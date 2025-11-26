@@ -3,22 +3,18 @@ import Carousel from "./Carousel";
 import { ThemeProvider } from "@mui/material/styles";
 import { theme } from "../Themes";
 import Navbar from "./Navbar";
-// import { ProductGrid } from "./ProductGrid";
 import { Route, Routes } from "react-router";
-import { PreLaunch } from "./PreLaunch";
 import { Footer } from "./Footer";
 import { FeedbackForm } from "./FeedbackForm";
 import { Alert, Snackbar } from "@mui/material";
 import React from "react";
 import { FeedbackCards } from "./FeedbackCard";
 import { Chat } from "./Chat";
+import { ProductGrid } from "./ProductGrid";
+import { Product } from "./Product";
 // import BreadCrumb from "./BreadCrumb";
 
 export const Home = () => {
-  // interface State extends SnackbarOrigin {
-  //   open: boolean;
-  //   message: string;
-  // }
   const [snackBar, setSnackBar] = React.useState<{
     open: boolean;
     message: string;
@@ -59,7 +55,9 @@ export const Home = () => {
         {/* <BreadCrumb /> */}
         <Routes>
           {/* <Route path="/" element={<ProductGrid></ProductGrid>} /> */}
-          <Route path="/" element={<PreLaunch></PreLaunch>} />
+          <Route path="/" element={<ProductGrid></ProductGrid>} />
+          <Route path="/product/:id" element={<Product />} />
+
           <Route
             path="/feedback"
             element={
