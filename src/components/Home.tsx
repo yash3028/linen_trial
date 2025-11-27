@@ -54,7 +54,6 @@ export const Home = () => {
         <Navbar />
         {/* <BreadCrumb /> */}
         <Routes>
-          {/* <Route path="/" element={<ProductGrid></ProductGrid>} /> */}
           <Route path="/" element={<ProductGrid></ProductGrid>} />
           <Route path="/product/:id" element={<Product />} />
 
