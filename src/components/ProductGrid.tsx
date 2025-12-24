@@ -11,6 +11,7 @@ import {
 } from "@mui/material";
 import { getRequest } from "../utils/requests";
 import { useNavigate } from "react-router";
+import { ImageSlider } from "./ImageSlider";
 
 export const ProductGrid: React.FC = () => {
   const navigate = useNavigate();
@@ -56,8 +57,11 @@ export const ProductGrid: React.FC = () => {
         // alignItems: "center",
         backgroundColor: "primary.main",
         pb: 2,
+        gap: 2,
       }}
     >
+      <ImageSlider images={[{url:"https://ranadeepreddyshyamakura.info/mdms/images/combined/S_P-40.jpg"}]}></ImageSlider>
+
       {!loading && (
         <Grid
           container

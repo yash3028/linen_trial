@@ -65,7 +65,7 @@ export const ImageSlider: React.FC<ImageSliderProps> = ({
             sx={{
               width: "100%",
               height: "100%",
-              objectFit: "cover",
+              objectFit: "fill",
               position: "absolute",
               top: 0,
               left: 0,
