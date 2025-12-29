@@ -3,7 +3,7 @@ import { ImageSlider } from "./ImageSlider";
 import { useParams } from "react-router";
 import { useEffect, useState } from "react";
 import { getRequest } from "../utils/requests";
-import { CustomButton } from "./CustomButton";
+import { SizeButton } from "./SizeButton";
 
 export const Product = () => {
   const { id } = useParams();
@@ -67,12 +67,12 @@ export const Product = () => {
           <Typography>Size</Typography>
           <Box flexDirection={"row"} flexWrap={"wrap"} display={"flex"} gap={2}>
             {["XS", "S", "M", "L", "XL"].map((size: string, index: number) => (
-              <CustomButton
+              <SizeButton
                 label={size}
                 index={index}
                 isSelectedArray={sizeArray}
                 onClick={selectSize}
-              ></CustomButton>
+              ></SizeButton>
             ))}
           </Box>
         </Box>

@@ -7,15 +7,38 @@ import {
   Popover,
   Button,
   Stack,
-  //  Modal,
+  Modal,
 } from "@mui/material";
+import { MuiTelInput } from "mui-tel-input";
+import "../styles/index.css";
+
 import logo from "../assets/mark_svg.svg";
 import { Link } from "react-router";
 import PersonIcon from "@mui/icons-material/Person";
 import React from "react";
+import CustomButton from "./CustomButton";
+
 //import { CustomButton } from "./CustomButton";
 
 const Navbar = () => {
+  const style = {
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+    width: 400,
+    bgcolor: "primary.main",
+    boxShadow: 24,
+    p: 4,
+  };
+  const [modalOpen, setModalOpen] = React.useState(false);
+  const handleModalOpen = () => setModalOpen(true);
+  const handleModalClose = () => setModalOpen(false);
+  const [phone, setPhone] = React.useState("");
+
+  const handleChange = (newPhone: string) => {
+    setPhone(newPhone);
+  };
   const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(
     null
   );
@@ -87,7 +110,11 @@ const Navbar = () => {
             }}
           >
             <Stack direction={"column"}>
-              <Button variant="text" color="secondary">
+              <Button
+                variant="text"
+                color="secondary"
+                onClick={handleModalOpen}
+              >
                 Login / Sign up
               </Button>
               <Button variant="text" color="secondary">
@@ -95,21 +122,41 @@ const Navbar = () => {
               </Button>
             </Stack>
           </Popover>
-          {/* <Modal
-            open={open}
-            onClose={handleClose}
+          <Modal
+            open={modalOpen}
+            onClose={handleModalClose}
             aria-labelledby="modal-modal-title"
             aria-describedby="modal-modal-description"
           >
-            <Box sx={style}>
-              <Typography id="modal-modal-title" variant="h6" component="h2">
-                Text in a modal
+            <Box sx={style} display={"flex"} flexDirection={"column"} gap={1}>
+              <Typography
+                id="modal-modal-title"
+                color="secondary"
+                variant="h6"
+                component="h2"
+              >
+                Login / Sign up
               </Typography>
-              <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-                Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
-              </Typography>
+              <MuiTelInput
+                value={phone}
+                onChange={handleChange}
+                onlyCountries={["IN"]}
+                forceCallingCode
+                defaultCountry="IN"
+                slotProps={
+                  {
+                    // input: {
+                    //   sx: {
+                    //     border: "none",
+                    //   },
+                    // },
+                  }
+                }
+                className="sample"
+              />
+              <CustomButton label="Send OTP" onClick={() => {}}></CustomButton>
             </Box>
-          </Modal> */}
+          </Modal>
         </Box>
       </Toolbar>
     </AppBar>

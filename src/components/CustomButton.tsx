@@ -1,27 +1,25 @@
 import "../styles/CustomButton.css";
 
-export const CustomButton = (props: {
+import { Typography } from "@mui/material";
+import React from "react";
+
+const CustomButton = (props: {
   label: string;
-  index: number;
-  isSelectedArray: boolean[];
-  onClick: (
-    index: number,
-    event: React.MouseEvent<HTMLButtonElement, MouseEvent>
-  ) => void;
+
+  onClick: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
 }) => {
   return (
     <>
+      {" "}
       <button
-        className={`hover:bg-primary hover:text-secondary rounded-xs border min-w-20 ${
-          props.isSelectedArray[props.index]
-            ? "bg-primary text-secondary"
-            : "bg-secondary text-primary"
-        }`}
+        className={`hover:bg-primary hover:text-secondary rounded-xs border min-w-20 bg-secondary text-primary`}
         style={{ padding: "1%", cursor: "pointer" }}
-        onClick={(event) => props.onClick(props.index, event)}
+        onClick={(event) => props.onClick(event)}
       >
-        {props.label}
+        <Typography> {props.label}</Typography>
       </button>
     </>
   );
 };
+
+export default CustomButton;
