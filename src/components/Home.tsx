@@ -51,7 +51,7 @@ export const Home = () => {
           <Alert severity={snackBar.type}>{snackBar.message}</Alert>
         </Snackbar>
         <Carousel />
-        <Navbar />
+        <Navbar snackBarFunction={openSnackBar} />
         {/* <BreadCrumb /> */}
         <Routes>
           <Route path="/" element={<ProductGrid></ProductGrid>} />

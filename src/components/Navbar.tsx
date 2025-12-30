@@ -9,7 +9,9 @@ import {
   Stack,
   Modal,
 } from "@mui/material";
-import { MuiTelInput } from "mui-tel-input";
+import { MuiTelInput, matchIsValidTel } from "mui-tel-input";
+import { MuiOtpInput } from "mui-one-time-password-input";
+
 import "../styles/index.css";
 
 import logo from "../assets/mark_svg.svg";
@@ -18,9 +20,11 @@ import PersonIcon from "@mui/icons-material/Person";
 import React from "react";
 import CustomButton from "./CustomButton";
 
-//import { CustomButton } from "./CustomButton";
-
-const Navbar = () => {
+const Navbar = ({
+  snackBarFunction,
+}: {
+  snackBarFunction: (message: string, type: "success" | "error") => void;
+}) => {
   const style = {
     position: "absolute",
     top: "50%",
@@ -35,9 +39,22 @@ const Navbar = () => {
   const handleModalOpen = () => setModalOpen(true);
   const handleModalClose = () => setModalOpen(false);
   const [phone, setPhone] = React.useState("");
-
-  const handleChange = (newPhone: string) => {
+  const [isOtpSent, setIsOtpSent] = React.useState(false);
+  const [otp, setOtp] = React.useState("");
+  const handleMobileNumberChange = (newPhone: string) => {
     setPhone(newPhone);
+  };
+  const handleOtpChange = (otp: string) => {
+    setOtp(otp);
+  };
+  const sendOtp = () => {
+    if (matchIsValidTel(phone, { onlyCountries: ["IN"] })) {
+      // API call to send OTP here
+      setIsOtpSent(true);
+      snackBarFunction("OTP sent successfully", "success");
+    } else {
+      snackBarFunction("Please enter a valid phone number", "error");
+    }
   };
   const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(
     null
@@ -104,7 +121,7 @@ const Navbar = () => {
             slotProps={{
               paper: {
                 sx: {
-                  backgroundColor: "primary.main", // or hex code like '#f50057'
+                  backgroundColor: "primary.main",
                 },
               },
             }}
@@ -137,24 +154,78 @@ const Navbar = () => {
               >
                 Login / Sign up
               </Typography>
-              <MuiTelInput
-                value={phone}
-                onChange={handleChange}
-                onlyCountries={["IN"]}
-                forceCallingCode
-                defaultCountry="IN"
-                slotProps={
-                  {
-                    // input: {
-                    //   sx: {
-                    //     border: "none",
-                    //   },
-                    // },
-                  }
-                }
-                className="sample"
-              />
-              <CustomButton label="Send OTP" onClick={() => {}}></CustomButton>
+
+              {!isOtpSent && (
+                <MuiTelInput
+                  value={phone}
+                  onChange={handleMobileNumberChange}
+                  onlyCountries={["IN"]}
+                  forceCallingCode
+                  defaultCountry="IN"
+                  sx={{
+                    backgroundColor: "primary.main",
+                    borderRadius: "4px",
+                    // 1. Style the default border
+                    "& .MuiOutlinedInput-notchedOutline": {
+                      borderColor: "secondary.main !important", // Light gray (Tailwind border-slate-200)
+                    },
+                    // 2. Style the border on Hover
+                    "&:hover .MuiOutlinedInput-notchedOutline": {
+                      borderColor: "secondary.main !important", // Medium gray
+                      borderWidth: "1px !important",
+                    },
+                    // 3. Style the border on Focus (The Dark Border)
+                    "& .Mui-focused .MuiOutlinedInput-notchedOutline": {
+                      borderColor: "secondary.main !important",
+                      borderWidth: "2px !important",
+                    },
+                  }}
+                />
+              )}
+              {isOtpSent && (
+                <>
+                  <Typography
+                    id="modal-modal-title"
+                    color="secondary"
+                    variant="subtitle1"
+                    component="h2"
+                  >
+                    Please enter OTP
+                  </Typography>
+                  <MuiOtpInput
+                    value={otp}
+                    length={6}
+                    onChange={handleOtpChange}
+                    sx={{
+                      backgroundColor: "primary.main",
+                      borderRadius: "4px",
+                      // 1. Style the default border
+                      "& .MuiOutlinedInput-notchedOutline": {
+                        borderColor: "secondary.main !important", // Light gray (Tailwind border-slate-200)
+                      },
+                      // 2. Style the border on Hover
+                      "&:hover .MuiOutlinedInput-notchedOutline": {
+                        borderColor: "secondary.main !important", // Medium gray
+                        borderWidth: "1px !important",
+                      },
+                      // 3. Style the border on Focus (The Dark Border)
+                      "& .Mui-focused .MuiOutlinedInput-notchedOutline": {
+                        borderColor: "secondary.main !important",
+                        borderWidth: "2px !important",
+                      },
+                    }}
+                  />
+                </>
+              )}
+              {!isOtpSent && (
+                <CustomButton label="Send OTP" onClick={sendOtp}></CustomButton>
+              )}
+              {isOtpSent && (
+                <CustomButton
+                  label="Verify OTP"
+                  onClick={() => {}}
+                ></CustomButton>
+              )}
             </Box>
           </Modal>
         </Box>
