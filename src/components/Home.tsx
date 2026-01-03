@@ -55,7 +55,10 @@ export const Home = () => {
         {/* <BreadCrumb /> */}
         <Routes>
           <Route path="/" element={<ProductGrid></ProductGrid>} />
-          <Route path="/product/:id" element={<Product />} />
+          <Route
+            path="/product/:id"
+            element={<Product snackBarFunction={openSnackBar} />}
+          />
 
           <Route
             path="/feedback"

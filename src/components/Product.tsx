@@ -1,17 +1,91 @@
-import { Box, Paper, Typography } from "@mui/material";
+import { Box, Modal, Paper, Typography } from "@mui/material";
 import { ImageSlider } from "./ImageSlider";
 import { useParams } from "react-router";
 import { useEffect, useState } from "react";
-import { getRequest } from "../utils/requests";
+import { getRequest, postRequest } from "../utils/requests";
 import { SizeButton } from "./SizeButton";
+import NumberSpinner from "./NumberSpinner";
+import CustomButton from "./CustomButton";
+import React from "react";
+import { matchIsValidTel, MuiTelInput } from "mui-tel-input";
+import { save_data, save_token } from "../utils/authentication";
+import { MuiOtpInput } from "mui-one-time-password-input";
 
-export const Product = () => {
+export const Product = ({
+  snackBarFunction,
+}: {
+  snackBarFunction: (message: string, type: "success" | "error") => void;
+}) => {
+  const style = {
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+    width: 400,
+    bgcolor: "primary.main",
+    boxShadow: 24,
+    p: 4,
+  };
   const { id } = useParams();
   const [loading, setLoading] = useState<boolean>(true);
   const [product, setProduct] = useState<any>(null);
   const [sizeArray, setSizeArray] = useState<Array<boolean>>(
     new Array(5).fill(false)
   );
+  const [quantity, setQuantity] = useState<number | null>(1);
+  const [modalOpen, setModalOpen] = React.useState(false);
+  const handleModalOpen = () => setModalOpen(true);
+  const handleModalClose = () => setModalOpen(false);
+  const [phone, setPhone] = React.useState("");
+  const [isOtpSent, setIsOtpSent] = React.useState(false);
+  const [otp, setOtp] = React.useState("");
+  const handleMobileNumberChange = (value: string) => {
+    setPhone(value);
+  };
+  const handleOtpChange = (otp: string) => {
+    setOtp(otp);
+  };
+  const sendOtp = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    console.log(phone);
+    if (matchIsValidTel(phone, { onlyCountries: ["IN"] })) {
+      // API call to send OTP here
+      const { data, error, message } = await postRequest<any>(
+        "/users/users/send-otp",
+        {
+          countryCode: "+91",
+          mobileNumber: phone.replace(/\s/g, "").slice(-10),
+        }
+      );
+      if (error) {
+        snackBarFunction(message, "error");
+      } else {
+        save_data("verificationToken", data.verificationToken);
+        setIsOtpSent(true);
+        snackBarFunction("OTP sent successfully", "success");
+      }
+    } else {
+      snackBarFunction("Please enter a valid phone number", "error");
+    }
+  };
+  const verifyOtp = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const { data, error, message } = await postRequest<any>(
+      "/users/users/verify-otp",
+      {
+        verificationToken: localStorage.getItem("verificationToken"),
+        otp: otp,
+      }
+    );
+    if (error) {
+      snackBarFunction(message, "error");
+    } else {
+      save_token(data.token);
+      setOtp("");
+      snackBarFunction("Logged in successfully", "success");
+      handleModalClose();
+    }
+  };
   const selectSize = (
     index: number,
     _event: React.MouseEvent<HTMLButtonElement, MouseEvent>
@@ -19,6 +93,10 @@ export const Product = () => {
     const newSizeArray = new Array(5).fill(false);
     newSizeArray[index] = sizeArray[index] ? false : true;
     setSizeArray(newSizeArray);
+  };
+  const place_order = () => {
+    console.log(quantity);
+    console.log(sizeArray);
   };
   useEffect(() => {
     const fetchData = async () => {
@@ -60,7 +138,7 @@ export const Product = () => {
         <Box width={{ xs: "100%", lg: "50%" }}>
           {!loading && product && <ImageSlider images={product.images || []} />}
         </Box>
-        <Box>
+        <Box display={"flex"} flexDirection={"column"} gap={2}>
           <Box>
             {!loading && <Typography variant="h4">{product.name}</Typography>}
           </Box>
@@ -72,10 +150,144 @@ export const Product = () => {
                 index={index}
                 isSelectedArray={sizeArray}
                 onClick={selectSize}
+                key={index}
               ></SizeButton>
             ))}
           </Box>
+          <Typography>Quantity</Typography>
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              gap: 4,
+              justifyContent: "center",
+            }}
+          >
+            <NumberSpinner
+              label="Number Spinner"
+              min={1}
+              max={3}
+              defaultValue={1}
+              onValueChange={(value) => setQuantity(value)}
+            />
+          </Box>
+          <CustomButton
+            label="Buy now"
+            onClick={
+              localStorage.getItem("token") ? place_order : handleModalOpen
+            }
+            type="button"
+          ></CustomButton>
         </Box>
+        <Modal
+          open={modalOpen}
+          onClose={handleModalClose}
+          aria-labelledby="modal-modal-title"
+          aria-describedby="modal-modal-description"
+        >
+          <Box
+            sx={style}
+            display={"flex"}
+            flexDirection={"column"}
+            gap={1}
+            component={"form"}
+            onSubmit={isOtpSent ? verifyOtp : sendOtp}
+          >
+            <Typography
+              id="modal-modal-title"
+              color="secondary"
+              variant="h6"
+              component="h2"
+            >
+              Login / Sign up
+            </Typography>
+
+            {!isOtpSent && (
+              <MuiTelInput
+                value={phone}
+                onChange={handleMobileNumberChange}
+                onlyCountries={["IN"]}
+                forceCallingCode
+                autoFocus
+                defaultCountry="IN"
+                sx={{
+                  backgroundColor: "primary.main",
+                  borderRadius: "4px",
+
+                  // Default border
+                  "& .MuiOutlinedInput-notchedOutline": {
+                    borderColor: "secondary.main",
+                  },
+
+                  // Hover
+                  "&:hover .MuiOutlinedInput-notchedOutline": {
+                    borderColor: "secondary.main",
+                  },
+
+                  // Focus (IMPORTANT FIX)
+                  "& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline":
+                    {
+                      borderColor: "secondary.main",
+                      borderWidth: 2,
+                    },
+                }}
+              />
+            )}
+            {isOtpSent && (
+              <>
+                <Typography
+                  id="modal-modal-title"
+                  color="secondary"
+                  variant="subtitle1"
+                  component="h2"
+                >
+                  Please enter OTP
+                </Typography>
+                <MuiOtpInput
+                  value={otp}
+                  length={6}
+                  autoFocus
+                  onChange={handleOtpChange}
+                  sx={{
+                    backgroundColor: "primary.main",
+                    borderRadius: "4px",
+
+                    // Default border
+                    "& .MuiOutlinedInput-notchedOutline": {
+                      borderColor: "secondary.main",
+                    },
+
+                    // Hover
+                    "&:hover .MuiOutlinedInput-notchedOutline": {
+                      borderColor: "secondary.main",
+                    },
+
+                    // Focus (IMPORTANT FIX)
+                    "& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline":
+                      {
+                        borderColor: "secondary.main",
+                        borderWidth: 2,
+                      },
+                  }}
+                />
+              </>
+            )}
+            {!isOtpSent && (
+              <CustomButton
+                label="Send OTP"
+                type="submit"
+                onClick={() => {}}
+              ></CustomButton>
+            )}
+            {isOtpSent && (
+              <CustomButton
+                label="Verify OTP"
+                onClick={() => {}}
+                type="submit"
+              ></CustomButton>
+            )}
+          </Box>
+        </Modal>
       </Paper>
     </>
   );

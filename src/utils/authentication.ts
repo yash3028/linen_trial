@@ -15,7 +15,15 @@ export const save_token = (token: string) => {
   }
 };
 
-export const logout = () => {
+export const save_data = (key: string, value: string) => {
+  try {
+    localStorage.setItem(key, value);
+  } catch (error) {
+    alert("Error while logging in");
+  }
+};
+
+export const clear_storage = () => {
   try {
     localStorage.clear();
   } catch (error) {

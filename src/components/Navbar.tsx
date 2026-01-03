@@ -19,6 +19,8 @@ import { Link } from "react-router";
 import PersonIcon from "@mui/icons-material/Person";
 import React from "react";
 import CustomButton from "./CustomButton";
+import { getRequest, postRequest } from "../utils/requests";
+import { clear_storage, save_data, save_token } from "../utils/authentication";
 
 const Navbar = ({
   snackBarFunction,
@@ -41,19 +43,60 @@ const Navbar = ({
   const [phone, setPhone] = React.useState("");
   const [isOtpSent, setIsOtpSent] = React.useState(false);
   const [otp, setOtp] = React.useState("");
-  const handleMobileNumberChange = (newPhone: string) => {
-    setPhone(newPhone);
+  const handleMobileNumberChange = (value: string) => {
+    setPhone(value);
   };
   const handleOtpChange = (otp: string) => {
     setOtp(otp);
   };
-  const sendOtp = () => {
+  const sendOtp = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    console.log(phone);
     if (matchIsValidTel(phone, { onlyCountries: ["IN"] })) {
       // API call to send OTP here
-      setIsOtpSent(true);
-      snackBarFunction("OTP sent successfully", "success");
+      const { data, error, message } = await postRequest<any>(
+        "/users/users/send-otp",
+        {
+          countryCode: "+91",
+          mobileNumber: phone.replace(/\s/g, "").slice(-10),
+        }
+      );
+      if (error) {
+        snackBarFunction(message, "error");
+      } else {
+        save_data("verificationToken", data.verificationToken);
+        setIsOtpSent(true);
+        snackBarFunction("OTP sent successfully", "success");
+      }
     } else {
       snackBarFunction("Please enter a valid phone number", "error");
+    }
+  };
+  const verifyOtp = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const { data, error, message } = await postRequest<any>(
+      "/users/users/verify-otp",
+      {
+        verificationToken: localStorage.getItem("verificationToken"),
+        otp: otp,
+      }
+    );
+    if (error) {
+      snackBarFunction(message, "error");
+    } else {
+      save_token(data.token);
+      setOtp("");
+      snackBarFunction("Logged in successfully", "success");
+      handleModalClose();
+    }
+  };
+  const logout = async () => {
+    const { error, message } = await getRequest<any>("/users/users/logout");
+    if (error) {
+      snackBarFunction(message, "error");
+    } else {
+      clear_storage();
+      snackBarFunction("Logged out successfully", "success");
     }
   };
   const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(
@@ -130,12 +173,20 @@ const Navbar = ({
               <Button
                 variant="text"
                 color="secondary"
-                onClick={handleModalOpen}
+                onClick={
+                  localStorage.getItem("token")?.length
+                    ? logout
+                    : handleModalOpen
+                }
               >
-                Login / Sign up
+                <Typography noWrap>
+                  {localStorage.getItem("token")?.length
+                    ? "Logout"
+                    : "Login / Sign up"}
+                </Typography>
               </Button>
               <Button variant="text" color="secondary">
-                Orders
+                <Typography>Orders</Typography>
               </Button>
             </Stack>
           </Popover>
@@ -145,7 +196,14 @@ const Navbar = ({
             aria-labelledby="modal-modal-title"
             aria-describedby="modal-modal-description"
           >
-            <Box sx={style} display={"flex"} flexDirection={"column"} gap={1}>
+            <Box
+              sx={style}
+              display={"flex"}
+              flexDirection={"column"}
+              gap={1}
+              component={"form"}
+              onSubmit={isOtpSent ? verifyOtp : sendOtp}
+            >
               <Typography
                 id="modal-modal-title"
                 color="secondary"
@@ -161,24 +219,28 @@ const Navbar = ({
                   onChange={handleMobileNumberChange}
                   onlyCountries={["IN"]}
                   forceCallingCode
+                  autoFocus
                   defaultCountry="IN"
                   sx={{
                     backgroundColor: "primary.main",
                     borderRadius: "4px",
-                    // 1. Style the default border
+
+                    // Default border
                     "& .MuiOutlinedInput-notchedOutline": {
-                      borderColor: "secondary.main !important", // Light gray (Tailwind border-slate-200)
+                      borderColor: "secondary.main",
                     },
-                    // 2. Style the border on Hover
+
+                    // Hover
                     "&:hover .MuiOutlinedInput-notchedOutline": {
-                      borderColor: "secondary.main !important", // Medium gray
-                      borderWidth: "1px !important",
+                      borderColor: "secondary.main",
                     },
-                    // 3. Style the border on Focus (The Dark Border)
-                    "& .Mui-focused .MuiOutlinedInput-notchedOutline": {
-                      borderColor: "secondary.main !important",
-                      borderWidth: "2px !important",
-                    },
+
+                    // Focus (IMPORTANT FIX)
+                    "& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline":
+                      {
+                        borderColor: "secondary.main",
+                        borderWidth: 2,
+                      },
                   }}
                 />
               )}
@@ -195,35 +257,44 @@ const Navbar = ({
                   <MuiOtpInput
                     value={otp}
                     length={6}
+                    autoFocus
                     onChange={handleOtpChange}
                     sx={{
                       backgroundColor: "primary.main",
                       borderRadius: "4px",
-                      // 1. Style the default border
+
+                      // Default border
                       "& .MuiOutlinedInput-notchedOutline": {
-                        borderColor: "secondary.main !important", // Light gray (Tailwind border-slate-200)
+                        borderColor: "secondary.main",
                       },
-                      // 2. Style the border on Hover
+
+                      // Hover
                       "&:hover .MuiOutlinedInput-notchedOutline": {
-                        borderColor: "secondary.main !important", // Medium gray
-                        borderWidth: "1px !important",
+                        borderColor: "secondary.main",
                       },
-                      // 3. Style the border on Focus (The Dark Border)
-                      "& .Mui-focused .MuiOutlinedInput-notchedOutline": {
-                        borderColor: "secondary.main !important",
-                        borderWidth: "2px !important",
-                      },
+
+                      // Focus (IMPORTANT FIX)
+                      "& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline":
+                        {
+                          borderColor: "secondary.main",
+                          borderWidth: 2,
+                        },
                     }}
                   />
                 </>
               )}
               {!isOtpSent && (
-                <CustomButton label="Send OTP" onClick={sendOtp}></CustomButton>
+                <CustomButton
+                  label="Send OTP"
+                  type="submit"
+                  onClick={() => {}}
+                ></CustomButton>
               )}
               {isOtpSent && (
                 <CustomButton
                   label="Verify OTP"
                   onClick={() => {}}
+                  type="submit"
                 ></CustomButton>
               )}
             </Box>
