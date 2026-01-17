@@ -11,7 +11,7 @@ const CustomButton = (props: {
   return (
     <>
       <button
-        className={`hover:bg-secondary hover:text-primary rounded-xs border min-w-20 bg-primary text-secondary`}
+        className={`hover:bg-secondary hover:text-primary rounded-sm border min-w-20 bg-primary text-secondary`}
         style={{ padding: "1%", cursor: "pointer" }}
         onClick={(event) => props.onClick(event)}
         type={props.type}

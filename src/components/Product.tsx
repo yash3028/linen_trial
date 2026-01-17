@@ -1,6 +1,6 @@
 import { Box, Modal, Paper, Typography } from "@mui/material";
 import { ImageSlider } from "./ImageSlider";
-import { useParams } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import { useEffect, useState } from "react";
 import { getRequest, postRequest } from "../utils/requests";
 import { SizeButton } from "./SizeButton";
@@ -10,6 +10,7 @@ import React from "react";
 import { matchIsValidTel, MuiTelInput } from "mui-tel-input";
 import { save_data, save_token } from "../utils/authentication";
 import { MuiOtpInput } from "mui-one-time-password-input";
+import { size_master } from "../utils/utils";
 
 export const Product = ({
   snackBarFunction,
@@ -27,10 +28,11 @@ export const Product = ({
     p: 4,
   };
   const { id } = useParams();
+  const navigate = useNavigate();
   const [loading, setLoading] = useState<boolean>(true);
   const [product, setProduct] = useState<any>(null);
   const [sizeArray, setSizeArray] = useState<Array<boolean>>(
-    new Array(5).fill(false)
+    new Array(5).fill(false),
   );
   const [quantity, setQuantity] = useState<number | null>(1);
   const [modalOpen, setModalOpen] = React.useState(false);
@@ -55,7 +57,7 @@ export const Product = ({
         {
           countryCode: "+91",
           mobileNumber: phone.replace(/\s/g, "").slice(-10),
-        }
+        },
       );
       if (error) {
         snackBarFunction(message, "error");
@@ -75,28 +77,52 @@ export const Product = ({
       {
         verificationToken: localStorage.getItem("verificationToken"),
         otp: otp,
-      }
+      },
     );
     if (error) {
       snackBarFunction(message, "error");
     } else {
       save_token(data.token);
       setOtp("");
+      setIsOtpSent(false);
+      setPhone("");
       snackBarFunction("Logged in successfully", "success");
       handleModalClose();
     }
   };
   const selectSize = (
     index: number,
-    _event: React.MouseEvent<HTMLButtonElement, MouseEvent>
+    _event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
   ) => {
     const newSizeArray = new Array(5).fill(false);
     newSizeArray[index] = sizeArray[index] ? false : true;
     setSizeArray(newSizeArray);
   };
-  const place_order = () => {
+  const place_order = async () => {
     console.log(quantity);
     console.log(sizeArray);
+    const index = sizeArray.findIndex((val) => val == true);
+    if (index == -1) {
+      snackBarFunction("Please select size", "error");
+    } else {
+      const { data, error, message } = await postRequest<any>(
+        "/products/orders/place-order",
+        {
+          size: size_master[index.toString() as keyof typeof size_master],
+          quantity: quantity,
+          price: product.price,
+          color: product.color,
+          status: "order_initiated",
+          productCode: product.productCode,
+        },
+      );
+      if (error) {
+        snackBarFunction(message, "error");
+      } else {
+        snackBarFunction(data.message, "success");
+        navigate(`/checkout/${data.order.id}`);
+      }
+    }
   };
   useEffect(() => {
     const fetchData = async () => {
@@ -104,7 +130,7 @@ export const Product = ({
         setLoading(true);
         console.log("here");
         const { data, error, message } = await getRequest(
-          `/products/products/get-product/${id}`
+          `/products/products/get-product/${id}`,
         );
 
         if (error) {

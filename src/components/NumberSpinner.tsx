@@ -87,9 +87,9 @@ export default function NumberSpinner({
 
         <BaseNumberField.Input
           id={id}
+          disabled
           render={(props, state) => (
             <OutlinedInput
-              disabled
               inputRef={props.ref}
               value={state.inputValue}
               onBlur={props.onBlur}
@@ -103,7 +103,7 @@ export default function NumberSpinner({
                   size:
                     Math.max(
                       (other.min?.toString() || "").length,
-                      state.inputValue.length || 1
+                      state.inputValue.length || 1,
                     ) + 1,
 
                   sx: {

@@ -12,6 +12,7 @@ import { FeedbackCards } from "./FeedbackCard";
 import { Chat } from "./Chat";
 import { ProductGrid } from "./ProductGrid";
 import { Product } from "./Product";
+import Checkout from "./Checkout";
 // import BreadCrumb from "./BreadCrumb";
 
 export const Home = () => {
@@ -59,7 +60,10 @@ export const Home = () => {
             path="/product/:id"
             element={<Product snackBarFunction={openSnackBar} />}
           />
-
+          <Route
+            path="/checkout/:id"
+            element={<Checkout snackBarFunction={openSnackBar} />}
+          />
           <Route
             path="/feedback"
             element={
