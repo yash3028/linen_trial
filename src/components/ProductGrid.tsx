@@ -11,7 +11,7 @@ import {
 } from "@mui/material";
 import { getRequest } from "../utils/requests";
 import { useNavigate } from "react-router";
-import { ImageSlider } from "./ImageSlider";
+import { BannerImageSlider } from "./BannerImageSlider";
 
 export const ProductGrid: React.FC = () => {
   const navigate = useNavigate();
@@ -25,7 +25,7 @@ export const ProductGrid: React.FC = () => {
       try {
         setLoading(true);
         const { data, error, message } = await getRequest(
-          `/products/products/get-all-products?limit=${limit}&page=${page}`
+          `/products/products/get-all-products?limit=${limit}&page=${page}`,
         );
         if (error) {
           throw new Error(`HTTP error! status: ${message}`);
@@ -60,7 +60,13 @@ export const ProductGrid: React.FC = () => {
         gap: 2,
       }}
     >
-      <ImageSlider images={[{url:"https://ranadeepreddyshyamakura.info/mdms/images/combined/S_P-40.jpg"}]}></ImageSlider>
+      <BannerImageSlider
+        images={[
+          {
+            url: "https://ranadeepreddyshyamakura.info/mdms/images/combined/S_P-40.jpg",
+          },
+        ]}
+      ></BannerImageSlider>
 
       {!loading && (
         <Grid
@@ -69,7 +75,12 @@ export const ProductGrid: React.FC = () => {
           sx={{ justifyContent: "center" }}
         >
           {products.map((product: any) => (
-            <Grid size={{ xs: 6, sm: 3, md: 4, lg: 3 }} key={product.id}>
+            <Grid
+              size={{ xs: 6, sm: 3, md: 4, lg: 2 }}
+              key={product.id}
+              display={"flex"}
+              gap={1}
+            >
               <Card
                 variant="outlined"
                 onClick={() => {
@@ -88,9 +99,9 @@ export const ProductGrid: React.FC = () => {
               >
                 <CardMedia
                   component="img"
-                  height="255"
                   image={product.images[0].url}
                   alt={product.name}
+                  sx={{ width: "210px", height: "auto" }}
                 />
                 <CardContent sx={{ ml: 0, pl: 1, pt: 0 }}>
                   <Typography

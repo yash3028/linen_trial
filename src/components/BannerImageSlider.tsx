@@ -8,7 +8,7 @@ interface ImageSliderProps {
   autoPlayDelay?: number; // in ms
 }
 
-export const ImageSlider: React.FC<ImageSliderProps> = ({
+export const BannerImageSlider: React.FC<ImageSliderProps> = ({
   images,
   autoPlay = true,
   autoPlayDelay = 3000,
@@ -48,7 +48,7 @@ export const ImageSlider: React.FC<ImageSliderProps> = ({
         sx={{
           position: "relative",
           width: "100%",
-          height: { xs: 600, sm: 500, lg: 400 },
+          height: { xs: 300 },
           overflow: "hidden",
           borderRadius: 0,
           backgroundColor: "primary.main",
@@ -68,9 +68,9 @@ export const ImageSlider: React.FC<ImageSliderProps> = ({
             sx={{
               maxWidth: "100%",
               maxHeight: "100%",
-              width: { xs: "100%", sm: "310px", lg: "310px" },
-              height: "auto",
-              objectFit: "contain",
+              width: "100%",
+              height: "100%",
+              objectFit: "fill",
               position: "absolute",
               transition: "opacity 0.5s ease-in-out",
               opacity: index === currentIndex ? 1 : 0,

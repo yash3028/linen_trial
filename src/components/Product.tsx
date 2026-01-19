@@ -164,7 +164,13 @@ export const Product = ({
         <Box width={{ xs: "100%", lg: "50%" }}>
           {!loading && product && <ImageSlider images={product.images || []} />}
         </Box>
-        <Box display={"flex"} flexDirection={"column"} gap={2}>
+        <Box
+          display={"flex"}
+          flexDirection={"column"}
+          gap={2}
+          mb={2}
+          mx={{ xs: 1, lg: 0 }}
+        >
           <Box>
             {!loading && <Typography variant="h4">{product.name}</Typography>}
           </Box>
