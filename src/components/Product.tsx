@@ -49,7 +49,6 @@ export const Product = ({
   };
   const sendOtp = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    console.log(phone);
     if (matchIsValidTel(phone, { onlyCountries: ["IN"] })) {
       // API call to send OTP here
       const { data, error, message } = await postRequest<any>(
@@ -99,8 +98,6 @@ export const Product = ({
     setSizeArray(newSizeArray);
   };
   const place_order = async () => {
-    console.log(quantity);
-    console.log(sizeArray);
     const index = sizeArray.findIndex((val) => val == true);
     if (index == -1) {
       snackBarFunction("Please select size", "error");
@@ -114,6 +111,7 @@ export const Product = ({
           color: product.color,
           status: "order_initiated",
           productCode: product.productCode,
+          name: product.name,
         },
       );
       if (error) {
@@ -128,7 +126,6 @@ export const Product = ({
     const fetchData = async () => {
       try {
         setLoading(true);
-        console.log("here");
         const { data, error, message } = await getRequest(
           `/products/products/get-product/${id}`,
         );
@@ -167,14 +164,26 @@ export const Product = ({
         <Box
           display={"flex"}
           flexDirection={"column"}
-          gap={2}
+          gap={1}
           mb={2}
           mx={{ xs: 1, lg: 0 }}
         >
           <Box>
-            {!loading && <Typography variant="h4">{product.name}</Typography>}
+            {!loading && (
+              <Typography variant="h5" fontWeight={"bold"}>
+                {product.name.toUpperCase()}
+              </Typography>
+            )}
           </Box>
-          <Typography>Size</Typography>
+          <Box>
+            {!loading && (
+              <>
+                <Typography variant="h6">Rs. {product.price}</Typography>
+                <Typography variant="body2">inclusive of all taxes</Typography>
+              </>
+            )}
+          </Box>
+          <Typography variant="h6">Size</Typography>
           <Box flexDirection={"row"} flexWrap={"wrap"} display={"flex"} gap={2}>
             {["XS", "S", "M", "L", "XL"].map((size: string, index: number) => (
               <SizeButton
@@ -186,7 +195,7 @@ export const Product = ({
               ></SizeButton>
             ))}
           </Box>
-          <Typography>Quantity</Typography>
+          <Typography variant="h6">Quantity</Typography>
           <Box
             sx={{
               display: "flex",
