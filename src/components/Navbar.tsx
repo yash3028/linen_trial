@@ -260,6 +260,7 @@ const Navbar = ({
                       length={6}
                       autoFocus
                       onChange={handleOtpChange}
+                      TextFieldsProps={{ inputProps: { inputMode: "numeric" } }}
                       sx={{
                         backgroundColor: "primary.main",
                         borderRadius: "4px",

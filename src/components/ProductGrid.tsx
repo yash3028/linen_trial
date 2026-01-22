@@ -80,6 +80,7 @@ export const ProductGrid: React.FC = () => {
               key={product.id}
               display={"flex"}
               gap={1}
+              p={0.7}
             >
               <Card
                 variant="outlined"
@@ -103,7 +104,7 @@ export const ProductGrid: React.FC = () => {
                   alt={product.name}
                   sx={{ width: "210px", height: "auto" }}
                 />
-                <CardContent sx={{ ml: 0, pl: 1, pt: 0 }}>
+                <CardContent sx={{ ml: 0, pl: 0, pt: 0 }}>
                   <Typography
                     sx={{ textTransform: "uppercase" }}
                     color="text.primary"
@@ -112,7 +113,7 @@ export const ProductGrid: React.FC = () => {
                   >
                     {product.name}
                   </Typography>
-                  <Typography color="text.primary" fontSize={"0.9rem"}>
+                  <Typography color="text.primary" fontSize={"0.8rem"}>
                     RS. {product.price}
                   </Typography>
                 </CardContent>

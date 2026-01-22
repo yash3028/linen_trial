@@ -8,11 +8,15 @@ export interface ApiResponse<T> {
 
 export const postRequest = async <T>(
   endpoint: string,
-  payload: Record<string, any>
+  payload: Record<string, any>,
 ): Promise<ApiResponse<T>> => {
   try {
     const response = await api.post<T>(endpoint, payload, {
       validateStatus: (status) => {
+        if (status == 401) {
+          alert("Unauthorized. Please login again");
+          // navigate("/");
+        }
         return status < 400;
       },
     });
@@ -28,12 +32,16 @@ export const postRequest = async <T>(
 
 export const getRequest = async <T>(
   endpoint: string,
-  params: Record<string, any> = {}
+  params: Record<string, any> = {},
 ): Promise<ApiResponse<T>> => {
   try {
     const response = await api.get<T>(endpoint, {
       params,
       validateStatus: (status) => {
+        if (status == 401) {
+          alert("Unauthorized. Please login again");
+          // navigate("/");
+        }
         return status < 400;
       },
     });

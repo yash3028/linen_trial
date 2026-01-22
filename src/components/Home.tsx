@@ -5,14 +5,13 @@ import { theme } from "../Themes";
 import Navbar from "./Navbar";
 import { Route, Routes } from "react-router";
 import { Footer } from "./Footer";
-import { FeedbackForm } from "./FeedbackForm";
 import { Alert, Snackbar } from "@mui/material";
 import React from "react";
 import { FeedbackCards } from "./FeedbackCard";
-import { Chat } from "./Chat";
 import { ProductGrid } from "./ProductGrid";
 import { Product } from "./Product";
 import Checkout from "./Checkout";
+import ShippingPolicy from "./ShippingPolicy";
 // import BreadCrumb from "./BreadCrumb";
 
 export const Home = () => {
@@ -64,17 +63,17 @@ export const Home = () => {
             path="/checkout/:id"
             element={<Checkout snackBarFunction={openSnackBar} />}
           />
-          <Route
-            path="/feedback"
-            element={
-              <FeedbackForm snackBarFunction={openSnackBar}></FeedbackForm>
-            }
-          />
+
           <Route
             path="/get-feedbacks"
             element={<FeedbackCards></FeedbackCards>}
           />
-          <Route path="/chat" element={<Chat></Chat>} />
+          <Route path="/policies">
+            <Route path="privacy-policy"></Route>
+            <Route path="terms-of-policy"></Route>
+            <Route path="shipping-policy" element={<ShippingPolicy />}></Route>
+            <Route path="refund-policy"></Route>
+          </Route>
         </Routes>
         <Footer></Footer>
       </Box>
