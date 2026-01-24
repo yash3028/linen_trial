@@ -63,7 +63,7 @@ export const Footer = () => {
             <Typography
               color="text.secondary"
               textAlign={"start"}
-              variant="body2"
+              variant="caption"
             >
               Conscious clothing choices for a greener tomorrow
             </Typography>

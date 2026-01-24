@@ -1,4 +1,12 @@
-import { Box, Paper, Typography } from "@mui/material";
+import {
+  Box,
+  FormControl,
+  FormControlLabel,
+  Paper,
+  Radio,
+  RadioGroup,
+  Typography,
+} from "@mui/material";
 import { useParams } from "react-router";
 import CustomButton from "./CustomButton";
 import { getRequest } from "../utils/requests";
@@ -14,7 +22,21 @@ const Checkout = ({
   const [loading, setLoading] = useState<boolean>(true);
   const [order, setOrder] = useState<any>(null);
   const [addresses, setAddresses] = useState<any[]>([]);
-
+  const [currentAddress, setCurrentAddress] = useState<{
+    addressLine1: string;
+  }>();
+  const handelAddress = (data: {
+    customerName: string;
+    addressLine1: string;
+    addressLine2: string;
+    addressLine3: string;
+    city: string;
+    state: string;
+    country: string;
+    pincode: string;
+  }) => {
+    setCurrentAddress(data);
+  };
   // const [modalOpen, setModalOpen] = React.useState(false);
   // const handleModalOpen = () => setModalOpen(true);
   // const handleModalClose = () => setModalOpen(false);
@@ -69,8 +91,8 @@ const Checkout = ({
               alignItems={"center"}
               justifyContent={"space-between"}
             >
-              <Typography variant="h6">Addresses</Typography>
-              {addresses.length > 0 && (
+              <Typography variant="h6">Address</Typography>
+              {addresses.length > 0 && false && (
                 <CustomButton
                   label="Add"
                   onClick={() => {}}
@@ -79,18 +101,58 @@ const Checkout = ({
               )}
             </Box>
           )}
-          <AddressForm></AddressForm>
+          <AddressForm sendData={handelAddress}></AddressForm>
         </Box>
         <Box width={{ xs: "100%", lg: "50%" }} p={1}>
           {!loading && (
-            <Box>
+            <>
               <Typography variant="h6">Order details</Typography>
-              <Typography variant="body1">Product: {order.name}</Typography>
-              <Typography variant="body1">Size: {order.size}</Typography>
-              <Typography variant="body1">
-                Quantity: {order.quantity}
-              </Typography>
-            </Box>
+              <Box display={"flex"} flexDirection={"column"} gap={1}>
+                <Typography variant="body1">Product: {order.name}</Typography>
+                <Typography variant="body1">Size: {order.size}</Typography>
+                <Typography variant="body1">
+                  Quantity: {order.quantity}
+                </Typography>
+                <div>
+                  <FormControl>
+                    <RadioGroup
+                      row
+                      aria-labelledby="payment-mode-options"
+                      name="row-radio-buttons-group"
+                      defaultValue={"cod"}
+                    >
+                      <FormControlLabel
+                        value="cod"
+                        control={
+                          <Radio
+                            color="secondary"
+                            sx={{ color: "secondary.main" }}
+                          />
+                        }
+                        label="Cash on delivery"
+                      />
+                      <FormControlLabel
+                        value="pay_now"
+                        control={
+                          <Radio
+                            color="secondary"
+                            sx={{ color: "secondary.main" }}
+                          />
+                        }
+                        label="Pay now"
+                      />
+                    </RadioGroup>
+                  </FormControl>
+                </div>{" "}
+                <CustomButton
+                  label={"Confirm order"}
+                  onClick={() => {
+                    console.log(currentAddress);
+                  }}
+                  type="button"
+                ></CustomButton>
+              </Box>
+            </>
           )}
         </Box>
       </Paper>

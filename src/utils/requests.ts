@@ -1,4 +1,5 @@
 import api from "./api";
+import { clear_storage } from "./authentication";
 
 export interface ApiResponse<T> {
   data: T | null;
@@ -14,6 +15,7 @@ export const postRequest = async <T>(
     const response = await api.post<T>(endpoint, payload, {
       validateStatus: (status) => {
         if (status == 401) {
+          clear_storage();
           alert("Unauthorized. Please login again");
           // navigate("/");
         }
@@ -39,6 +41,7 @@ export const getRequest = async <T>(
       params,
       validateStatus: (status) => {
         if (status == 401) {
+          clear_storage();
           alert("Unauthorized. Please login again");
           // navigate("/");
         }

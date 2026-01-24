@@ -178,7 +178,7 @@ export const Product = ({
           <Box>
             {!loading && (
               <>
-                <Typography variant="h6">Rs. {product.price}</Typography>
+                <Typography variant="h6">INR {product.price}</Typography>
                 <Typography variant="body2">inclusive of all taxes</Typography>
               </>
             )}

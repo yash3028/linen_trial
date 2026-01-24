@@ -114,7 +114,7 @@ export const ProductGrid: React.FC = () => {
                     {product.name}
                   </Typography>
                   <Typography color="text.primary" fontSize={"0.8rem"}>
-                    RS. {product.price}
+                    INR {product.price}
                   </Typography>
                 </CardContent>
               </Card>

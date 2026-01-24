@@ -180,14 +180,14 @@ const Navbar = ({
                       : handleModalOpen
                   }
                 >
-                  <Typography noWrap>
+                  <Typography variant="button" noWrap>
                     {localStorage.getItem("token")?.length
                       ? "Logout"
                       : "Login / Sign up"}
                   </Typography>
                 </Button>
                 <Button variant="text" color="secondary">
-                  <Typography>Orders</Typography>
+                  <Typography variant="button">Orders</Typography>
                 </Button>
               </Stack>
             </Popover>

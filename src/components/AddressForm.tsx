@@ -1,57 +1,166 @@
+import { useState } from "react";
 import { states } from "../utils/master";
-import CustomButton from "./CustomButton";
+import { Typography } from "@mui/material";
 
-const AddressForm = () => {
+const AddressForm = ({ sendData }: { sendData: any }) => {
+  const [address, setAddress] = useState<{
+    customerName: string;
+    addressLine1: string;
+    addressLine2: string;
+    addressLine3: string;
+    city: string;
+    state: string;
+    country: string;
+    pincode: string;
+  }>({
+    customerName: "",
+    addressLine1: "",
+    addressLine2: "",
+    addressLine3: "",
+    city: "",
+    state: "",
+    country: "India",
+    pincode: "",
+  });
+
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
+  ) => {
+    const { name, value } = e.target;
+    const updatedAddress = { ...address, [name]: value };
+    setAddress(updatedAddress);
+    sendData(updatedAddress);
+  };
   return (
     <div className="flex flex-col gap-2">
-      <input
-        type="text"
-        className="min-w-80 border-1 border-primary rounded-lg p-2 focus:border-3 focus:border-primary"
-        placeholder="Address line 1"
-        style={{ outline: "none" }}
-      ></input>
-      <input
-        type="text"
-        className="min-w-80 border-1 border-primary rounded-lg p-2 focus:border-3 focus:border-primary"
-        placeholder="Address line 2"
-        style={{ outline: "none" }}
-      ></input>
-      <input
-        type="text"
-        className="min-w-80 border-1 border-primary rounded-lg p-2 focus:border-3 focus:border-primary"
-        placeholder="Address line 3"
-        style={{ outline: "none" }}
-      ></input>
-      <div className="flex flex-row gap-1">
+      <div className="flex flex-col">
+        <label htmlFor="customerName" aria-required>
+          <Typography variant="body2"> Name*</Typography>
+        </label>
         <input
+          id="customerName"
           type="text"
-          className="max-w-40 border-1 border-primary rounded-lg p-2 focus:border-3 focus:border-primary"
-          placeholder="City"
+          className="min-w-80 border-1 border-primary rounded-lg p-2 focus:border-2 focus:border-primary"
+          name="customerName"
+          value={address.customerName}
           style={{ outline: "none" }}
+          onChange={handleChange}
+          required
+          autoComplete="off"
         ></input>
-        <select
-          className="max-w-48 border-1 border-primary rounded-lg p-2 focus:border-3 focus:border-primary"
-          style={{ outline: "none" }}
-        >
-          {states.map((state, index) => (
-            <option value={state.key} key={index}>
-              {state.name}
-            </option>
-          ))}
-        </select>
       </div>
-      <select
-        disabled
-        className="max-w-40 border-1 border-primary rounded-lg p-2 focus:border-3 focus:border-primary"
-        style={{ outline: "none" }}
-      >
-        <option>INDIA</option>
-      </select>
-      <CustomButton
-        type="submit"
-        label="Add Address"
-        onClick={() => {}}
-      ></CustomButton>
+      <div className="flex flex-col">
+        <label htmlFor="addressLine1" aria-required>
+          <Typography variant="body2"> Address line 1*</Typography>
+        </label>
+        <input
+          id="addressLine1"
+          type="text"
+          className="min-w-80 border-1 border-primary rounded-lg p-2 focus:border-2 focus:border-primary"
+          name="addressLine1"
+          value={address.addressLine1}
+          style={{ outline: "none" }}
+          onChange={handleChange}
+          autoComplete="off"
+        ></input>
+      </div>
+      <div className="flex flex-col">
+        <label htmlFor="addressLine2" aria-required>
+          <Typography variant="body2">Address line 2</Typography>
+        </label>
+        <input
+          id="addressLine2"
+          type="text"
+          className="min-w-80 border-1 border-primary rounded-lg p-2 focus:border-2 focus:border-primary"
+          name="addressLine2"
+          value={address.addressLine2}
+          style={{ outline: "none" }}
+          onChange={handleChange}
+        ></input>
+      </div>
+      <div className="flex flex-col">
+        <label htmlFor="addressLine3" aria-required>
+          <Typography variant="body2">Address line 3</Typography>
+        </label>
+        <input
+          id="addressLine3"
+          type="text"
+          className="min-w-80 border-1 border-primary rounded-lg p-2 focus:border-2 focus:border-primary"
+          name="addressLine3"
+          value={address.addressLine3}
+          style={{ outline: "none" }}
+          onChange={handleChange}
+          autoComplete="off"
+        ></input>
+      </div>
+
+      <div className="flex flex-row gap-1">
+        <div className="flex flex-col">
+          <label htmlFor="city" aria-required>
+            <Typography variant="body2">City*</Typography>
+          </label>
+          <input
+            id="city"
+            type="text"
+            className="max-w-40 border-1 border-primary rounded-lg p-2 focus:border-2 focus:border-primary"
+            name="city"
+            value={address.city}
+            style={{ outline: "none" }}
+            onChange={handleChange}
+          ></input>
+        </div>
+        <div className="flex flex-col">
+          <label htmlFor="state" aria-required>
+            <Typography variant="body2"> State*</Typography>
+          </label>
+          <select
+            id="state"
+            className="max-w-48 md:max-w-64 border-1 border-primary rounded-lg p-2 focus:border-2 focus:border-primary"
+            style={{ outline: "none" }}
+            name="state"
+            value={address.state}
+            onChange={handleChange}
+          >
+            {states.map((state, index) => (
+              <option value={state.key} key={index}>
+                {state.name}
+              </option>
+            ))}
+          </select>
+        </div>
+      </div>
+      <div className="flex flex-row gap-1">
+        <div className="flex flex-col">
+          <label htmlFor="country" aria-required>
+            <Typography variant="body2">Country</Typography>
+          </label>
+          <select
+            id="country"
+            className="min-w-40 max-w-48 md:max-w-64 border-1 border-primary rounded-lg p-2 focus:border-2 focus:border-primary"
+            style={{ outline: "none" }}
+            name="country"
+            value={address.country}
+            onChange={handleChange}
+            disabled
+          >
+            <option value={"India"}>India</option>
+          </select>
+        </div>
+        <div className="flex flex-col">
+          <label htmlFor="pincode" aria-required>
+            <Typography variant="body2"> Pincode*</Typography>
+          </label>
+          <input
+            id="pincode"
+            type="text"
+            className="max-w-48 border-1 border-primary rounded-lg p-2 focus:border-2 focus:border-primary"
+            name="pincode"
+            value={address.pincode}
+            style={{ outline: "none" }}
+            onChange={handleChange}
+          ></input>
+        </div>
+      </div>
     </div>
   );
 };
