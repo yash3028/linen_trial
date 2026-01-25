@@ -118,7 +118,7 @@ export const Product = ({
         snackBarFunction(message, "error");
       } else {
         snackBarFunction(data.message, "success");
-        navigate(`/checkout/${data.order.id}`);
+        navigate(`/checkout/cart/${data.order.id}`);
       }
     }
   };

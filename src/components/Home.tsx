@@ -7,11 +7,11 @@ import { Route, Routes } from "react-router";
 import { Footer } from "./Footer";
 import { Alert, Snackbar } from "@mui/material";
 import React from "react";
-import { FeedbackCards } from "./FeedbackCard";
 import { ProductGrid } from "./ProductGrid";
 import { Product } from "./Product";
 import Checkout from "./Checkout";
 import ShippingPolicy from "./ShippingPolicy";
+import FinalSummary from "./FinalSummary";
 // import BreadCrumb from "./BreadCrumb";
 
 export const Home = () => {
@@ -59,15 +59,19 @@ export const Home = () => {
             path="/product/:id"
             element={<Product snackBarFunction={openSnackBar} />}
           />
-          <Route
-            path="/checkout/:id"
-            element={<Checkout snackBarFunction={openSnackBar} />}
-          />
+          <Route path="/checkout">
+            <Route
+              path="cart/:id"
+              element={<Checkout snackBarFunction={openSnackBar} />}
+            ></Route>
+            <Route
+              path="summary/:id"
+              element={
+                <FinalSummary snackBarFunction={openSnackBar}></FinalSummary>
+              }
+            ></Route>
+          </Route>
 
-          <Route
-            path="/get-feedbacks"
-            element={<FeedbackCards></FeedbackCards>}
-          />
           <Route path="/policies">
             <Route path="privacy-policy"></Route>
             <Route path="terms-of-policy"></Route>

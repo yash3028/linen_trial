@@ -1,10 +1,27 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { states } from "../utils/master";
 import { Typography } from "@mui/material";
 
-const AddressForm = ({ sendData }: { sendData: any }) => {
+const AddressForm = ({
+  sendData,
+  savedAddress,
+}: {
+  sendData: any;
+  savedAddress: {
+    customerName: string;
+    emailAddress: string;
+    addressLine1: string;
+    addressLine2: string;
+    addressLine3: string;
+    city: string;
+    state: string;
+    country: string;
+    pincode: string;
+  } | null;
+}) => {
   const [address, setAddress] = useState<{
     customerName: string;
+    emailAddress: string;
     addressLine1: string;
     addressLine2: string;
     addressLine3: string;
@@ -14,6 +31,7 @@ const AddressForm = ({ sendData }: { sendData: any }) => {
     pincode: string;
   }>({
     customerName: "",
+    emailAddress: "",
     addressLine1: "",
     addressLine2: "",
     addressLine3: "",
@@ -22,7 +40,15 @@ const AddressForm = ({ sendData }: { sendData: any }) => {
     country: "India",
     pincode: "",
   });
+  useEffect(() => {
+    if (savedAddress) {
+      setAddress(savedAddress);
+    }
+  }, []);
 
+  useEffect(() => {
+    sendData(address);
+  }, [address]);
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
   ) => {
@@ -35,7 +61,10 @@ const AddressForm = ({ sendData }: { sendData: any }) => {
     <div className="flex flex-col gap-2">
       <div className="flex flex-col">
         <label htmlFor="customerName" aria-required>
-          <Typography variant="body2"> Name*</Typography>
+          <Typography variant="body2" fontWeight={"bold"}>
+            {" "}
+            Name*
+          </Typography>
         </label>
         <input
           id="customerName"
@@ -50,8 +79,30 @@ const AddressForm = ({ sendData }: { sendData: any }) => {
         ></input>
       </div>
       <div className="flex flex-col">
+        <label htmlFor="customerName" aria-required>
+          <Typography variant="body2" fontWeight={"bold"}>
+            {" "}
+            Email*
+          </Typography>
+        </label>
+        <input
+          id="customerName"
+          type="emailAddress"
+          className="min-w-80 border-1 border-primary rounded-lg p-2 focus:border-2 focus:border-primary"
+          name="emailAddress"
+          value={address.emailAddress}
+          style={{ outline: "none" }}
+          onChange={handleChange}
+          required
+          autoComplete="off"
+        ></input>
+      </div>
+      <div className="flex flex-col">
         <label htmlFor="addressLine1" aria-required>
-          <Typography variant="body2"> Address line 1*</Typography>
+          <Typography variant="body2" fontWeight={"bold"}>
+            {" "}
+            Address line 1*
+          </Typography>
         </label>
         <input
           id="addressLine1"
@@ -66,7 +117,9 @@ const AddressForm = ({ sendData }: { sendData: any }) => {
       </div>
       <div className="flex flex-col">
         <label htmlFor="addressLine2" aria-required>
-          <Typography variant="body2">Address line 2</Typography>
+          <Typography variant="body2" fontWeight={"bold"}>
+            Address line 2
+          </Typography>
         </label>
         <input
           id="addressLine2"
@@ -80,7 +133,9 @@ const AddressForm = ({ sendData }: { sendData: any }) => {
       </div>
       <div className="flex flex-col">
         <label htmlFor="addressLine3" aria-required>
-          <Typography variant="body2">Address line 3</Typography>
+          <Typography variant="body2" fontWeight={"bold"}>
+            Address line 3
+          </Typography>
         </label>
         <input
           id="addressLine3"
@@ -97,7 +152,9 @@ const AddressForm = ({ sendData }: { sendData: any }) => {
       <div className="flex flex-row gap-1">
         <div className="flex flex-col">
           <label htmlFor="city" aria-required>
-            <Typography variant="body2">City*</Typography>
+            <Typography variant="body2" fontWeight={"bold"}>
+              City*
+            </Typography>
           </label>
           <input
             id="city"
@@ -111,7 +168,10 @@ const AddressForm = ({ sendData }: { sendData: any }) => {
         </div>
         <div className="flex flex-col">
           <label htmlFor="state" aria-required>
-            <Typography variant="body2"> State*</Typography>
+            <Typography variant="body2" fontWeight={"bold"}>
+              {" "}
+              State*
+            </Typography>
           </label>
           <select
             id="state"
@@ -121,6 +181,9 @@ const AddressForm = ({ sendData }: { sendData: any }) => {
             value={address.state}
             onChange={handleChange}
           >
+            <option value={""} key={"X"}>
+              Select state
+            </option>
             {states.map((state, index) => (
               <option value={state.key} key={index}>
                 {state.name}
@@ -132,7 +195,9 @@ const AddressForm = ({ sendData }: { sendData: any }) => {
       <div className="flex flex-row gap-1">
         <div className="flex flex-col">
           <label htmlFor="country" aria-required>
-            <Typography variant="body2">Country</Typography>
+            <Typography variant="body2" fontWeight={"bold"}>
+              Country
+            </Typography>
           </label>
           <select
             id="country"
@@ -148,7 +213,10 @@ const AddressForm = ({ sendData }: { sendData: any }) => {
         </div>
         <div className="flex flex-col">
           <label htmlFor="pincode" aria-required>
-            <Typography variant="body2"> Pincode*</Typography>
+            <Typography variant="body2" fontWeight={"bold"}>
+              {" "}
+              Pincode*
+            </Typography>
           </label>
           <input
             id="pincode"
@@ -158,6 +226,7 @@ const AddressForm = ({ sendData }: { sendData: any }) => {
             value={address.pincode}
             style={{ outline: "none" }}
             onChange={handleChange}
+            maxLength={6}
           ></input>
         </div>
       </div>

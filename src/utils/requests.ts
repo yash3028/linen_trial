@@ -17,7 +17,7 @@ export const postRequest = async <T>(
         if (status == 401) {
           clear_storage();
           alert("Unauthorized. Please login again");
-          // navigate("/");
+          window.location.href = "/";
         }
         return status < 400;
       },
@@ -43,7 +43,7 @@ export const getRequest = async <T>(
         if (status == 401) {
           clear_storage();
           alert("Unauthorized. Please login again");
-          // navigate("/");
+          window.location.href = "/";
         }
         return status < 400;
       },

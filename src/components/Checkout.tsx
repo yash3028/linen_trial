@@ -7,11 +7,13 @@ import {
   RadioGroup,
   Typography,
 } from "@mui/material";
-import { useParams } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import CustomButton from "./CustomButton";
-import { getRequest } from "../utils/requests";
+import { getRequest, postRequest } from "../utils/requests";
 import { useEffect, useState } from "react";
 import AddressForm from "./AddressForm";
+import { apiError } from "../utils/error";
+import OrderSummary from "./OrderSummary";
 
 const Checkout = ({
   snackBarFunction,
@@ -19,14 +21,37 @@ const Checkout = ({
   snackBarFunction: (message: string, type: "success" | "error") => void;
 }) => {
   const { id } = useParams();
+  const navigate = useNavigate();
+
   const [loading, setLoading] = useState<boolean>(true);
   const [order, setOrder] = useState<any>(null);
-  const [addresses, setAddresses] = useState<any[]>([]);
+  const [addresses, setAddresses] = useState<
+    {
+      customerName: string;
+      emailAddress: string;
+      addressLine1: string;
+      addressLine2: string;
+      addressLine3: string;
+      city: string;
+      state: string;
+      country: string;
+      pincode: string;
+    }[]
+  >([]);
   const [currentAddress, setCurrentAddress] = useState<{
+    customerName: string;
+    emailAddress: string;
     addressLine1: string;
+    addressLine2: string;
+    addressLine3: string;
+    city: string;
+    state: string;
+    country: string;
+    pincode: string;
   }>();
   const handelAddress = (data: {
     customerName: string;
+    emailAddress: string;
     addressLine1: string;
     addressLine2: string;
     addressLine3: string;
@@ -56,16 +81,50 @@ const Checkout = ({
           );
         }
         setOrder(order_response.data);
-        setAddresses(addresses_response.data.addresses[0]);
+        setAddresses(addresses_response.data.addresses[0] as any[]);
       } catch (err: any) {
         console.log(err.message || "Something went wrong");
-        snackBarFunction("err.message", "error");
+        snackBarFunction(err.message, "error");
       } finally {
         setLoading(false);
       }
     };
     fetchData();
   }, []);
+
+  const confirm_order = async () => {
+    try {
+      if (
+        !currentAddress?.customerName ||
+        !currentAddress?.emailAddress ||
+        !currentAddress?.addressLine1 ||
+        !currentAddress?.city ||
+        !currentAddress?.state ||
+        !currentAddress?.country ||
+        !currentAddress?.pincode ||
+        currentAddress.pincode.length != 6
+      ) {
+        console.log(currentAddress);
+        throw new apiError(500, "Please fill required address fields");
+      } else {
+        const { data, error, message } = await postRequest<any>(
+          "/products/orders/confirm-order",
+          {
+            orderId: order.id,
+            address: { ...currentAddress },
+          },
+        );
+        if (error) {
+          snackBarFunction(message, "error");
+        } else {
+          snackBarFunction(data.message, "success");
+          navigate(`/checkout/summary/${order.id}`);
+        }
+      }
+    } catch (error: any) {
+      snackBarFunction(error.message, "error");
+    }
+  };
   return (
     <>
       <Paper
@@ -84,35 +143,41 @@ const Checkout = ({
       >
         <Box width={{ xs: "100%", lg: "50%" }} p={1}>
           {!loading && (
-            <Box
-              display={"flex"}
-              flexDirection={"row"}
-              gap={2}
-              alignItems={"center"}
-              justifyContent={"space-between"}
-            >
-              <Typography variant="h6">Address</Typography>
-              {addresses.length > 0 && false && (
-                <CustomButton
-                  label="Add"
-                  onClick={() => {}}
-                  type="button"
-                ></CustomButton>
-              )}
+            <Box display={"flex"} flexDirection={"column"} gap={2}>
+              <Typography variant="h6" className="border-b-1 pb-3">
+                Shipping address
+              </Typography>
+              <AddressForm
+                sendData={handelAddress}
+                savedAddress={addresses.length > 0 ? addresses[0] : null}
+              ></AddressForm>
             </Box>
+            // <Box
+            //   display={"flex"}
+            //   flexDirection={"row"}
+            //   gap={2}
+            //   alignItems={"center"}
+            //   justifyContent={"space-between"}
+            // >
+            //   <Typography variant="h6" className="border-b-2">
+            //     Address
+            //   </Typography>
+            //   {addresses.length > 0 && false && (
+            //     <CustomButton
+            //       label="Add"
+            //       onClick={() => {}}
+            //       type="button"
+            //     ></CustomButton>
+            //   )}
+            // </Box>
           )}
-          <AddressForm sendData={handelAddress}></AddressForm>
         </Box>
         <Box width={{ xs: "100%", lg: "50%" }} p={1}>
-          {!loading && (
-            <>
-              <Typography variant="h6">Order details</Typography>
+          <div>
+            {!loading && (
               <Box display={"flex"} flexDirection={"column"} gap={1}>
-                <Typography variant="body1">Product: {order.name}</Typography>
-                <Typography variant="body1">Size: {order.size}</Typography>
-                <Typography variant="body1">
-                  Quantity: {order.quantity}
-                </Typography>
+                <OrderSummary order={order}></OrderSummary>
+
                 <div>
                   <FormControl>
                     <RadioGroup
@@ -143,17 +208,15 @@ const Checkout = ({
                       />
                     </RadioGroup>
                   </FormControl>
-                </div>{" "}
+                </div>
                 <CustomButton
                   label={"Confirm order"}
-                  onClick={() => {
-                    console.log(currentAddress);
-                  }}
+                  onClick={confirm_order}
                   type="button"
                 ></CustomButton>
               </Box>
-            </>
-          )}
+            )}
+          </div>
         </Box>
       </Paper>
     </>

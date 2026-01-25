@@ -5,3 +5,8 @@ export const size_master = {
   "3": "L",
   "4": "XL",
 };
+
+export const order_status_master = {
+  order_initiated: "Confirmation pending",
+  order_confirmed: "Order confirmed",
+};
