@@ -12,7 +12,7 @@ import { Product } from "./Product";
 import Checkout from "./Checkout";
 import ShippingPolicy from "./ShippingPolicy";
 import FinalSummary from "./FinalSummary";
-// import BreadCrumb from "./BreadCrumb";
+import OrdersList from "./OrdersList";
 
 export const Home = () => {
   const [snackBar, setSnackBar] = React.useState<{
@@ -52,7 +52,6 @@ export const Home = () => {
         </Snackbar>
         <Carousel />
         <Navbar snackBarFunction={openSnackBar} />
-        {/* <BreadCrumb /> */}
         <Routes>
           <Route path="/" element={<ProductGrid></ProductGrid>} />
           <Route
@@ -71,7 +70,10 @@ export const Home = () => {
               }
             ></Route>
           </Route>
-
+          <Route
+            path="/my-orders"
+            element={<OrdersList snackBarFunction={openSnackBar}></OrdersList>}
+          ></Route>
           <Route path="/policies">
             <Route path="privacy-policy"></Route>
             <Route path="terms-of-policy"></Route>

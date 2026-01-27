@@ -53,8 +53,6 @@ export const ProductGrid: React.FC = () => {
         width: "100%",
         boxSizing: "border-box",
         borderRadius: 0,
-        // justifyContent: "center",
-        // alignItems: "center",
         backgroundColor: "primary.main",
         pb: 2,
         gap: 2,
@@ -83,7 +81,7 @@ export const ProductGrid: React.FC = () => {
               p={0.7}
             >
               <Card
-                variant="outlined"
+                elevation={0}
                 onClick={() => {
                   navigate(`/product/${product.id}`);
                 }}
@@ -91,12 +89,9 @@ export const ProductGrid: React.FC = () => {
                   height: "100%",
                   display: "flex",
                   flexDirection: "column",
-                  borderRadius: "0",
-                  border: "none",
-                  borderColor: "primary.main",
                   cursor: "pointer",
-                  backgroundColor: "primary.main",
                 }}
+                className="bg-slate-100 rounded-xl border-1"
               >
                 <CardMedia
                   component="img"
@@ -104,7 +99,7 @@ export const ProductGrid: React.FC = () => {
                   alt={product.name}
                   sx={{ width: "210px", height: "auto" }}
                 />
-                <CardContent sx={{ ml: 0, pl: 0, pt: 0 }}>
+                <CardContent sx={{ ml: 0, pl: 0.5, pt: 0 }}>
                   <Typography
                     sx={{ textTransform: "uppercase" }}
                     color="text.primary"

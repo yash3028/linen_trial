@@ -15,7 +15,7 @@ import { MuiOtpInput } from "mui-one-time-password-input";
 import "../styles/index.css";
 
 import logo from "../assets/mark_svg.svg";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import PersonIcon from "@mui/icons-material/Person";
 import React from "react";
 import CustomButton from "./CustomButton";
@@ -27,6 +27,8 @@ const Navbar = ({
 }: {
   snackBarFunction: (message: string, type: "success" | "error") => void;
 }) => {
+  const navigate = useNavigate();
+
   const style = {
     position: "absolute",
     top: "50%",
@@ -186,7 +188,11 @@ const Navbar = ({
                       : "Login / Sign up"}
                   </Typography>
                 </Button>
-                <Button variant="text" color="secondary">
+                <Button
+                  variant="text"
+                  color="secondary"
+                  onClick={() => navigate("/my-orders")}
+                >
                   <Typography variant="button">Orders</Typography>
                 </Button>
               </Stack>
