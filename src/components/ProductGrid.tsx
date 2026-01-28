@@ -61,7 +61,10 @@ export const ProductGrid: React.FC = () => {
       <BannerImageSlider
         images={[
           {
-            url: "https://ranadeepreddyshyamakura.info/mdms/images/combined/S_P-40.jpg",
+            url: "https://thetruetouch.in/mdms/images/combined/1.JPG",
+          },
+          {
+            url: "https://ranadeepreddyshyamakura.info/mdms/images/combined/2.JPG",
           },
         ]}
       ></BannerImageSlider>

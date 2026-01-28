@@ -70,10 +70,15 @@ export const Home = () => {
               }
             ></Route>
           </Route>
-          <Route
-            path="/my-orders"
-            element={<OrdersList snackBarFunction={openSnackBar}></OrdersList>}
-          ></Route>
+          <Route path="/my-orders">
+            <Route
+              path=""
+              element={
+                <OrdersList snackBarFunction={openSnackBar}></OrdersList>
+              }
+            ></Route>
+            <Route path=":id"></Route>
+          </Route>
           <Route path="/policies">
             <Route path="privacy-policy"></Route>
             <Route path="terms-of-policy"></Route>

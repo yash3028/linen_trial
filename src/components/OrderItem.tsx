@@ -10,6 +10,7 @@ const OrderItem = ({
     color: string;
     quantity: number;
     price: number;
+    status: string;
   };
 }) => {
   return (
@@ -19,12 +20,13 @@ const OrderItem = ({
       </Typography>
       <div className="flex flex-row justify-between">
         <div>
-          <Typography>Size: {order.size}</Typography>
-          <Typography>Color: {order.color}</Typography>
-          <Typography>Quantity: {order.quantity}</Typography>
+          <Typography variant="body2">Size: {order.size}</Typography>
+          <Typography variant="body2">Color: {order.color}</Typography>
+          <Typography variant="body2">Quantity: {order.quantity}</Typography>
         </div>
         <div className="flex flex-col h-full justify-between">
-          <Typography>Total: INR {order.price}</Typography>
+          <Typography variant="body2">Total: INR {order.price}</Typography>
+
           <CustomButton
             label="Get support"
             type="button"

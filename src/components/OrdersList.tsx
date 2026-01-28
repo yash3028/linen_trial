@@ -49,11 +49,14 @@ const OrdersList = ({
         boxSizing: "border-box",
         borderRadius: 0,
         justifyContent: "flex-start",
-        gap: 2,
+        gap: 0,
         backgroundColor: "primary.main",
-        p: { sx: 0, lg: 5 },
+        p: { sx: 0, lg: 0 },
       }}
     >
+      <Typography variant="h5" className="pl-2 pt-2">
+        Your Orders{" "}
+      </Typography>{" "}
       {!loading && (
         <Grid
           container

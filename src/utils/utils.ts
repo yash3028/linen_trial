@@ -9,4 +9,5 @@ export const size_master = {
 export const order_status_master = {
   order_initiated: "Confirmation pending",
   order_confirmed: "Order confirmed",
+  order_shipped: "Order shipped",
 };
