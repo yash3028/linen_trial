@@ -126,7 +126,7 @@ export const Footer = () => {
                 noWrap
               >
                 <Link
-                  href="/shipping-policy"
+                  href="/policies/refund-policy"
                   color="text.secondary"
                   fontSize={"inherit"}
                   underline="hover"

@@ -64,7 +64,7 @@ export const ProductGrid: React.FC = () => {
             url: "https://thetruetouch.in/mdms/images/combined/1.JPG",
           },
           {
-            url: "https://ranadeepreddyshyamakura.info/mdms/images/combined/2.JPG",
+            url: "https://thetruetouch.in/mdms/images/combined/2.JPG",
           },
         ]}
       ></BannerImageSlider>

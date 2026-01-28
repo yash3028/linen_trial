@@ -1,6 +1,6 @@
 import { Paper } from "@mui/material";
 
-const ShippingPolicy = () => {
+const RefundPolicy = () => {
   return (
     <Paper
       sx={{
@@ -17,16 +17,17 @@ const ShippingPolicy = () => {
       }}
     >
       <iframe
-        src="https://thetruetouch.in/mdms/static/shipping_policy.html"
+        src="https://thetruetouch.in/mdms/static/refund_policy.html"
         style={{
           display: "flex",
           width: "100%",
           height: "100%",
           overflow: "hidden",
+          flexGrow: 1,
         }}
       ></iframe>
     </Paper>
   );
 };
 
-export default ShippingPolicy;
+export default RefundPolicy;
