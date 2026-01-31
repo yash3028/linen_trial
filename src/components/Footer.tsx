@@ -81,7 +81,7 @@ export const Footer = () => {
                 noWrap
               >
                 <Link
-                  href="/shipping-policy"
+                  href="/policies/privacy-policy"
                   color="text.secondary"
                   fontSize={"inherit"}
                   underline="hover"
@@ -96,7 +96,7 @@ export const Footer = () => {
                 noWrap
               >
                 <Link
-                  href="/shipping-policy"
+                  href="/policies/terms-of-service"
                   color="text.secondary"
                   fontSize={"inherit"}
                   underline="hover"

@@ -14,6 +14,8 @@ import ShippingPolicy from "./ShippingPolicy";
 import FinalSummary from "./FinalSummary";
 import OrdersList from "./OrdersList";
 import RefundPolicy from "./RefundPolicy";
+import TermsOfService from "./TermsOfService";
+import PrivacyPolicy from "./PrivacyPolicy";
 
 export const Home = () => {
   const [snackBar, setSnackBar] = React.useState<{
@@ -81,8 +83,8 @@ export const Home = () => {
             <Route path=":id"></Route>
           </Route>
           <Route path="/policies">
-            <Route path="privacy-policy"></Route>
-            <Route path="terms-of-policy"></Route>
+            <Route path="privacy-policy" element={<PrivacyPolicy />}></Route>
+            <Route path="terms-of-service" element={<TermsOfService />}></Route>
             <Route path="shipping-policy" element={<ShippingPolicy />}></Route>
             <Route path="refund-policy" element={<RefundPolicy />}></Route>
           </Route>
