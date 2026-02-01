@@ -56,11 +56,13 @@ export const Home = () => {
         <Carousel />
         <Navbar snackBarFunction={openSnackBar} />
         <Routes>
-          <Route path="/" element={<ProductGrid></ProductGrid>} />
-          <Route
-            path="/product/:id"
-            element={<Product snackBarFunction={openSnackBar} />}
-          />
+          <Route path="/">
+            <Route path="" element={<ProductGrid></ProductGrid>}></Route>
+            <Route
+              path="the-earth-essentials/product/:id"
+              element={<Product snackBarFunction={openSnackBar} />}
+            ></Route>
+          </Route>
           <Route path="/checkout">
             <Route
               path="cart/:id"

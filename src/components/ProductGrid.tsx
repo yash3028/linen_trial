@@ -95,7 +95,9 @@ export const ProductGrid: React.FC = () => {
               <div className="rounded-xl border-1 bg-slate-100">
                 <Box
                   onClick={() => {
-                    navigate(`/product/${product.id}`);
+                    navigate(
+                      `/the-earth-essentials/product/${product.productCode}`,
+                    );
                   }}
                   sx={{
                     height: "100%",
@@ -115,7 +117,7 @@ export const ProductGrid: React.FC = () => {
                     <Typography
                       sx={{ textTransform: "uppercase" }}
                       color="text.primary"
-                      fontSize={"0.9rem"}
+                      fontSize={"0.8rem"}
                       fontWeight={"bold"}
                     >
                       {product.name}

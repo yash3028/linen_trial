@@ -164,7 +164,7 @@ export const Product = ({
         <Box
           display={"flex"}
           flexDirection={"column"}
-          gap={1}
+          gap={0.5}
           mb={2}
           mx={{ xs: 1, lg: 0 }}
         >
@@ -173,7 +173,7 @@ export const Product = ({
               <Typography variant="body2">{product.productFamily}</Typography>
             )}
             {!loading && (
-              <Typography variant="h5" fontWeight={"bold"}>
+              <Typography variant="h6" fontWeight={"bold"}>
                 {product.name.toUpperCase()}
               </Typography>
             )}
@@ -181,12 +181,21 @@ export const Product = ({
           <Box>
             {!loading && (
               <>
-                <Typography variant="h6">INR {product.price}</Typography>
-                <Typography variant="body2">inclusive of all taxes</Typography>
+                <Typography variant="body1">INR {product.price}</Typography>
+                <Typography variant="caption">
+                  inclusive of all taxes
+                </Typography>
               </>
             )}
           </Box>
-          <Typography variant="h6">Size</Typography>
+          <Box>
+            {!loading && (
+              <>
+                <Typography variant="body1">Color: {product.color}</Typography>
+              </>
+            )}
+          </Box>
+          <Typography variant="body1">Size</Typography>
           <Box flexDirection={"row"} flexWrap={"wrap"} display={"flex"} gap={2}>
             {["XS", "S", "M", "L", "XL"].map((size: string, index: number) => (
               <SizeButton
@@ -198,7 +207,7 @@ export const Product = ({
               ></SizeButton>
             ))}
           </Box>
-          <Typography variant="h6">Quantity</Typography>
+          <Typography variant="body1">Quantity</Typography>
           <Box
             sx={{
               display: "flex",

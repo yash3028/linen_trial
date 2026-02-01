@@ -99,6 +99,7 @@ const Navbar = ({
     } else {
       clear_storage();
       snackBarFunction("Logged out successfully", "success");
+      navigate("/");
     }
   };
   const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(
