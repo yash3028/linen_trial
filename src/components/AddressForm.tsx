@@ -58,7 +58,10 @@ const AddressForm = ({
     sendData(updatedAddress);
   };
   return (
-    <div className="flex flex-col gap-2">
+    <div className="flex flex-col gap-2 bg-slate-100 rounded-xl p-2 border-1">
+      <Typography variant="h6" className="border-b-1 pb-3">
+        Shipping address
+      </Typography>
       <div className="flex flex-col">
         <label htmlFor="customerName" aria-required>
           <Typography variant="body2" fontWeight={"bold"}>
@@ -96,6 +99,44 @@ const AddressForm = ({
           required
           autoComplete="off"
         ></input>
+      </div>
+      <div className="flex flex-row gap-1">
+        <div className="flex flex-col">
+          <label htmlFor="country" aria-required>
+            <Typography variant="body2" fontWeight={"bold"}>
+              Country
+            </Typography>
+          </label>
+          <select
+            id="country"
+            className="min-w-40 max-w-48 md:max-w-64 border-1 border-primary rounded-lg p-2 focus:border-2 focus:border-primary"
+            style={{ outline: "none" }}
+            name="country"
+            value={address.country}
+            onChange={handleChange}
+            disabled
+          >
+            <option value={"India"}>India</option>
+          </select>
+        </div>
+        <div className="flex flex-col">
+          <label htmlFor="pincode" aria-required>
+            <Typography variant="body2" fontWeight={"bold"}>
+              {" "}
+              Pincode*
+            </Typography>
+          </label>
+          <input
+            id="pincode"
+            type="text"
+            className="max-w-42 border-1 border-primary rounded-lg p-2 focus:border-2 focus:border-primary"
+            name="pincode"
+            value={address.pincode}
+            style={{ outline: "none" }}
+            onChange={handleChange}
+            maxLength={6}
+          ></input>
+        </div>
       </div>
       <div className="flex flex-col">
         <label htmlFor="addressLine1" aria-required>
@@ -175,7 +216,7 @@ const AddressForm = ({
           </label>
           <select
             id="state"
-            className="max-w-48 md:max-w-64 border-1 border-primary rounded-lg p-2 focus:border-2 focus:border-primary"
+            className="max-w-40 md:max-w-64 border-1 border-primary rounded-lg p-2 focus:border-2 focus:border-primary"
             style={{ outline: "none" }}
             name="state"
             value={address.state}
@@ -190,44 +231,6 @@ const AddressForm = ({
               </option>
             ))}
           </select>
-        </div>
-      </div>
-      <div className="flex flex-row gap-1">
-        <div className="flex flex-col">
-          <label htmlFor="country" aria-required>
-            <Typography variant="body2" fontWeight={"bold"}>
-              Country
-            </Typography>
-          </label>
-          <select
-            id="country"
-            className="min-w-40 max-w-48 md:max-w-64 border-1 border-primary rounded-lg p-2 focus:border-2 focus:border-primary"
-            style={{ outline: "none" }}
-            name="country"
-            value={address.country}
-            onChange={handleChange}
-            disabled
-          >
-            <option value={"India"}>India</option>
-          </select>
-        </div>
-        <div className="flex flex-col">
-          <label htmlFor="pincode" aria-required>
-            <Typography variant="body2" fontWeight={"bold"}>
-              {" "}
-              Pincode*
-            </Typography>
-          </label>
-          <input
-            id="pincode"
-            type="text"
-            className="max-w-48 border-1 border-primary rounded-lg p-2 focus:border-2 focus:border-primary"
-            name="pincode"
-            value={address.pincode}
-            style={{ outline: "none" }}
-            onChange={handleChange}
-            maxLength={6}
-          ></input>
         </div>
       </div>
     </div>

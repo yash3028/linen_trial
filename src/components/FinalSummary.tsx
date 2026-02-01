@@ -53,7 +53,7 @@ const FinalSummary = ({
         p: { sx: 0, lg: 5 },
       }}
     >
-      <div className="flex flex-col p-2">
+      <div className="flex flex-col p-2 gap-2">
         {!loading && order.status == "order_confirmed" ? (
           <Typography variant="h6">Order placed successfully!</Typography>
         ) : (
@@ -63,9 +63,8 @@ const FinalSummary = ({
         )}
         {!loading && (
           <>
-            {" "}
-            <Typography>Please note the below reference number.</Typography>
-            <Typography>{order.referenceNumber}</Typography>
+            <Typography>Please note the below order id.</Typography>
+            <Typography fontWeight={"bold"}>{order.referenceNumber}</Typography>
             <OrderSummary order={order}></OrderSummary>
             <CustomButton
               label="Shop more"

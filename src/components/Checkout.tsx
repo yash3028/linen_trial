@@ -5,7 +5,6 @@ import {
   Paper,
   Radio,
   RadioGroup,
-  Typography,
 } from "@mui/material";
 import { useNavigate, useParams } from "react-router";
 import CustomButton from "./CustomButton";
@@ -144,9 +143,6 @@ const Checkout = ({
         <Box width={{ xs: "100%", lg: "50%" }} p={1}>
           {!loading && (
             <Box display={"flex"} flexDirection={"column"} gap={2}>
-              <Typography variant="h6" className="border-b-1 pb-3">
-                Shipping address
-              </Typography>
               <AddressForm
                 sendData={handelAddress}
                 savedAddress={addresses.length > 0 ? addresses[0] : null}

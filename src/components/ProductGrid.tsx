@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import {
   Grid,
-  Card,
   CardContent,
   CardMedia,
   Typography,
@@ -68,12 +67,22 @@ export const ProductGrid: React.FC = () => {
           },
         ]}
       ></BannerImageSlider>
-
+      {/* <div className="flex flex-col items-center w-full p-1">
+        <div className="bg-slate-100 rounded-b-xl"></div>
+      </div> */}
+      <Typography
+        variant="h5"
+        textTransform={"uppercase"}
+        textAlign={"center"}
+        fontWeight={"bold"}
+      >
+        The Earth Essentials
+      </Typography>
       {!loading && (
         <Grid
           container
           spacing={{ xs: 0, sm: 1, md: 2 }}
-          sx={{ justifyContent: "center" }}
+          justifyContent={{ xs: "start", md: "center" }}
         >
           {products.map((product: any) => (
             <Grid
@@ -83,39 +92,40 @@ export const ProductGrid: React.FC = () => {
               gap={1}
               p={0.7}
             >
-              <Card
-                elevation={0}
-                onClick={() => {
-                  navigate(`/product/${product.id}`);
-                }}
-                sx={{
-                  height: "100%",
-                  display: "flex",
-                  flexDirection: "column",
-                  cursor: "pointer",
-                }}
-                className="bg-slate-100 rounded-xl border-1"
-              >
-                <CardMedia
-                  component="img"
-                  image={product.images[0].url}
-                  alt={product.name}
-                  sx={{ width: "210px", height: "auto" }}
-                />
-                <CardContent sx={{ ml: 0, pl: 0.5, pt: 0 }}>
-                  <Typography
-                    sx={{ textTransform: "uppercase" }}
-                    color="text.primary"
-                    fontSize={"0.9rem"}
-                    fontWeight={"bold"}
-                  >
-                    {product.name}
-                  </Typography>
-                  <Typography color="text.primary" fontSize={"0.8rem"}>
-                    INR {product.price}
-                  </Typography>
-                </CardContent>
-              </Card>
+              <div className="rounded-xl border-1 bg-slate-100">
+                <Box
+                  onClick={() => {
+                    navigate(`/product/${product.id}`);
+                  }}
+                  sx={{
+                    height: "100%",
+                    display: "flex",
+                    flexDirection: "column",
+                    cursor: "pointer",
+                  }}
+                >
+                  <CardMedia
+                    component="img"
+                    image={product.images[0].url}
+                    alt={product.name}
+                    sx={{ width: "210px", height: "auto" }}
+                    className="rounded-t-xl"
+                  />
+                  <CardContent sx={{ ml: 0, pl: 0.5, pt: 0 }}>
+                    <Typography
+                      sx={{ textTransform: "uppercase" }}
+                      color="text.primary"
+                      fontSize={"0.9rem"}
+                      fontWeight={"bold"}
+                    >
+                      {product.name}
+                    </Typography>
+                    <Typography color="text.primary" fontSize={"0.8rem"}>
+                      INR {product.price}
+                    </Typography>
+                  </CardContent>
+                </Box>
+              </div>
             </Grid>
           ))}
         </Grid>

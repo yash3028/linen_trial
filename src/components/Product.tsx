@@ -170,6 +170,9 @@ export const Product = ({
         >
           <Box>
             {!loading && (
+              <Typography variant="body2">{product.productFamily}</Typography>
+            )}
+            {!loading && (
               <Typography variant="h5" fontWeight={"bold"}>
                 {product.name.toUpperCase()}
               </Typography>
