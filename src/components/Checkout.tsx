@@ -24,6 +24,13 @@ const Checkout = ({
 
   const [loading, setLoading] = useState<boolean>(true);
   const [order, setOrder] = useState<any>(null);
+  const [paymentMode, setPaymentMode] = useState<string>("cod");
+  const handlePaymentModeChange = (
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) => {
+    const value = event.target.value;
+    setPaymentMode(value);
+  };
   const [addresses, setAddresses] = useState<
     {
       customerName: string;
@@ -61,9 +68,6 @@ const Checkout = ({
   }) => {
     setCurrentAddress(data);
   };
-  // const [modalOpen, setModalOpen] = React.useState(false);
-  // const handleModalOpen = () => setModalOpen(true);
-  // const handleModalClose = () => setModalOpen(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -110,6 +114,7 @@ const Checkout = ({
           "/products/orders/confirm-order",
           {
             orderId: order.id,
+            paymentMode,
             address: { ...currentAddress },
           },
         );
@@ -148,24 +153,6 @@ const Checkout = ({
                 savedAddress={addresses.length > 0 ? addresses[0] : null}
               ></AddressForm>
             </Box>
-            // <Box
-            //   display={"flex"}
-            //   flexDirection={"row"}
-            //   gap={2}
-            //   alignItems={"center"}
-            //   justifyContent={"space-between"}
-            // >
-            //   <Typography variant="h6" className="border-b-2">
-            //     Address
-            //   </Typography>
-            //   {addresses.length > 0 && false && (
-            //     <CustomButton
-            //       label="Add"
-            //       onClick={() => {}}
-            //       type="button"
-            //     ></CustomButton>
-            //   )}
-            // </Box>
           )}
         </Box>
         <Box width={{ xs: "100%", lg: "50%" }} p={1}>
@@ -180,7 +167,8 @@ const Checkout = ({
                       row
                       aria-labelledby="payment-mode-options"
                       name="row-radio-buttons-group"
-                      defaultValue={"cod"}
+                      defaultValue={paymentMode}
+                      onChange={handlePaymentModeChange}
                     >
                       <FormControlLabel
                         value="cod"

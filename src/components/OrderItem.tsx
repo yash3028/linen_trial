@@ -1,10 +1,12 @@
 import { Typography } from "@mui/material";
 import CustomButton from "./CustomButton";
+import { useNavigate } from "react-router";
 
 const OrderItem = ({
   order,
 }: {
   order: {
+    id: number;
     name: string;
     size: string;
     color: string;
@@ -14,6 +16,8 @@ const OrderItem = ({
     referenceNumber: string;
   };
 }) => {
+  const navigate = useNavigate();
+
   return (
     <div className="flex flex-col w-full p-2 bg-slate-100 rounded-lg border-1">
       <div className="flex flex-row justify-between">
@@ -37,7 +41,9 @@ const OrderItem = ({
           <CustomButton
             label="Get support"
             type="button"
-            onClick={() => {}}
+            onClick={() => {
+              navigate(`./${order.id}`, { relative: "route" });
+            }}
           ></CustomButton>
         </div>
       </div>

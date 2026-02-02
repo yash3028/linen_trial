@@ -1,17 +1,14 @@
 import { Paper, Typography } from "@mui/material";
-import { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
+import { useParams } from "react-router";
 import { getRequest } from "../utils/requests";
-import { useNavigate, useParams } from "react-router";
-import OrderSummary from "./OrderSummary";
-import CustomButton from "./CustomButton";
 
-const FinalSummary = ({
+const OrderDetail = ({
   snackBarFunction,
 }: {
   snackBarFunction: (message: string, type: "success" | "error") => void;
 }) => {
   const { id } = useParams();
-  const navigate = useNavigate();
 
   const [loading, setLoading] = useState<boolean>(true);
 
@@ -47,39 +44,36 @@ const FinalSummary = ({
         width: "100%",
         boxSizing: "border-box",
         borderRadius: 0,
-        justifyContent: "center",
+        justifyContent: "flex-start",
         gap: 2,
         backgroundColor: "primary.main",
         p: { sx: 0, lg: 5 },
       }}
     >
-      <div className="flex flex-col p-2 gap-2 w-2/3">
-        {!loading && order.status == "order_confirmed" ? (
-          <Typography variant="h6">Order placed successfully!</Typography>
-        ) : (
-          <Typography variant="h6" color="warning">
-            Order pending
-          </Typography>
-        )}
-        {!loading && (
-          <>
-            <Typography>Please note the below order id.</Typography>
-            <Typography fontWeight={"bold"}>
-              # {order.referenceNumber}
-            </Typography>
-            <OrderSummary order={order}></OrderSummary>
-            <CustomButton
-              label="Shop more"
-              type="button"
-              onClick={() => {
-                navigate("/");
-              }}
-            ></CustomButton>
-          </>
-        )}
-      </div>
+      {!loading && (
+        <div className="p-2">
+          <div className="p-2 bg-slate-100 rounded-xl border-1 flex flex-col gap-10">
+            <div>
+              <Typography variant="h6">
+                Order #{order.referenceNumber}
+              </Typography>
+
+              <Typography variant="body1">{order.name}</Typography>
+              <div className="w-2/3 flex flex-row justify-between">
+                <Typography variant="body2">Size: {order.size}</Typography>
+                <Typography variant="body2">
+                  Quantity: {order.quantity}
+                </Typography>
+              </div>
+            </div>
+            <div className="border-t-1 pt-2">
+              <Typography variant="body1">Issues / Queries</Typography>
+            </div>
+          </div>
+        </div>
+      )}
     </Paper>
   );
 };
 
-export default FinalSummary;
+export default OrderDetail;
