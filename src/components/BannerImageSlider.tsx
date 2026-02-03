@@ -1,17 +1,19 @@
 import React, { useState, useEffect } from "react";
-import { Box, Paper } from "@mui/material";
+import { Box, Paper, Typography } from "@mui/material";
 // import { ArrowBackIos, ArrowForwardIos } from "@mui/icons-material";
 
 interface ImageSliderProps {
   images: { url: string }[];
   autoPlay?: boolean;
   autoPlayDelay?: number; // in ms
+  onClickAction: () => void;
 }
 
 export const BannerImageSlider: React.FC<ImageSliderProps> = ({
   images,
   autoPlay = true,
   autoPlayDelay = 3000,
+  onClickAction,
 }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
 
@@ -58,7 +60,6 @@ export const BannerImageSlider: React.FC<ImageSliderProps> = ({
         }}
         elevation={0}
       >
-        {/* Images */}
         {images.map((img, index) => (
           <Box
             key={index}
@@ -78,7 +79,18 @@ export const BannerImageSlider: React.FC<ImageSliderProps> = ({
             }}
           />
         ))}
-
+        <button
+          onClick={onClickAction}
+          className="top-50 left-50 z-10 rounded-full border-2 p-3 sm:p-3 lg:p-8 cursor-pointer bg-secondary opacity-80"
+        >
+          <Typography
+            variant={"body1"}
+            textTransform={"uppercase"}
+            sx={{ fontWeight: { lg: "bold" } }}
+          >
+            Shop now
+          </Typography>
+        </button>
         {/* Previous Button */}
         {/* <IconButton
           onClick={prevSlide}
