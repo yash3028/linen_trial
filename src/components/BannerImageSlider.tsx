@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { Box, IconButton, Paper } from "@mui/material";
-import { ArrowBackIos, ArrowForwardIos } from "@mui/icons-material";
+import { Box, Paper } from "@mui/material";
+// import { ArrowBackIos, ArrowForwardIos } from "@mui/icons-material";
 
 interface ImageSliderProps {
   images: { url: string }[];
@@ -15,9 +15,9 @@ export const BannerImageSlider: React.FC<ImageSliderProps> = ({
 }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
 
-  const prevSlide = () => {
-    setCurrentIndex((prev) => (prev === 0 ? images.length - 1 : prev - 1));
-  };
+  // const prevSlide = () => {
+  //   setCurrentIndex((prev) => (prev === 0 ? images.length - 1 : prev - 1));
+  // };
 
   const nextSlide = () => {
     setCurrentIndex((prev) => (prev === images.length - 1 ? 0 : prev + 1));
@@ -48,7 +48,7 @@ export const BannerImageSlider: React.FC<ImageSliderProps> = ({
         sx={{
           position: "relative",
           width: "100%",
-          height: { xs: 300 },
+          height: { xs: 270, sm: 400, md: 600, lg: 800 },
           overflow: "hidden",
           borderRadius: 0,
           backgroundColor: "primary.main",
@@ -80,7 +80,7 @@ export const BannerImageSlider: React.FC<ImageSliderProps> = ({
         ))}
 
         {/* Previous Button */}
-        <IconButton
+        {/* <IconButton
           onClick={prevSlide}
           sx={{
             position: "absolute",
@@ -94,10 +94,10 @@ export const BannerImageSlider: React.FC<ImageSliderProps> = ({
           }}
         >
           <ArrowBackIos fontSize="small" />
-        </IconButton>
+        </IconButton> */}
 
         {/* Next Button */}
-        <IconButton
+        {/* <IconButton
           onClick={nextSlide}
           sx={{
             position: "absolute",
@@ -111,7 +111,7 @@ export const BannerImageSlider: React.FC<ImageSliderProps> = ({
           }}
         >
           <ArrowForwardIos fontSize="small" />
-        </IconButton>
+        </IconButton> */}
       </Paper>
     </Paper>
   );
