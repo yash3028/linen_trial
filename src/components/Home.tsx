@@ -41,9 +41,7 @@ export const Home = () => {
         sx={{
           width: "100%",
           margin: "0%",
-          display: "flex",
-          flexDirection: "column",
-          height: "100vh",
+          minHeight: "100vh ",
         }}
       >
         <Snackbar

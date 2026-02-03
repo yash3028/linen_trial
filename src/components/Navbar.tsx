@@ -120,7 +120,7 @@ const Navbar = ({
   return (
     <div className="sticky top-0 z-50">
       <AppBar
-        position="static"
+        position="sticky"
         color="inherit"
         elevation={1}
         sx={{ backgroundColor: "primary.main" }}

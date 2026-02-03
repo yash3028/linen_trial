@@ -8,7 +8,6 @@ const TermsOfService = () => {
         display: "flex",
         flexDirection: { xs: "column", lg: "row" },
         width: "100%",
-        minHeight: "100dvh",
         boxSizing: "border-box",
         borderRadius: 0,
         justifyContent: "flex-start",
@@ -22,7 +21,7 @@ const TermsOfService = () => {
         style={{
           display: "flex",
           width: "100%",
-          height: "100%",
+          height: "80vh",
           overflow: "hidden",
           flexGrow: 1,
         }}

@@ -21,7 +21,7 @@ const RefundPolicy = () => {
         style={{
           display: "flex",
           width: "100%",
-          height: "100%",
+          height: "80vh",
           overflow: "hidden",
           flexGrow: 1,
         }}

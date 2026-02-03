@@ -76,6 +76,7 @@ export const ImageSlider: React.FC<ImageSliderProps> = ({
               opacity: index === currentIndex ? 1 : 0,
               zIndex: index === currentIndex ? 1 : 0,
             }}
+            className="hover:scale-150 transition-all duration-300 origin-bottom"
           />
         ))}
 

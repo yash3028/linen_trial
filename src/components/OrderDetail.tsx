@@ -39,6 +39,7 @@ const OrderDetail = ({
     <Paper
       sx={{
         flexGrow: 1,
+        minHeight: "70vh",
         display: "flex",
         flexDirection: { xs: "column", lg: "row" },
         width: "100%",
