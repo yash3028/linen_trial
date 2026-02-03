@@ -132,27 +132,29 @@ export const ProductGrid: React.FC = () => {
           ))}
         </Grid>
       )}
-      <Box display="flex" justifyContent="center" mt={2} gap={1}>
-        <Button
-          variant="outlined"
-          sx={{ color: "text.primary" }}
-          disabled={page <= 1}
-          onClick={() => setPage((p) => p - 1)}
-        >
-          Previous
-        </Button>
-        <Typography sx={{ display: "flex", alignItems: "center" }}>
-          Page {page} of {totalPages}
-        </Typography>
-        <Button
-          variant="outlined"
-          sx={{ color: "text.primary" }}
-          disabled={page >= totalPages}
-          onClick={() => setPage((p) => p + 1)}
-        >
-          Next
-        </Button>
-      </Box>
+      {!loading && page > 1 && (
+        <Box display="flex" justifyContent="center" mt={2} gap={1}>
+          <Button
+            variant="outlined"
+            sx={{ color: "text.primary" }}
+            disabled={page <= 1}
+            onClick={() => setPage((p) => p - 1)}
+          >
+            Previous
+          </Button>
+          <Typography sx={{ display: "flex", alignItems: "center" }}>
+            Page {page} of {totalPages}
+          </Typography>
+          <Button
+            variant="outlined"
+            sx={{ color: "text.primary" }}
+            disabled={page >= totalPages}
+            onClick={() => setPage((p) => p + 1)}
+          >
+            Next
+          </Button>
+        </Box>
+      )}
     </Paper>
   );
 };
