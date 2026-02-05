@@ -22,6 +22,8 @@ import CustomButton from "./CustomButton";
 import { getRequest, postRequest } from "../utils/requests";
 import { clear_storage, save_data, save_token } from "../utils/authentication";
 
+import Drawer from "@mui/material/Drawer";
+
 const Navbar = ({
   snackBarFunction,
 }: {
@@ -117,6 +119,65 @@ const Navbar = ({
   const open = Boolean(anchorEl);
   const id = open ? "simple-popover" : undefined;
 
+  //-------------------------------------------------------
+  type Anchor = "top" | "left" | "bottom" | "right";
+
+  const [state, setState] = React.useState({
+    top: false,
+    left: false,
+    bottom: false,
+    right: false,
+  });
+
+  const toggleDrawer =
+    (open: boolean, anchor: Anchor = "right") =>
+    (event: React.KeyboardEvent | React.MouseEvent) => {
+      if (
+        event.type === "keydown" &&
+        ((event as React.KeyboardEvent).key === "Tab" ||
+          (event as React.KeyboardEvent).key === "Shift")
+      ) {
+        return;
+      }
+
+      setState({ ...state, [anchor]: open });
+    };
+
+  const list = () => (
+    <Box
+      sx={{ width: 100, backgroundColor: "primary.main" }}
+      role="presentation"
+      onClick={toggleDrawer(false)}
+      onKeyDown={toggleDrawer(false)}
+      mt={10}
+    >
+      <Stack direction={"column"}>
+        <Button
+          variant="text"
+          color="secondary"
+          onClick={
+            localStorage.getItem("token")?.length ? logout : handleModalOpen
+          }
+        >
+          <Typography variant="button" noWrap>
+            {localStorage.getItem("token")?.length
+              ? "Logout"
+              : "Login / Sign up"}
+          </Typography>
+        </Button>
+        <Button
+          variant="text"
+          color="secondary"
+          onClick={() => navigate("/my-orders")}
+        >
+          <Typography variant="button">Orders</Typography>
+        </Button>
+      </Stack>
+    </Box>
+  );
+
+  //-------------------------------------------------------
+
   return (
     <div className="sticky top-0 z-50">
       <AppBar
@@ -154,7 +215,7 @@ const Navbar = ({
 
           <Box sx={{ py: 1, ml: "auto" }}>
             <IconButton color="inherit" onClick={handleClick}>
-              <PersonIcon fontSize="large" />
+              <PersonIcon fontSize="inherit" />
             </IconButton>
             <Popover
               id={id}
@@ -311,6 +372,14 @@ const Navbar = ({
           </Box>
         </Toolbar>
       </AppBar>
+      <Drawer
+        anchor={"right"}
+        open={state["right"]}
+        onClose={toggleDrawer(false)}
+        slotProps={{ paper: { sx: { backgroundColor: "primary.main" } } }}
+      >
+        {list()}
+      </Drawer>
     </div>
   );
 };

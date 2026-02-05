@@ -53,7 +53,7 @@ const FinalSummary = ({
         p: { sx: 0, lg: 5 },
       }}
     >
-      <div className="flex flex-col p-2 gap-2 w-2/3">
+      <div className="flex flex-col p-2 gap-2 w-full lg:w-2/3 lg:text-center">
         {!loading && order.status == "order_confirmed" ? (
           <Typography variant="h6">Order placed successfully!</Typography>
         ) : (

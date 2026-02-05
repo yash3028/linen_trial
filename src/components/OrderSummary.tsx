@@ -8,7 +8,7 @@ const OrderSummary = ({ order }: { order: any }) => {
         Order summary
       </Typography>
       <Typography variant="body2">Product: {order.name}</Typography>
-      <div className="flex flex-row gap-3">
+      <div className="flex flex-row justify-between lg:justify-around">
         <Typography variant="body2">Size: {order.size}</Typography>
         <Typography variant="body2">Quantity: {order.quantity}</Typography>
       </div>

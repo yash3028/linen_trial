@@ -11,12 +11,12 @@ const CustomButton = (props: {
   return (
     <>
       <button
-        className={`hover:bg-secondary hover:text-primary rounded-sm border min-w-20 bg-primary text-secondary`}
-        style={{ padding: "1%", cursor: "pointer" }}
+        className={`hover:bg-secondary hover:text-primary rounded-full border min-w-20 bg-primary text-secondary p-3`}
+        style={{ cursor: "pointer" }}
         onClick={(event) => props.onClick(event)}
         type={props.type}
       >
-        <Typography> {props.label}</Typography>
+        <Typography variant="body2"> {props.label}</Typography>
       </button>
     </>
   );

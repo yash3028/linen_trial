@@ -122,6 +122,31 @@ export const Product = ({
       }
     }
   };
+  // const add_to_cart = async () => {
+  //   const index = sizeArray.findIndex((val) => val == true);
+  //   if (index == -1) {
+  //     snackBarFunction("Please select size", "error");
+  //   } else {
+  //     const { data, error, message } = await postRequest<any>(
+  //       "/products/orders/place-order",
+  //       {
+  //         size: size_master[index.toString() as keyof typeof size_master],
+  //         quantity: quantity,
+  //         price: product.price,
+  //         color: product.color,
+  //         status: "added_to_cart",
+  //         productCode: product.productCode,
+  //         name: product.name,
+  //       },
+  //     );
+  //     if (error) {
+  //       snackBarFunction(message, "error");
+  //     } else {
+  //       snackBarFunction(data.message, "success");
+  //       navigate(`/checkout/cart/${data.order.id}`);
+  //     }
+  //   }
+  // };
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -231,6 +256,13 @@ export const Product = ({
             }
             type="button"
           ></CustomButton>
+          {/* <CustomButton
+            label="Add to cart"
+            onClick={
+              localStorage.getItem("token") ? add_to_cart : handleModalOpen
+            }
+            type="button"
+          ></CustomButton> */}
         </Box>
         <Modal
           open={modalOpen}

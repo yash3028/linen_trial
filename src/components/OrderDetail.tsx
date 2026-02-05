@@ -2,6 +2,7 @@ import { Paper, Typography } from "@mui/material";
 import { useState, useEffect } from "react";
 import { useParams } from "react-router";
 import { getRequest } from "../utils/requests";
+import Address from "./Address";
 
 const OrderDetail = ({
   snackBarFunction,
@@ -45,31 +46,61 @@ const OrderDetail = ({
         width: "100%",
         boxSizing: "border-box",
         borderRadius: 0,
-        justifyContent: "flex-start",
+        justifyContent: { xs: "flex-start", lg: "center" },
         gap: 2,
         backgroundColor: "primary.main",
         p: { sx: 0, lg: 5 },
       }}
     >
       {!loading && (
-        <div className="p-2">
-          <div className="p-2 bg-slate-100 rounded-xl border-1 flex flex-col gap-10">
-            <div>
-              <Typography variant="h6">
-                Order #{order.referenceNumber}
-              </Typography>
-
-              <Typography variant="body1">{order.name}</Typography>
-              <div className="w-2/3 flex flex-row justify-between">
-                <Typography variant="body2">Size: {order.size}</Typography>
-                <Typography variant="body2">
-                  Quantity: {order.quantity}
+        <div className="p-2 h-full w-full lg:w-2/3">
+          <div className="p-2 bg-[#135638]/5 rounded-xl border-1 flex flex-col items-center">
+            <Typography variant="h6">Order #{order.referenceNumber}</Typography>
+            <div className="w-full bg-slate-500/10 rounded-xl p-2 text-center">
+              <div className="flex flex-col lg:flex-row justify-around gap-3">
+                <div>
+                  <Typography
+                    variant="body1"
+                    textTransform={"uppercase"}
+                    fontWeight={"bold"}
+                  >
+                    {order.name}
+                  </Typography>
+                  <div className="flex flex-row justify-around">
+                    <Typography variant="body2">Size: {order.size}</Typography>
+                    <Typography variant="body2">
+                      Quantity: {order.quantity}
+                    </Typography>
+                  </div>
+                  <div>
+                    <Typography variant="body2">
+                      Total order price: INR {order.price}
+                    </Typography>
+                  </div>
+                </div>
+                <div>
+                  <Address address={order.address}></Address>
+                </div>
+              </div>
+              <div>
+                <Typography variant="body2" fontWeight={"bold"}>
+                  Contact us:
                 </Typography>
+                <div className="flex flex-col">
+                  <Typography variant="caption">
+                    Call or WhatsApp: +91 70759 67089
+                  </Typography>
+                  <Typography variant="caption">
+                    Email: support@thetruetouch.in
+                  </Typography>
+                </div>
               </div>
             </div>
-            <div className="border-t-1 pt-2">
+
+            {/* <div className="w-full mt-1 text-center bg-slate-150">
               <Typography variant="body1">Issues / Queries</Typography>
-            </div>
+              <TextArea></TextArea>
+            </div> */}
           </div>
         </div>
       )}
