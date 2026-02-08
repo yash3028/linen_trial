@@ -57,7 +57,6 @@ const Navbar = ({
   };
   const sendOtp = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    console.log(phone);
     if (matchIsValidTel(phone, { onlyCountries: ["IN"] })) {
       // API call to send OTP here
       const { data, error, message } = await postRequest<any>(
@@ -94,6 +93,7 @@ const Navbar = ({
       setOtp("");
       snackBarFunction("Logged in successfully", "success");
       handleModalClose();
+      handleClose();
     }
   };
   const logout = async () => {
@@ -102,6 +102,8 @@ const Navbar = ({
       snackBarFunction(message, "error");
     } else {
       clear_storage();
+      setIsOtpSent(false);
+      handleClose();
       snackBarFunction("Logged out successfully", "success");
       navigate("/");
     }

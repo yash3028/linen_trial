@@ -130,6 +130,9 @@ const Checkout = ({
           snackBarFunction(message, "error");
         } else {
           snackBarFunction(data.message, "success");
+          if (data.payment_url) {
+            window.location.replace(data.payment_url);
+          }
           id
             ? navigate(`/checkout/summary/single/${data.id}`)
             : navigate(`/checkout/summary/cart/${data.id}`);
