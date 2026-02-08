@@ -64,11 +64,21 @@ export const Home = () => {
           </Route>
           <Route path="/checkout">
             <Route
-              path="cart/:id"
+              path="view-cart"
               element={<Checkout snackBarFunction={openSnackBar} />}
             ></Route>
             <Route
-              path="summary/:id"
+              path="view-cart/:id"
+              element={<Checkout snackBarFunction={openSnackBar} />}
+            ></Route>
+            <Route
+              path="summary/single/:id"
+              element={
+                <FinalSummary snackBarFunction={openSnackBar}></FinalSummary>
+              }
+            ></Route>
+            <Route
+              path="summary/cart/:cartId"
               element={
                 <FinalSummary snackBarFunction={openSnackBar}></FinalSummary>
               }

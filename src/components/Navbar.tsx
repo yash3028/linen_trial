@@ -8,6 +8,7 @@ import {
   Button,
   Stack,
   Modal,
+  Divider,
 } from "@mui/material";
 import { MuiTelInput, matchIsValidTel } from "mui-tel-input";
 import { MuiOtpInput } from "mui-one-time-password-input";
@@ -17,6 +18,7 @@ import "../styles/index.css";
 import logo from "../assets/mark_svg.svg";
 import { Link, useNavigate } from "react-router";
 import PersonIcon from "@mui/icons-material/Person";
+import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import React from "react";
 import CustomButton from "./CustomButton";
 import { getRequest, postRequest } from "../utils/requests";
@@ -217,6 +219,12 @@ const Navbar = ({
             <IconButton color="inherit" onClick={handleClick}>
               <PersonIcon fontSize="inherit" />
             </IconButton>
+            <IconButton
+              color="inherit"
+              onClick={() => navigate("/checkout/view-cart")}
+            >
+              <ShoppingCartIcon fontSize="inherit" />
+            </IconButton>
             <Popover
               id={id}
               open={open}
@@ -234,29 +242,37 @@ const Navbar = ({
                 },
               }}
             >
-              <Stack direction={"column"}>
-                <Button
-                  variant="text"
+              <Stack direction={"column"} minWidth={200} textAlign={"start"}>
+                <Box
                   color="secondary"
                   onClick={
                     localStorage.getItem("token")?.length
                       ? logout
                       : handleModalOpen
                   }
+                  p={1}
+                  sx={{ cursor: "pointer" }}
                 >
-                  <Typography variant="button" noWrap>
+                  <Typography noWrap textAlign={"start"} variant="body2">
                     {localStorage.getItem("token")?.length
                       ? "Logout"
                       : "Login / Sign up"}
                   </Typography>
-                </Button>
-                <Button
-                  variant="text"
+                </Box>
+                <Divider />
+                <Box
                   color="secondary"
-                  onClick={() => navigate("/my-orders")}
+                  onClick={() => {
+                    handleClose();
+                    navigate("/my-orders");
+                  }}
+                  p={1}
+                  sx={{ cursor: "pointer" }}
                 >
-                  <Typography variant="button">Orders</Typography>
-                </Button>
+                  <Typography textAlign={"start"} variant="body2">
+                    Orders
+                  </Typography>
+                </Box>
               </Stack>
             </Popover>
             <Modal

@@ -27,12 +27,8 @@ const OrderItem = ({
         <Typography fontWeight={"bold"} textTransform={"uppercase"}>
           {order.name}
         </Typography>
-        <Typography textTransform={"uppercase"} variant="body2">
-          {order.referenceNumber}
-        </Typography>
       </div>
       <div className="bg-slate-500/10 p-2 rounded-xl flex flex-col gap-2">
-        {" "}
         <div className="text-center">
           <Typography>
             Status:{" "}
@@ -49,9 +45,11 @@ const OrderItem = ({
             <Typography variant="body2">Color: {order.color}</Typography>
             <Typography variant="body2">Quantity: {order.quantity}</Typography>
           </div>
-          <div className="flex flex-col h-full justify-between gap-2">
+          <div className="flex flex-col h-full justify-between gap-2 items-end">
             <Typography variant="body2">Total: INR {order.price}</Typography>
-
+            <Typography variant="body2">
+              Order id: {order.referenceNumber}
+            </Typography>
             <CustomButton
               label="Get support"
               type="button"
@@ -64,7 +62,7 @@ const OrderItem = ({
                 label="Complete order"
                 type="button"
                 onClick={() => {
-                  navigate(`../checkout/cart/${order.id}`, {
+                  navigate(`../checkout/view-cart/${order.id}`, {
                     relative: "route",
                   });
                 }}

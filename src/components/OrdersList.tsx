@@ -1,16 +1,17 @@
 import { Box, Button, Grid, Paper, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
-// import { useNavigate } from "react-router";
+import { useNavigate } from "react-router";
 import { getRequest } from "../utils/requests";
 import OrderItem from "./OrderItem";
+import CustomButton from "./CustomButton";
 
 const OrdersList = ({
   snackBarFunction,
 }: {
   snackBarFunction: (message: string, type: "success" | "error") => void;
 }) => {
-  //   const navigate = useNavigate();
-  const [orders, setOrders] = useState<any>(null);
+  const navigate = useNavigate();
+  const [orders, setOrders] = useState<any[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [page, setPage] = useState(1);
   const [limit] = useState(10);
@@ -55,28 +56,50 @@ const OrdersList = ({
         p: { sx: 0, lg: 0 },
       }}
     >
-      <Typography variant="h5" className="pl-2 pt-2">
-        Your Orders{" "}
-      </Typography>{" "}
-      {!loading && (
-        <Grid
-          container
-          spacing={{ xs: 0, sm: 1, md: 2 }}
-          sx={{ justifyContent: "center" }}
-        >
-          {orders.map((order: any) => (
-            <Grid
-              size={{ xs: 12, sm: 6, md: 6, lg: 6 }}
-              key={order.id}
-              display={"flex"}
-              gap={1}
-              p={0.7}
-            >
-              <OrderItem order={order} key={order.id}></OrderItem>
-            </Grid>
-          ))}
-        </Grid>
-      )}
+      <Typography
+        variant="body2"
+        className="p-2 text-center bg-[#135638]/5"
+        textTransform={"uppercase"}
+        letterSpacing={5}
+        fontWeight={"bold"}
+      >
+        Your Orders
+      </Typography>
+      {!loading &&
+        (orders.length ? (
+          <Grid
+            container
+            spacing={{ xs: 0, sm: 1, md: 2 }}
+            sx={{ justifyContent: "center" }}
+          >
+            {orders.map((order: any) => (
+              <Grid
+                size={{ xs: 12, sm: 6, md: 6, lg: 6 }}
+                key={order.id}
+                display={"flex"}
+                gap={1}
+                p={0.7}
+              >
+                <OrderItem order={order} key={order.id}></OrderItem>
+              </Grid>
+            ))}
+          </Grid>
+        ) : (
+          <Box className="p-2 flex flex-col items-center gap-2 h-full">
+            <Typography variant="h6" className="text-center">
+              You do not have any orders!
+            </Typography>
+            <Box className="w-1/2">
+              <CustomButton
+                label="Shop now"
+                type="button"
+                onClick={() => {
+                  navigate("/");
+                }}
+              ></CustomButton>
+            </Box>
+          </Box>
+        ))}
       {!loading && page > 1 && (
         <Box display="flex" justifyContent="center" mt={2} gap={1}>
           <Button

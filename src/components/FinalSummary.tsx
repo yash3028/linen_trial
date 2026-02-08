@@ -10,25 +10,28 @@ const FinalSummary = ({
 }: {
   snackBarFunction: (message: string, type: "success" | "error") => void;
 }) => {
-  const { id } = useParams();
+  const { id, cartId } = useParams();
   const navigate = useNavigate();
 
   const [loading, setLoading] = useState<boolean>(true);
 
-  const [order, setOrder] = useState<any>(null);
+  const [orders, setOrders] = useState<any[]>([]);
+
+  const [total_price, setTotalPrice] = useState<number>(0);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         setLoading(true);
-        const { data, error, message } = await getRequest(
-          `/products/orders/get-order/${id}`,
-        );
+        const { data, error, message } = id
+          ? await getRequest(`/products/orders/view-cart/${id}`)
+          : await getRequest(`/products/orders/get-cart/${cartId}`);
 
         if (error) {
           throw new Error(`HTTP error! status: ${message}`);
         }
-        setOrder(data);
+        setOrders((data as any).orders);
+        setTotalPrice((data as any).total_price);
       } catch (err: any) {
         console.log(err.message || "Something went wrong");
         snackBarFunction(err.message, "error");
@@ -54,20 +57,15 @@ const FinalSummary = ({
       }}
     >
       <div className="flex flex-col p-2 gap-2 w-full lg:w-2/3 lg:text-center">
-        {!loading && order.status == "order_confirmed" ? (
+        {!loading && (
           <Typography variant="h6">Order placed successfully!</Typography>
-        ) : (
-          <Typography variant="h6" color="warning">
-            Order pending
-          </Typography>
         )}
         {!loading && (
           <>
-            <Typography>Please note the below order id.</Typography>
-            <Typography fontWeight={"bold"}>
-              # {order.referenceNumber}
-            </Typography>
-            <OrderSummary order={order}></OrderSummary>
+            <OrderSummary
+              orders={orders}
+              total_price={total_price}
+            ></OrderSummary>
             <CustomButton
               label="Shop more"
               type="button"

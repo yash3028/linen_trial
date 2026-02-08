@@ -118,35 +118,34 @@ export const Product = ({
         snackBarFunction(message, "error");
       } else {
         snackBarFunction(data.message, "success");
-        navigate(`/checkout/cart/${data.order.id}`);
+        navigate(`/checkout/view-cart/${data.order.id}`);
       }
     }
   };
-  // const add_to_cart = async () => {
-  //   const index = sizeArray.findIndex((val) => val == true);
-  //   if (index == -1) {
-  //     snackBarFunction("Please select size", "error");
-  //   } else {
-  //     const { data, error, message } = await postRequest<any>(
-  //       "/products/orders/place-order",
-  //       {
-  //         size: size_master[index.toString() as keyof typeof size_master],
-  //         quantity: quantity,
-  //         price: product.price,
-  //         color: product.color,
-  //         status: "added_to_cart",
-  //         productCode: product.productCode,
-  //         name: product.name,
-  //       },
-  //     );
-  //     if (error) {
-  //       snackBarFunction(message, "error");
-  //     } else {
-  //       snackBarFunction(data.message, "success");
-  //       navigate(`/checkout/cart/${data.order.id}`);
-  //     }
-  //   }
-  // };
+  const add_to_cart = async () => {
+    const index = sizeArray.findIndex((val) => val == true);
+    if (index == -1) {
+      snackBarFunction("Please select size", "error");
+    } else {
+      const { data, error, message } = await postRequest<any>(
+        "/products/orders/place-order",
+        {
+          size: size_master[index.toString() as keyof typeof size_master],
+          quantity: quantity,
+          price: product.price,
+          color: product.color,
+          status: "added_to_cart",
+          productCode: product.productCode,
+          name: product.name,
+        },
+      );
+      if (error) {
+        snackBarFunction(message, "error");
+      } else {
+        snackBarFunction(data.message, "success");
+      }
+    }
+  };
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -256,13 +255,13 @@ export const Product = ({
             }
             type="button"
           ></CustomButton>
-          {/* <CustomButton
+          <CustomButton
             label="Add to cart"
             onClick={
               localStorage.getItem("token") ? add_to_cart : handleModalOpen
             }
             type="button"
-          ></CustomButton> */}
+          ></CustomButton>
         </Box>
         <Modal
           open={modalOpen}
