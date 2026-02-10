@@ -65,6 +65,7 @@ const FinalSummary = ({
             <OrderSummary
               orders={orders}
               total_price={total_price}
+              delete_item={null}
             ></OrderSummary>
             <CustomButton
               label="Shop more"

@@ -8,7 +8,7 @@ const OrderSummary = ({
 }: {
   orders: any[];
   total_price: number;
-  delete_item: any;
+  delete_item: any | null;
 }) => {
   const onDelete = (referenceNumber: string) => {
     delete_item(referenceNumber);
@@ -54,7 +54,7 @@ const OrderSummary = ({
             </div>
 
             <div>
-              {order.referenceNumber != order.cartId && (
+              {order.referenceNumber != order.cartId && delete_item != null && (
                 <IconButton
                   sx={{ cursor: "pointer" }}
                   onClick={() => {
