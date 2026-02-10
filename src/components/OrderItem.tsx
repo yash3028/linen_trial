@@ -31,7 +31,6 @@ const OrderItem = ({
       <div className="bg-slate-500/10 p-2 rounded-xl flex flex-col gap-2 h-full">
         <div className="text-center">
           <Typography>
-            Status:{" "}
             {
               order_status_master[
                 order.status as keyof typeof order_status_master

@@ -70,11 +70,11 @@ export const Home = () => {
           </Route>
           <Route path="/checkout">
             <Route
-              path="view-cart"
+              path="cart/:cartId"
               element={<Checkout snackBarFunction={openSnackBar} />}
             ></Route>
             <Route
-              path="view-cart/:cartId"
+              path="view-cart"
               element={<Checkout snackBarFunction={openSnackBar} />}
             ></Route>
             <Route

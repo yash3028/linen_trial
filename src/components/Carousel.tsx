@@ -4,8 +4,8 @@ import Typography from "@mui/material/Typography";
 
 const Carousel = () => {
   const items = [
-    { url: "", text: "Contact for more details." },
-    { url: "", text: "We are lauching our product on 11th Oct, 2025." },
+    { url: "", text: "Contact for more details" },
+    { url: "", text: "Buy 1 - 5% OFF | Buy 2 - 10% OFF | Buy 3 - 15% OFF" },
   ];
   const [index, setIndex] = useState(0);
 

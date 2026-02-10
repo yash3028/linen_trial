@@ -4,15 +4,18 @@ import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 const OrderSummary = ({
   orders,
   total_price,
+  delete_item,
 }: {
   orders: any[];
   total_price: number;
+  delete_item: any;
 }) => {
+  const onDelete = (referenceNumber: string) => {
+    delete_item(referenceNumber);
+  };
   return (
     <div className="flex flex-col gap-1 bg-slate-100 p-2 pt-1 rounded-xl border-1">
-      <Typography variant="h6" className="">
-        Order summary
-      </Typography>
+      <Typography variant="h6">Order summary</Typography>
       {orders.map((order, index) => (
         <Box key={index}>
           <Divider />
@@ -51,10 +54,16 @@ const OrderSummary = ({
             </div>
 
             <div>
-              <IconButton sx={{ cursor: "pointer" }}>
-                {" "}
-                <DeleteOutlineIcon color="error"></DeleteOutlineIcon>
-              </IconButton>
+              {order.referenceNumber != order.cartId && (
+                <IconButton
+                  sx={{ cursor: "pointer" }}
+                  onClick={() => {
+                    onDelete(order.referenceNumber);
+                  }}
+                >
+                  <DeleteOutlineIcon color="error"></DeleteOutlineIcon>
+                </IconButton>
+              )}
             </div>
           </div>
           <Divider />

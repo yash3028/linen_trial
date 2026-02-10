@@ -100,7 +100,7 @@ const Checkout = ({
       }
     };
     fetchData();
-  }, []);
+  }, [cartId]);
 
   const confirm_order = async () => {
     try {
@@ -134,6 +134,22 @@ const Checkout = ({
             navigate(`/checkout/summary/${data.id}`);
           }
         }
+      }
+    } catch (error: any) {
+      snackBarFunction(error.message, "error");
+    }
+  };
+  const delete_item = async (referenceNumber: string) => {
+    try {
+      const { data, error, message } = await postRequest<any>(
+        "/products/orders/delete-from-cart",
+        { deleteType: "single", orderRef: referenceNumber },
+      );
+      if (error) {
+        snackBarFunction(message, "error");
+      } else {
+        snackBarFunction("Item deleted", "success");
+        setOrders(data.orders);
       }
     } catch (error: any) {
       snackBarFunction(error.message, "error");
@@ -184,6 +200,7 @@ const Checkout = ({
                       <OrderSummary
                         orders={orders}
                         total_price={total_price}
+                        delete_item={delete_item}
                       ></OrderSummary>
 
                       <div>
