@@ -114,7 +114,6 @@ const Checkout = ({
         !currentAddress?.pincode ||
         currentAddress.pincode.length != 6
       ) {
-        console.log(currentAddress);
         throw new apiError(500, "Please fill required address fields");
       } else {
         const { data, error, message } = await postRequest<any>(
@@ -146,7 +145,7 @@ const Checkout = ({
         sx={{
           flexGrow: 1,
           display: "flex",
-          flexDirection: { xs: "column", lg: "row" },
+          flexDirection: { xs: "column", lg: "column" },
           width: "100%",
           minHeight: "80dvh",
           boxSizing: "border-box",
@@ -154,7 +153,7 @@ const Checkout = ({
           justifyContent: "flex-start",
           gap: 2,
           backgroundColor: "primary.main",
-          p: { sx: 0, lg: 5 },
+          p: { sx: 0, lg: 0 },
         }}
       >
         <Typography
@@ -163,81 +162,78 @@ const Checkout = ({
           textTransform={"uppercase"}
           letterSpacing={5}
           fontWeight={"bold"}
+          flexBasis={"100%"}
         >
           Cart
-        </Typography>{" "}
-        {orders.length > 0 ? (
-          <>
-            <Box width={{ xs: "100%", lg: "50%" }} p={1}>
-              {!loading && (
-                <Box display={"flex"} flexDirection={"column"} gap={2}>
+        </Typography>
+        <Box width={"100%"}>
+          {orders.length > 0 ? (
+            <div className="flex flex-col lg:flex lg:flex-row w-full">
+              <Box width={{ xs: "100%", lg: "50%" }} p={1}>
+                {!loading && (
                   <AddressForm
                     sendData={handelAddress}
                     savedAddress={addresses.length > 0 ? addresses[0] : null}
                   ></AddressForm>
-                </Box>
-              )}
-            </Box>
-            <Box width={{ xs: "100%", lg: "50%" }} p={1}>
-              <div>
-                {!loading && (
-                  <Box display={"flex"} flexDirection={"column"} gap={1}>
-                    <OrderSummary
-                      orders={orders}
-                      total_price={total_price}
-                    ></OrderSummary>
-
-                    <div>
-                      <FormControl>
-                        <RadioGroup
-                          row
-                          aria-labelledby="payment-mode-options"
-                          name="row-radio-buttons-group"
-                          defaultValue={paymentMode}
-                          onChange={handlePaymentModeChange}
-                        >
-                          <FormControlLabel
-                            value="cod"
-                            control={
-                              <Radio
-                                color="secondary"
-                                sx={{ color: "secondary.main" }}
-                              />
-                            }
-                            label="Cash on delivery"
-                          />
-                          <FormControlLabel
-                            value="pay_now"
-                            control={
-                              <Radio
-                                color="secondary"
-                                sx={{ color: "secondary.main" }}
-                              />
-                            }
-                            label="Pay now"
-                          />
-                        </RadioGroup>
-                      </FormControl>
-                    </div>
-                    <CustomButton
-                      label={"Confirm order"}
-                      onClick={confirm_order}
-                      type="button"
-                    ></CustomButton>
-                  </Box>
                 )}
-              </div>
-            </Box>
-          </>
-        ) : (
-          <>
+              </Box>
+              <Box width={{ xs: "100%", lg: "50%" }} p={1}>
+                <div>
+                  {!loading && (
+                    <Box display={"flex"} flexDirection={"column"} gap={1}>
+                      <OrderSummary
+                        orders={orders}
+                        total_price={total_price}
+                      ></OrderSummary>
+
+                      <div>
+                        <FormControl>
+                          <RadioGroup
+                            row
+                            aria-labelledby="payment-mode-options"
+                            name="row-radio-buttons-group"
+                            defaultValue={paymentMode}
+                            onChange={handlePaymentModeChange}
+                          >
+                            <FormControlLabel
+                              value="cod"
+                              control={
+                                <Radio
+                                  color="secondary"
+                                  sx={{ color: "secondary.main" }}
+                                />
+                              }
+                              label="Cash on delivery"
+                            />
+                            <FormControlLabel
+                              value="pay_now"
+                              control={
+                                <Radio
+                                  color="secondary"
+                                  sx={{ color: "secondary.main" }}
+                                />
+                              }
+                              label="Pay now"
+                            />
+                          </RadioGroup>
+                        </FormControl>
+                      </div>
+                      <CustomButton
+                        label={"Confirm order"}
+                        onClick={confirm_order}
+                        type="button"
+                      ></CustomButton>
+                    </Box>
+                  )}
+                </div>
+              </Box>
+            </div>
+          ) : (
             <Box className="p-2 flex flex-col items-center gap-2">
-              {" "}
               <Typography variant="h6" className="text-center">
                 Your cart is empty!
               </Typography>
               <Box className="w-1/2">
-                {" "}
                 <CustomButton
                   label="Shop now"
                   type="button"
@@ -247,8 +243,8 @@ const Checkout = ({
                 ></CustomButton>
               </Box>
             </Box>
-          </>
-        )}
+          )}
+        </Box>
       </Paper>
     </>
   );

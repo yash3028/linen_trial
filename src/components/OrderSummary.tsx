@@ -1,6 +1,6 @@
-import { Box, Divider, Typography } from "@mui/material";
+import { Box, Divider, IconButton, Typography } from "@mui/material";
 import { order_status_master } from "../utils/utils";
-
+import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 const OrderSummary = ({
   orders,
   total_price,
@@ -16,29 +16,48 @@ const OrderSummary = ({
       {orders.map((order, index) => (
         <Box key={index}>
           <Divider />
-          <Typography variant="body2" pt={1}>
-            Product: {order.name}
-          </Typography>
-          <div className="flex flex-row justify-between lg:justify-around">
-            <Typography variant="body2">Size: {order.size}</Typography>
-            <Typography variant="body2">Quantity: {order.quantity}</Typography>
+          <div className="flex flex-row justify-between">
+            <div className="w-6/8 lg:w-1/2">
+              <Typography
+                variant="body2"
+                pt={1}
+                textTransform={"uppercase"}
+                fontWeight={"bold"}
+              >
+                {order.name}
+              </Typography>
+              <div className="flex flex-row justify-between">
+                <Typography variant="body2">Size: {order.size}</Typography>
+                <Typography variant="body2">
+                  Quantity: {order.quantity}
+                </Typography>
+              </div>
+              <Typography variant="body2">
+                Total price: INR {order.price}
+              </Typography>
+              <Typography variant="body2">
+                Status:{" "}
+                {
+                  order_status_master[
+                    order.status as keyof typeof order_status_master
+                  ]
+                }
+              </Typography>
+              {order.referenceNumber && (
+                <Typography variant="body2">
+                  Order id: {order.referenceNumber}
+                </Typography>
+              )}
+            </div>
+
+            <div>
+              <IconButton sx={{ cursor: "pointer" }}>
+                {" "}
+                <DeleteOutlineIcon color="error"></DeleteOutlineIcon>
+              </IconButton>
+            </div>
           </div>
-          <Typography variant="body2">
-            Total price: INR {order.price}
-          </Typography>
-          <Typography variant="body2">
-            Status:{" "}
-            {
-              order_status_master[
-                order.status as keyof typeof order_status_master
-              ]
-            }
-          </Typography>
-          {order.referenceNumber && (
-            <Typography variant="body2">
-              Order id: {order.referenceNumber}
-            </Typography>
-          )}
+          <Divider />
         </Box>
       ))}
       <Typography className="text-center">

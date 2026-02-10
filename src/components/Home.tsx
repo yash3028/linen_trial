@@ -50,7 +50,13 @@ export const Home = () => {
           autoHideDuration={3000}
           onClose={closeSnackBar}
         >
-          <Alert severity={snackBar.type}>{snackBar.message}</Alert>
+          <Alert
+            severity={snackBar.type}
+            variant="filled"
+            onClose={closeSnackBar}
+          >
+            {snackBar.message}
+          </Alert>
         </Snackbar>
         <Carousel />
         <Navbar snackBarFunction={openSnackBar} />

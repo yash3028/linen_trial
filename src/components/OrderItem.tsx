@@ -16,6 +16,7 @@ const OrderItem = ({
     status: string;
     referenceNumber: string;
     address: any;
+    cartId: string;
   };
 }) => {
   const navigate = useNavigate();
@@ -27,7 +28,7 @@ const OrderItem = ({
           {order.name}
         </Typography>
       </div>
-      <div className="bg-slate-500/10 p-2 rounded-xl flex flex-col gap-2">
+      <div className="bg-slate-500/10 p-2 rounded-xl flex flex-col gap-2 h-full">
         <div className="text-center">
           <Typography>
             Status:{" "}
@@ -39,7 +40,7 @@ const OrderItem = ({
           </Typography>
         </div>
         <div className="flex flex-row justify-between">
-          <div>
+          <div className="w-40">
             <Typography variant="body2">Size: {order.size}</Typography>
             <Typography variant="body2">Color: {order.color}</Typography>
             <Typography variant="body2">Quantity: {order.quantity}</Typography>
@@ -61,7 +62,7 @@ const OrderItem = ({
                 label="Complete order"
                 type="button"
                 onClick={() => {
-                  navigate(`../checkout/view-cart/${order.id}`, {
+                  navigate(`../checkout/view-cart/${order.cartId}`, {
                     relative: "route",
                   });
                 }}
