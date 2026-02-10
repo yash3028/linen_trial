@@ -118,7 +118,7 @@ export const Product = ({
         snackBarFunction(message, "error");
       } else {
         snackBarFunction(data.message, "success");
-        navigate(`/checkout/view-cart/${data.order.id}`);
+        navigate(`/checkout/view-cart/${data.order.referenceNumber}`);
       }
     }
   };

@@ -10,7 +10,7 @@ const FinalSummary = ({
 }: {
   snackBarFunction: (message: string, type: "success" | "error") => void;
 }) => {
-  const { id, cartId } = useParams();
+  const { cartId } = useParams();
   const navigate = useNavigate();
 
   const [loading, setLoading] = useState<boolean>(true);
@@ -23,9 +23,9 @@ const FinalSummary = ({
     const fetchData = async () => {
       try {
         setLoading(true);
-        const { data, error, message } = id
-          ? await getRequest(`/products/orders/view-cart/${id}`)
-          : await getRequest(`/products/orders/get-cart/${cartId}`);
+        const { data, error, message } = await getRequest(
+          `/products/orders/view-cart/${cartId}`,
+        );
 
         if (error) {
           throw new Error(`HTTP error! status: ${message}`);

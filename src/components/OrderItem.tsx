@@ -1,7 +1,6 @@
 import { Typography } from "@mui/material";
 import CustomButton from "./CustomButton";
 import { useNavigate } from "react-router";
-import Address from "./Address";
 import { order_status_master } from "../utils/utils";
 
 const OrderItem = ({
@@ -69,9 +68,6 @@ const OrderItem = ({
               ></CustomButton>
             )}
           </div>
-        </div>
-        <div className="text-center">
-          <Address address={order.address}></Address>
         </div>
       </div>
     </div>

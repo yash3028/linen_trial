@@ -20,7 +20,7 @@ const Checkout = ({
 }: {
   snackBarFunction: (message: string, type: "success" | "error") => void;
 }) => {
-  const { id } = useParams();
+  const { cartId } = useParams();
   const navigate = useNavigate();
 
   const [loading, setLoading] = useState<boolean>(true);
@@ -78,7 +78,9 @@ const Checkout = ({
         setLoading(true);
         const [addresses_response, order_response]: any[] = await Promise.all([
           await getRequest(`/products/orders/get-addresses`),
-          await getRequest(`/products/orders/view-cart${id ? `/${id}` : ""}`),
+          await getRequest(
+            `/products/orders/view-cart${cartId ? `/${cartId}` : ""}`,
+          ),
         ]);
 
         if (addresses_response.error || order_response.error) {
@@ -115,27 +117,23 @@ const Checkout = ({
         console.log(currentAddress);
         throw new apiError(500, "Please fill required address fields");
       } else {
-        const { data, error, message } = id
-          ? await postRequest<any>("/products/orders/confirm-order", {
-              orderId: orders[0].id,
-              paymentMode,
-              address: { ...currentAddress },
-            })
-          : await postRequest<any>("/products/orders/confirm-cart", {
-              cartId: orders[0].cartId,
-              paymentMode,
-              address: { ...currentAddress },
-            });
+        const { data, error, message } = await postRequest<any>(
+          "/products/orders/confirm-cart",
+          {
+            cartId: orders[0].cartId,
+            paymentMode,
+            address: { ...currentAddress },
+          },
+        );
         if (error) {
           snackBarFunction(message, "error");
         } else {
           snackBarFunction(data.message, "success");
           if (data.payment_url) {
             window.location.replace(data.payment_url);
+          } else {
+            navigate(`/checkout/summary/${data.id}`);
           }
-          id
-            ? navigate(`/checkout/summary/single/${data.id}`)
-            : navigate(`/checkout/summary/cart/${data.id}`);
         }
       }
     } catch (error: any) {

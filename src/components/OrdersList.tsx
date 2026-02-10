@@ -58,7 +58,7 @@ const OrdersList = ({
     >
       <Typography
         variant="body2"
-        className="p-2 text-center bg-[#135638]/5"
+        className="p-2 text-center bg-[#135638]/20"
         textTransform={"uppercase"}
         letterSpacing={5}
         fontWeight={"bold"}

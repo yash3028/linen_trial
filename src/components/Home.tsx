@@ -68,17 +68,11 @@ export const Home = () => {
               element={<Checkout snackBarFunction={openSnackBar} />}
             ></Route>
             <Route
-              path="view-cart/:id"
+              path="view-cart/:cartId"
               element={<Checkout snackBarFunction={openSnackBar} />}
             ></Route>
             <Route
-              path="summary/single/:id"
-              element={
-                <FinalSummary snackBarFunction={openSnackBar}></FinalSummary>
-              }
-            ></Route>
-            <Route
-              path="summary/cart/:cartId"
+              path="summary/:cartId"
               element={
                 <FinalSummary snackBarFunction={openSnackBar}></FinalSummary>
               }
