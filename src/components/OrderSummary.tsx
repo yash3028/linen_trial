@@ -1,13 +1,19 @@
 import { Box, Divider, IconButton, Typography } from "@mui/material";
-import { order_status_master } from "../utils/utils";
+import {
+  get_discount,
+  get_discounted_price,
+  order_status_master,
+} from "../utils/utils";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 const OrderSummary = ({
   orders,
   total_price,
   delete_item,
+  total_items,
 }: {
   orders: any[];
   total_price: number;
+  total_items: number;
   delete_item: any | null;
 }) => {
   const onDelete = (referenceNumber: string) => {
@@ -36,7 +42,9 @@ const OrderSummary = ({
                 </Typography>
               </div>
               <Typography variant="body2">
-                Total price: INR {order.price}
+                Total price: INR <s>{order.price}</s>{" "}
+                {get_discounted_price(order.price, total_items)}
+                {}
               </Typography>
               <Typography variant="body2">
                 Status:{" "}
@@ -70,7 +78,9 @@ const OrderSummary = ({
         </Box>
       ))}
       <Typography className="text-center">
-        Total price: {total_price.toFixed(2)}
+        Total price: INR <s>{total_price.toFixed(2)}</s>{" "}
+        {get_discounted_price(total_price, total_items)} (
+        {get_discount(total_items)})
       </Typography>
     </div>
   );

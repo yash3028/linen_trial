@@ -18,6 +18,7 @@ const FinalSummary = ({
   const [orders, setOrders] = useState<any[]>([]);
 
   const [total_price, setTotalPrice] = useState<number>(0);
+  const [total_items, setTotalItems] = useState<number>(0);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -32,6 +33,7 @@ const FinalSummary = ({
         }
         setOrders((data as any).orders);
         setTotalPrice((data as any).total_price);
+        setTotalItems((data as any).total_items);
       } catch (err: any) {
         console.log(err.message || "Something went wrong");
         snackBarFunction(err.message, "error");
@@ -65,6 +67,7 @@ const FinalSummary = ({
             <OrderSummary
               orders={orders}
               total_price={total_price}
+              total_items={total_items}
               delete_item={null}
             ></OrderSummary>
             <CustomButton

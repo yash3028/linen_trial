@@ -26,6 +26,7 @@ const Checkout = ({
   const [loading, setLoading] = useState<boolean>(true);
   const [orders, setOrders] = useState<any[]>([]);
   const [total_price, setTotalPrice] = useState<number>(0);
+  const [total_items, setTotalItems] = useState<number>(0);
 
   const [paymentMode, setPaymentMode] = useState<string>("cod");
   const handlePaymentModeChange = (
@@ -90,7 +91,7 @@ const Checkout = ({
         }
         setOrders(order_response.data.orders);
         setTotalPrice((order_response as any).data.total_price);
-
+        setTotalItems((order_response as any).data.total_items);
         setAddresses(addresses_response.data.addresses[0] as any[]);
       } catch (err: any) {
         console.log(err.message || "Something went wrong");
@@ -150,6 +151,8 @@ const Checkout = ({
       } else {
         snackBarFunction("Item deleted", "success");
         setOrders(data.orders);
+        setTotalPrice(data.total_price);
+        setTotalItems(data.total_items);
       }
     } catch (error: any) {
       snackBarFunction(error.message, "error");
@@ -200,6 +203,7 @@ const Checkout = ({
                       <OrderSummary
                         orders={orders}
                         total_price={total_price}
+                        total_items={total_items}
                         delete_item={delete_item}
                       ></OrderSummary>
 
