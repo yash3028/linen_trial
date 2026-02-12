@@ -10,11 +10,13 @@ const OrderSummary = ({
   total_price,
   delete_item,
   total_items,
+  isDiscountApplicable = true,
 }: {
   orders: any[];
   total_price: number;
   total_items: number;
   delete_item: any | null;
+  isDiscountApplicable: boolean;
 }) => {
   const onDelete = (referenceNumber: string) => {
     delete_item(referenceNumber);
@@ -42,9 +44,15 @@ const OrderSummary = ({
                 </Typography>
               </div>
               <Typography variant="body2">
-                Total price: INR <s>{order.price}</s>{" "}
-                {get_discounted_price(order.price, total_items)}
-                {}
+                Total price: INR
+                {isDiscountApplicable ? (
+                  <>
+                    <s>{order.price}</s>
+                    {get_discounted_price(order.price, total_items)}
+                  </>
+                ) : (
+                  <>{order.price}</>
+                )}
               </Typography>
               <Typography variant="body2">
                 Status:{" "}
@@ -78,9 +86,16 @@ const OrderSummary = ({
         </Box>
       ))}
       <Typography className="text-center">
-        Total price: INR <s>{total_price.toFixed(2)}</s>{" "}
-        {get_discounted_price(total_price, total_items)} (
-        {get_discount(total_items)})
+        Total price: INR
+        {isDiscountApplicable ? (
+          <>
+            <s>{total_price.toFixed(2)}</s>
+            {get_discounted_price(total_price, total_items)} (
+            {get_discount(total_items)})
+          </>
+        ) : (
+          <>{total_price.toFixed(2)}</>
+        )}
       </Typography>
     </div>
   );

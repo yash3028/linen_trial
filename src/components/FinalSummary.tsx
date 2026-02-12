@@ -69,6 +69,7 @@ const FinalSummary = ({
               total_price={total_price}
               total_items={total_items}
               delete_item={null}
+              isDiscountApplicable={false}
             ></OrderSummary>
             <CustomButton
               label="Shop more"

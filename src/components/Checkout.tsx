@@ -205,6 +205,7 @@ const Checkout = ({
                         total_price={total_price}
                         total_items={total_items}
                         delete_item={delete_item}
+                        isDiscountApplicable={true}
                       ></OrderSummary>
 
                       <div>
