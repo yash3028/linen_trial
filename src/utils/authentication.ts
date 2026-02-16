@@ -30,3 +30,19 @@ export const clear_storage = () => {
     alert("Error while logging out");
   }
 };
+
+export const save_role = (role: string) => {
+  try {
+    localStorage.setItem("role", role);
+  } catch (error) {
+    alert("Error while saving role");
+  }
+};
+
+export const get_role = () => {
+  try {
+    return localStorage.getItem("role");
+  } catch (error) {
+    alert("Error while getting role");
+  }
+};

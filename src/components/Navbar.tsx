@@ -22,7 +22,13 @@ import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import React from "react";
 import CustomButton from "./CustomButton";
 import { getRequest, postRequest } from "../utils/requests";
-import { clear_storage, save_data, save_token } from "../utils/authentication";
+import {
+  clear_storage,
+  get_role,
+  save_data,
+  save_role,
+  save_token,
+} from "../utils/authentication";
 
 import Drawer from "@mui/material/Drawer";
 
@@ -90,6 +96,7 @@ const Navbar = ({
       snackBarFunction(message, "error");
     } else {
       save_token(data.token);
+      save_role(data.role);
       setOtp("");
       snackBarFunction("Logged in successfully", "success");
       handleModalClose();
@@ -176,7 +183,11 @@ const Navbar = ({
         <Button
           variant="text"
           color="secondary"
-          onClick={() => navigate("/my-orders")}
+          onClick={() =>
+            get_role() == "admin"
+              ? navigate("/my-orders/all")
+              : navigate("/my-orders")
+          }
         >
           <Typography variant="button">Orders</Typography>
         </Button>
