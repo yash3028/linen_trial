@@ -44,10 +44,10 @@ const OrderSummary = ({
                 </Typography>
               </div>
               <Typography variant="body2">
-                Total price: INR
+                Total price: INR{" "}
                 {isDiscountApplicable ? (
                   <>
-                    <s>{order.price}</s>
+                    <s>{order.price}</s>{" "}
                     {get_discounted_price(order.price, total_items)}
                   </>
                 ) : (
@@ -86,10 +86,10 @@ const OrderSummary = ({
         </Box>
       ))}
       <Typography className="text-center">
-        Total price: INR
+        Total price: INR{" "}
         {isDiscountApplicable ? (
           <>
-            <s>{total_price.toFixed(2)}</s>
+            <s>{total_price.toFixed(2)}</s>{" "}
             {get_discounted_price(total_price, total_items)} (
             {get_discount(total_items)})
           </>

@@ -17,6 +17,7 @@ import RefundPolicy from "./RefundPolicy";
 import TermsOfService from "./TermsOfService";
 import PrivacyPolicy from "./PrivacyPolicy";
 import OrderDetail from "./OrderDetail";
+import AdminOrderList from "./AdminOrderList";
 
 export const Home = () => {
   const [snackBar, setSnackBar] = React.useState<{
@@ -95,6 +96,14 @@ export const Home = () => {
               path=":id"
               element={
                 <OrderDetail snackBarFunction={openSnackBar}></OrderDetail>
+              }
+            ></Route>
+            <Route
+              path="all"
+              element={
+                <AdminOrderList
+                  snackBarFunction={openSnackBar}
+                ></AdminOrderList>
               }
             ></Route>
           </Route>

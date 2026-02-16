@@ -94,6 +94,9 @@ const Navbar = ({
       snackBarFunction("Logged in successfully", "success");
       handleModalClose();
       handleClose();
+      if (data.role == "admin") {
+        navigate("/my-orders/all");
+      }
     }
   };
   const logout = async () => {
@@ -103,6 +106,7 @@ const Navbar = ({
     } else {
       clear_storage();
       setIsOtpSent(false);
+      setPhone("");
       handleClose();
       snackBarFunction("Logged out successfully", "success");
       navigate("/");

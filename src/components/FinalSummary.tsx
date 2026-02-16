@@ -50,6 +50,7 @@ const FinalSummary = ({
         display: "flex",
         flexDirection: { xs: "column", lg: "row" },
         width: "100%",
+        minHeight: "80dvh",
         boxSizing: "border-box",
         borderRadius: 0,
         justifyContent: "center",

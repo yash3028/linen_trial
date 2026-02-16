@@ -11,7 +11,7 @@ import { matchIsValidTel, MuiTelInput } from "mui-tel-input";
 import { save_data, save_token } from "../utils/authentication";
 import { MuiOtpInput } from "mui-one-time-password-input";
 import { size_master } from "../utils/utils";
-
+import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 export const Product = ({
   snackBarFunction,
 }: {
@@ -215,13 +215,31 @@ export const Product = ({
           <Box>
             {!loading && (
               <>
-                <Typography variant="body1">Color: {product.color}</Typography>
+                <Typography variant="body2">Color: {product.color}</Typography>
               </>
             )}
           </Box>
-          <Typography variant="body1">Size</Typography>
+          <div className="flex items-center gap-3">
+            {" "}
+            {/* Vertical centering for the row */}
+            <Typography variant="body2">Size</Typography>
+            <button className="flex items-center cursor-pointer h-full">
+              {" "}
+              {/* Internal vertical centering */}
+              <Typography
+                variant="caption"
+                fontWeight={"bold"}
+                textAlign={"center"}
+              >
+                size chart
+                <KeyboardArrowRightIcon fontSize="inherit"></KeyboardArrowRightIcon>
+              </Typography>
+            </button>
+          </div>
+          <img src="https://thetruetouch.in/mdms/images/others/size_chart.jpg"></img>
+
           <Box flexDirection={"row"} flexWrap={"wrap"} display={"flex"} gap={2}>
-            {["XS", "S", "M", "L", "XL"].map((size: string, index: number) => (
+            {["S", "M", "L", "XL", "XXL"].map((size: string, index: number) => (
               <SizeButton
                 label={size}
                 index={index}
@@ -231,7 +249,7 @@ export const Product = ({
               ></SizeButton>
             ))}
           </Box>
-          <Typography variant="body1">Quantity</Typography>
+          <Typography variant="body2">Quantity</Typography>
           <Box
             sx={{
               display: "flex",
