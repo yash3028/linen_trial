@@ -41,6 +41,9 @@ export const Product = ({
   const [phone, setPhone] = React.useState("");
   const [isOtpSent, setIsOtpSent] = React.useState(false);
   const [otp, setOtp] = React.useState("");
+  const [sizeChartOpen, setSizeChartOpen] = useState(false);
+  const handleSizeChartOpen = () => setSizeChartOpen(true);
+  const handleSizeChartClose = () => setSizeChartOpen(false);
   const handleMobileNumberChange = (value: string) => {
     setPhone(value);
   };
@@ -220,23 +223,23 @@ export const Product = ({
             )}
           </Box>
           <div className="flex items-center gap-3">
-            {" "}
-            {/* Vertical centering for the row */}
             <Typography variant="body2">Size</Typography>
-            <button className="flex items-center cursor-pointer h-full">
-              {" "}
-              {/* Internal vertical centering */}
+
+            <button
+              type="button"
+              onClick={handleSizeChartOpen}
+              className="flex items-center cursor-pointer"
+            >
               <Typography
                 variant="caption"
                 fontWeight={"bold"}
                 textAlign={"center"}
               >
                 size chart
-                <KeyboardArrowRightIcon fontSize="inherit"></KeyboardArrowRightIcon>
+                <KeyboardArrowRightIcon fontSize="inherit" />
               </Typography>
             </button>
           </div>
-          <img src="https://thetruetouch.in/mdms/images/others/size_chart.jpg"></img>
 
           <Box flexDirection={"row"} flexWrap={"wrap"} display={"flex"} gap={2}>
             {["S", "M", "L", "XL", "XXL"].map((size: string, index: number) => (
@@ -389,6 +392,31 @@ export const Product = ({
                 type="submit"
               ></CustomButton>
             )}
+          </Box>
+        </Modal>
+        <Modal open={sizeChartOpen} onClose={handleSizeChartClose}>
+          <Box
+            sx={{
+              position: "absolute",
+              top: "50%",
+              left: "50%",
+              transform: "translate(-50%, -50%)",
+              width: { xs: "90%", sm: "70%", md: "50%" },
+              bgcolor: "background.paper",
+              boxShadow: 24,
+              p: 2,
+              borderRadius: 2,
+            }}
+          >
+            <Typography variant="h6" mb={2}>
+              Size Chart
+            </Typography>
+
+            <img
+              src="https://thetruetouch.in/mdms/images/others/size_chart.jpg"
+              alt="Size Chart"
+              style={{ width: "100%", height: "auto", borderRadius: "8px" }}
+            />
           </Box>
         </Modal>
       </Paper>

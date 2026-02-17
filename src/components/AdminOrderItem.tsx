@@ -15,7 +15,15 @@ const AdminOrderItem = ({
     price: number;
     status: string;
     referenceNumber: string;
-    address: any;
+    address?: {
+      customerName: string;
+      addressLine1: string;
+      city: string;
+      state: string;
+      contactNumber: string;
+      emailAddress: string;
+      createdAt: string;
+    };
     cartId: string;
   };
 }) => {
@@ -29,7 +37,13 @@ const AdminOrderItem = ({
         </Typography>
       </div>
       <div className="bg-slate-500/10 p-2 rounded-xl flex flex-col gap-2 h-full">
-        <div className="text-center">
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+          }}
+        >
           <Typography>
             {
               order_status_master[
@@ -37,8 +51,35 @@ const AdminOrderItem = ({
               ]
             }
           </Typography>
+
+          <Typography variant="body2">
+            Date:{" "}
+            {new Date(order.address?.createdAt || "").toLocaleDateString(
+              "en-IN",
+              {
+                day: "2-digit",
+                month: "short",
+                year: "numeric",
+              },
+            )}
+          </Typography>
         </div>
         <div className="flex flex-row justify-between">
+          <div className="user-info">
+            <Typography variant="body2">
+              Name: {order.address?.customerName}
+            </Typography>
+            <Typography variant="body2">
+              Email: {order.address?.emailAddress}
+            </Typography>
+            <Typography variant="body2">
+              Address: {order.address?.addressLine1}
+            </Typography>
+            <Typography variant="body2">City: {order.address?.city}</Typography>
+            <Typography variant="body2">
+              Phone: {order.address?.contactNumber}
+            </Typography>
+          </div>
           <div className="w-40">
             <Typography variant="body2">Size: {order.size}</Typography>
             <Typography variant="body2">Color: {order.color}</Typography>
