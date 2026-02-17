@@ -1,128 +1,419 @@
-import React, { useState } from "react";
-import { AppBar, Toolbar, Button, Menu, Grid, Box, Link } from "@mui/material";
-import { NavItems } from "../static/NavItems";
-import type { Module } from "../static/NavItems";
+import {
+  AppBar,
+  Toolbar,
+  Box,
+  Typography,
+  IconButton,
+  Popover,
+  Button,
+  Stack,
+  Modal,
+  Divider,
+} from "@mui/material";
+import { MuiTelInput, matchIsValidTel } from "mui-tel-input";
+import { MuiOtpInput } from "mui-one-time-password-input";
 
-const Navbar = () => {
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const [activeModules, setActiveModules] = useState<Module[]>([]);
-  const [open, setOpen] = useState(false);
+import "../styles/index.css";
 
-  const handleOpen = (
-    event: React.MouseEvent<HTMLElement>,
-    modules: Module[]
-  ) => {
+import logo from "../assets/mark_svg.svg";
+import { Link, useNavigate } from "react-router";
+import PersonIcon from "@mui/icons-material/Person";
+import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
+import React from "react";
+import CustomButton from "./CustomButton";
+import { getRequest, postRequest } from "../utils/requests";
+import {
+  clear_storage,
+  get_role,
+  save_data,
+  save_role,
+  save_token,
+} from "../utils/authentication";
+
+import Drawer from "@mui/material/Drawer";
+
+const Navbar = ({
+  snackBarFunction,
+}: {
+  snackBarFunction: (message: string, type: "success" | "error") => void;
+}) => {
+  const navigate = useNavigate();
+
+  const style = {
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+    width: 400,
+    bgcolor: "primary.main",
+    boxShadow: 24,
+    p: 4,
+  };
+  const [modalOpen, setModalOpen] = React.useState(false);
+  const handleModalOpen = () => setModalOpen(true);
+  const handleModalClose = () => setModalOpen(false);
+  const [phone, setPhone] = React.useState("");
+  const [isOtpSent, setIsOtpSent] = React.useState(false);
+  const [otp, setOtp] = React.useState("");
+  const handleMobileNumberChange = (value: string) => {
+    setPhone(value);
+  };
+  const handleOtpChange = (otp: string) => {
+    setOtp(otp);
+  };
+  const sendOtp = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    if (matchIsValidTel(phone, { onlyCountries: ["IN"] })) {
+      // API call to send OTP here
+      const { data, error, message } = await postRequest<any>(
+        "/users/users/send-otp",
+        {
+          countryCode: "+91",
+          mobileNumber: phone.replace(/\s/g, "").slice(-10),
+        },
+      );
+      if (error) {
+        snackBarFunction(message, "error");
+      } else {
+        save_data("verificationToken", data.verificationToken);
+        setIsOtpSent(true);
+        snackBarFunction("OTP sent successfully", "success");
+      }
+    } else {
+      snackBarFunction("Please enter a valid phone number", "error");
+    }
+  };
+  const verifyOtp = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const { data, error, message } = await postRequest<any>(
+      "/users/users/verify-otp",
+      {
+        verificationToken: localStorage.getItem("verificationToken"),
+        otp: otp,
+      },
+    );
+    if (error) {
+      snackBarFunction(message, "error");
+    } else {
+      save_token(data.token);
+      save_role(data.role);
+      setOtp("");
+      snackBarFunction("Logged in successfully", "success");
+      handleModalClose();
+      handleClose();
+      if (data.role == "admin") {
+        navigate("/my-orders/all");
+      }
+    }
+  };
+  const logout = async () => {
+    const { error, message } = await getRequest<any>("/users/users/logout");
+    if (error) {
+      snackBarFunction(message, "error");
+    } else {
+      clear_storage();
+      setIsOtpSent(false);
+      setPhone("");
+      handleClose();
+      snackBarFunction("Logged out successfully", "success");
+      navigate("/");
+    }
+  };
+  const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(
+    null,
+  );
+
+  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
-    setActiveModules(modules);
-    setOpen(true);
   };
 
   const handleClose = () => {
     setAnchorEl(null);
-    setActiveModules([]);
-    setOpen(false);
   };
 
-  return (
-    <AppBar position="static" color="inherit" elevation={1}>
-      <Toolbar>
-        {NavItems.map((item, i) => (
-          <Button
-            key={i}
-            {...(item.url ? { href: item.url } : {})}
-            onMouseEnter={(e) => handleOpen(e, item.modules)}
-            sx={{ fontWeight: "bold", mx: 2 }}
-          >
-            {item.name}
-          </Button>
-        ))}
+  const open = Boolean(anchorEl);
+  const id = open ? "simple-popover" : undefined;
 
-        <Menu
-          anchorEl={anchorEl}
-          open={open && Boolean(anchorEl)}
-          onClose={handleClose}
-          MenuListProps={{
-            onMouseEnter: () => setOpen(true),
-            onMouseLeave: handleClose,
-          }}
-          PaperProps={{ sx: { padding: 2, minWidth: 600 } }}
+  //-------------------------------------------------------
+  type Anchor = "top" | "left" | "bottom" | "right";
+
+  const [state, setState] = React.useState({
+    top: false,
+    left: false,
+    bottom: false,
+    right: false,
+  });
+
+  const toggleDrawer =
+    (open: boolean, anchor: Anchor = "right") =>
+    (event: React.KeyboardEvent | React.MouseEvent) => {
+      if (
+        event.type === "keydown" &&
+        ((event as React.KeyboardEvent).key === "Tab" ||
+          (event as React.KeyboardEvent).key === "Shift")
+      ) {
+        return;
+      }
+
+      setState({ ...state, [anchor]: open });
+    };
+
+  const list = () => (
+    <Box
+      sx={{ width: 100, backgroundColor: "primary.main" }}
+      role="presentation"
+      onClick={toggleDrawer(false)}
+      onKeyDown={toggleDrawer(false)}
+      mt={10}
+    >
+      <Stack direction={"column"}>
+        <Button
+          variant="text"
+          color="secondary"
+          onClick={
+            localStorage.getItem("token")?.length ? logout : handleModalOpen
+          }
         >
-          <Grid container spacing={3}>
-            {activeModules.map((mod, j) => (
-              <Grid sx={{ xs: 4 }} key={j}>
-                <Box>
-                  {mod.imageUrl && (
-                    <Box
-                      component="img"
-                      src={mod.imageUrl}
-                      alt={mod.name}
+          <Typography variant="button" noWrap>
+            {localStorage.getItem("token")?.length
+              ? "Logout"
+              : "Login / Sign up"}
+          </Typography>
+        </Button>
+        <Button
+          variant="text"
+          color="secondary"
+          onClick={() =>
+            get_role() == "admin"
+              ? navigate("/my-orders/all")
+              : navigate("/my-orders")
+          }
+        >
+          <Typography variant="button">Orders</Typography>
+        </Button>
+      </Stack>
+    </Box>
+  );
+
+  //-------------------------------------------------------
+
+  return (
+    <div className="sticky top-0 z-50">
+      <AppBar
+        position="sticky"
+        color="inherit"
+        elevation={1}
+        sx={{ backgroundColor: "primary.main" }}
+      >
+        <Toolbar>
+          <Box
+            component={Link}
+            to="/"
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              textDecoration: "none",
+              color: "inherit",
+              cursor: "pointer",
+              marginRight: 0.5,
+            }}
+          >
+            <Box
+              component="img"
+              src={logo}
+              alt="Logo"
+              sx={{
+                height: 45, // adjust height
+                width: "auto", // optional, keeps aspect ratio if square
+                marginRight: 0.5, // spacing between logo and text
+              }}
+            />
+
+            <Typography sx={{ fontWeight: "bold" }}>THE TRUE TOUCH</Typography>
+          </Box>
+
+          <Box sx={{ py: 1, ml: "auto" }}>
+            <IconButton color="inherit" onClick={handleClick}>
+              <PersonIcon fontSize="inherit" />
+            </IconButton>
+            <IconButton
+              color="inherit"
+              onClick={() => navigate("/checkout/view-cart")}
+            >
+              <ShoppingCartIcon fontSize="inherit" />
+            </IconButton>
+            <Popover
+              id={id}
+              open={open}
+              anchorEl={anchorEl}
+              onClose={handleClose}
+              anchorOrigin={{
+                vertical: "bottom",
+                horizontal: "left",
+              }}
+              slotProps={{
+                paper: {
+                  sx: {
+                    backgroundColor: "primary.main",
+                  },
+                },
+              }}
+            >
+              <Stack direction={"column"} minWidth={200} textAlign={"start"}>
+                <Box
+                  color="secondary"
+                  onClick={
+                    localStorage.getItem("token")?.length
+                      ? logout
+                      : handleModalOpen
+                  }
+                  p={1}
+                  sx={{ cursor: "pointer" }}
+                >
+                  <Typography noWrap textAlign={"start"} variant="body2">
+                    {localStorage.getItem("token")?.length
+                      ? "Logout"
+                      : "Login / Sign up"}
+                  </Typography>
+                </Box>
+                <Divider />
+                <Box
+                  color="secondary"
+                  onClick={() => {
+                    handleClose();
+                    navigate("/my-orders");
+                  }}
+                  p={1}
+                  sx={{ cursor: "pointer" }}
+                >
+                  <Typography textAlign={"start"} variant="body2">
+                    Orders
+                  </Typography>
+                </Box>
+              </Stack>
+            </Popover>
+            <Modal
+              open={modalOpen}
+              onClose={handleModalClose}
+              aria-labelledby="modal-modal-title"
+              aria-describedby="modal-modal-description"
+            >
+              <Box
+                sx={style}
+                display={"flex"}
+                flexDirection={"column"}
+                gap={1}
+                component={"form"}
+                onSubmit={isOtpSent ? verifyOtp : sendOtp}
+              >
+                <Typography
+                  id="modal-modal-title"
+                  color="secondary"
+                  variant="h6"
+                  component="h2"
+                >
+                  Login / Sign up
+                </Typography>
+
+                {!isOtpSent && (
+                  <MuiTelInput
+                    value={phone}
+                    onChange={handleMobileNumberChange}
+                    onlyCountries={["IN"]}
+                    forceCallingCode
+                    autoFocus
+                    defaultCountry="IN"
+                    sx={{
+                      backgroundColor: "primary.main",
+                      borderRadius: "4px",
+
+                      // Default border
+                      "& .MuiOutlinedInput-notchedOutline": {
+                        borderColor: "secondary.main",
+                      },
+
+                      // Hover
+                      "&:hover .MuiOutlinedInput-notchedOutline": {
+                        borderColor: "secondary.main",
+                      },
+
+                      // Focus (IMPORTANT FIX)
+                      "& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline":
+                        {
+                          borderColor: "secondary.main",
+                          borderWidth: 2,
+                        },
+                    }}
+                  />
+                )}
+                {isOtpSent && (
+                  <>
+                    <Typography
+                      id="modal-modal-title"
+                      color="secondary"
+                      variant="subtitle1"
+                      component="h2"
+                    >
+                      Please enter OTP
+                    </Typography>
+                    <MuiOtpInput
+                      value={otp}
+                      length={6}
+                      autoFocus
+                      onChange={handleOtpChange}
+                      TextFieldsProps={{ inputProps: { inputMode: "numeric" } }}
                       sx={{
-                        width: "100%",
-                        height: 120,
-                        objectFit: "cover",
-                        borderRadius: 2,
-                        mb: 1,
+                        backgroundColor: "primary.main",
+                        borderRadius: "4px",
+
+                        // Default border
+                        "& .MuiOutlinedInput-notchedOutline": {
+                          borderColor: "secondary.main",
+                        },
+
+                        // Hover
+                        "&:hover .MuiOutlinedInput-notchedOutline": {
+                          borderColor: "secondary.main",
+                        },
+
+                        // Focus (IMPORTANT FIX)
+                        "& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline":
+                          {
+                            borderColor: "secondary.main",
+                            borderWidth: 2,
+                          },
                       }}
                     />
-                  )}
-
-                  {mod.url ? (
-                    <Link
-                      component="a"
-                      href={mod.url}
-                      underline="hover"
-                      color="text.primary"
-                      sx={{ fontWeight: "bold", display: "block", mb: 1 }}
-                    >
-                      {mod.name}
-                    </Link>
-                  ) : (
-                    <Box
-                      sx={{
-                        fontWeight: "bold",
-                        display: "block",
-                        mb: 1,
-                        cursor: "default",
-                      }}
-                    >
-                      {mod.name}
-                    </Box>
-                  )}
-
-                  {mod.sub_modules?.map((sub, k) =>
-                    sub.url ? (
-                      <Link
-                        key={k}
-                        component="a"
-                        href={sub.url}
-                        underline="hover"
-                        color="text.secondary"
-                        display="block"
-                        sx={{ fontSize: 14, py: 0.3 }}
-                      >
-                        {sub.name}
-                      </Link>
-                    ) : (
-                      <Box
-                        key={k}
-                        sx={{
-                          fontSize: 14,
-                          py: 0.3,
-                          color: "text.secondary",
-                          cursor: "default",
-                        }}
-                      >
-                        {sub.name}
-                      </Box>
-                    )
-                  )}
-                </Box>
-              </Grid>
-            ))}
-          </Grid>
-        </Menu>
-      </Toolbar>
-    </AppBar>
+                  </>
+                )}
+                {!isOtpSent && (
+                  <CustomButton
+                    label="Send OTP"
+                    type="submit"
+                    onClick={() => {}}
+                  ></CustomButton>
+                )}
+                {isOtpSent && (
+                  <CustomButton
+                    label="Verify OTP"
+                    onClick={() => {}}
+                    type="submit"
+                  ></CustomButton>
+                )}
+              </Box>
+            </Modal>
+          </Box>
+        </Toolbar>
+      </AppBar>
+      <Drawer
+        anchor={"right"}
+        open={state["right"]}
+        onClose={toggleDrawer(false)}
+        slotProps={{ paper: { sx: { backgroundColor: "primary.main" } } }}
+      >
+        {list()}
+      </Drawer>
+    </div>
   );
 };
 

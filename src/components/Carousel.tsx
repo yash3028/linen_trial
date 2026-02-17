@@ -4,15 +4,15 @@ import Typography from "@mui/material/Typography";
 
 const Carousel = () => {
   const items = [
-    { url: "", text: "Price increase sale" },
-    { url: "", text: "Now pay with LT pay later" },
+    { url: "", text: "Contact for more details" },
+    { url: "", text: "Buy 1 - 5% OFF | Buy 2 - 10% OFF | Buy 3 - 15% OFF" },
   ];
   const [index, setIndex] = useState(0);
 
   useEffect(() => {
     const intervalId = setInterval(() => {
       setIndex((prevIndex) => (prevIndex === 0 ? 1 : 0));
-    }, 1000);
+    }, 1500);
 
     return () => clearInterval(intervalId);
   }, []);
@@ -20,13 +20,21 @@ const Carousel = () => {
   return (
     <Box
       sx={{
-        flexGrow: 1,
         m: 0,
-        backgroundColor: "primary.main",
+        backgroundColor: "secondary.main",
         py: 1,
       }}
     >
-      <Typography variant="h6" sx={{ textAlign: "center", color: "white" }}>
+      <Typography
+        sx={{
+          textAlign: "center",
+          color: "text.secondary",
+          fontSize: "0.6em",
+          fontWeight: "800",
+          textTransform: "uppercase",
+          letterSpacing: "0.2em",
+        }}
+      >
         {items[index].text}
       </Typography>
     </Box>
