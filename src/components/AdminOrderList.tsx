@@ -14,7 +14,7 @@ const AdminOrderList = ({
   const [orders, setOrders] = useState<any[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [page, setPage] = useState(1);
-  const [limit] = useState(10);
+  const [limit] = useState(5);
   const [totalCount, setTotalCount] = useState(0);
   useEffect(() => {
     const fetchData = async () => {
@@ -100,7 +100,7 @@ const AdminOrderList = ({
             </Box>
           </Box>
         ))}
-      {!loading && page > 1 && (
+      {!loading && totalPages > 1 && (
         <Box display="flex" justifyContent="center" mt={2} gap={1}>
           <Button
             variant="outlined"

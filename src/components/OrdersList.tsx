@@ -100,7 +100,7 @@ const OrdersList = ({
             </Box>
           </Box>
         ))}
-      {!loading && page > 1 && (
+      {!loading && totalPages > 1 && (
         <Box display="flex" justifyContent="center" mt={2} gap={1}>
           <Button
             variant="outlined"
