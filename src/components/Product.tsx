@@ -1,4 +1,6 @@
 import { Box, Modal, Paper, Typography } from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
+import IconButton from "@mui/material/IconButton";
 import { ImageSlider } from "./ImageSlider";
 import { useNavigate, useParams } from "react-router";
 import { useEffect, useState } from "react";
@@ -404,11 +406,23 @@ export const Product = ({
               width: { xs: "90%", sm: "70%", md: "50%" },
               bgcolor: "background.paper",
               boxShadow: 24,
-              p: 2,
+              p: 3,
               borderRadius: 2,
             }}
           >
-            <Typography variant="h6" mb={2}>
+            <IconButton
+              onClick={handleSizeChartClose}
+              sx={{
+                position: "absolute",
+                top: 8,
+                right: 8,
+                color: "secondary.main",
+              }}
+            >
+              <CloseIcon />
+            </IconButton>
+
+            <Typography variant="h6" mb={2} sx={{ color: "secondary.main" }}>
               Size Chart
             </Typography>
 
