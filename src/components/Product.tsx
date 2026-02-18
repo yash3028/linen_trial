@@ -404,7 +404,7 @@ export const Product = ({
               left: "50%",
               transform: "translate(-50%, -50%)",
               width: { xs: "90%", sm: "70%", md: "50%" },
-              bgcolor: "background.paper",
+              bgcolor: "primary.main",
               boxShadow: 24,
               p: 3,
               borderRadius: 2,

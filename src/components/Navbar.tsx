@@ -281,7 +281,10 @@ const Navbar = ({
                   color="secondary"
                   onClick={() => {
                     handleClose();
-                    navigate("/my-orders");
+
+                    get_role() == "admin"
+                      ? navigate("/my-orders/all")
+                      : navigate("/my-orders");
                   }}
                   p={1}
                   sx={{ cursor: "pointer" }}
