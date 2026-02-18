@@ -12,6 +12,7 @@ export const order_status_master = {
   order_shipped: "Order shipped",
   added_to_cart: "Added to cart",
   paid: "Payment confirmed",
+  order_delivered: "Order delivered",
 };
 
 export function get_discounted_price(
