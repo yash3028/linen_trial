@@ -1,7 +1,8 @@
 import { Typography } from "@mui/material";
-import { useNavigate } from "react-router";
+// import { useNavigate } from "react-router";
 import { order_status_master } from "../utils/utils";
-import CustomButton from "./CustomButton";
+// import CustomButton from "./CustomButton";
+import { states } from "../utils/master";
 
 const AdminOrderItem = ({
   order,
@@ -15,11 +16,22 @@ const AdminOrderItem = ({
     price: number;
     status: string;
     referenceNumber: string;
-    address: any;
+    address?: {
+      customerName: string;
+      addressLine1: string;
+      addressLine2: string;
+      addressLine3: string;
+      city: string;
+      state: string;
+      contactNumber: string;
+      emailAddress: string;
+      createdAt: string;
+    };
     cartId: string;
+    createdAt: Date;
   };
 }) => {
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
   return (
     <div className="flex flex-col w-full p-2 bg-[#135638]/5 rounded-lg border-1 gap-2">
@@ -29,13 +41,27 @@ const AdminOrderItem = ({
         </Typography>
       </div>
       <div className="bg-slate-500/10 p-2 rounded-xl flex flex-col gap-2 h-full">
-        <div className="text-center">
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+          }}
+        >
           <Typography>
             {
               order_status_master[
                 order.status as keyof typeof order_status_master
               ]
             }
+          </Typography>
+
+          <Typography variant="body2">
+            {new Date(order.createdAt || "").toLocaleDateString("en-IN", {
+              day: "2-digit",
+              month: "short",
+              year: "numeric",
+            })}
           </Typography>
         </div>
         <div className="flex flex-row justify-between">
@@ -49,7 +75,7 @@ const AdminOrderItem = ({
             <Typography variant="body2">
               Order id: {order.referenceNumber}
             </Typography>
-
+            {/* 
             {order.status == "order_initiated" && (
               <CustomButton
                 label="Complete order"
@@ -60,9 +86,47 @@ const AdminOrderItem = ({
                   });
                 }}
               ></CustomButton>
-            )}
+            )} */}
           </div>
         </div>
+        {order.address && (
+          <div className="user-info">
+            <Typography variant="body2">
+              Name: {order.address?.customerName}
+            </Typography>
+            <Typography variant="body2">
+              Email: {order.address?.emailAddress}
+            </Typography>
+            <Typography variant="body2">
+              Phone: {order.address?.contactNumber}
+            </Typography>
+
+            <Typography variant="body2">
+              Address: <br></br>
+              {order.address?.addressLine1}
+              {order.address?.addressLine2 && (
+                <>
+                  {" "}
+                  <br></br>
+                  {order.address?.addressLine2}
+                </>
+              )}
+              {order.address?.addressLine3 && (
+                <>
+                  {" "}
+                  <br></br>
+                  {order.address?.addressLine3}
+                </>
+              )}
+            </Typography>
+
+            <Typography variant="body2">City: {order.address?.city}</Typography>
+            <Typography variant="body2">
+              State:{" "}
+              {states.find((state) => state.key == order.address?.state)?.name}
+            </Typography>
+          </div>
+        )}
       </div>
     </div>
   );
