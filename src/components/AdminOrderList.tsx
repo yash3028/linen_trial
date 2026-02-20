@@ -80,7 +80,11 @@ const AdminOrderList = ({
                 gap={1}
                 p={0.7}
               >
-                <AdminOrderItem order={order} key={order.id}></AdminOrderItem>
+                <AdminOrderItem
+                  order={order}
+                  key={order.id}
+                  snackBarFunction={snackBarFunction}
+                ></AdminOrderItem>
               </Grid>
             ))}
           </Grid>
