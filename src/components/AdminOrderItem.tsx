@@ -16,6 +16,7 @@ import { Snackbar, Alert } from "@mui/material";
 
 const AdminOrderItem = ({
   order,
+  snackBarFunction,
 }: {
   order: {
     id: number;
@@ -36,59 +37,41 @@ const AdminOrderItem = ({
       contactNumber: string;
       emailAddress: string;
       createdAt: string;
+      pincode: string;
+      country: string;
     };
     cartId: string;
     createdAt: Date;
   };
+  snackBarFunction: (message: string, type: "success" | "error") => void;
 }) => {
   // const navigate = useNavigate();
   const [Status, setStatus] = useState(order.status);
-  const [snackOpen, setSnackOpen] = useState(false);
-  const [snackMessage, setSnackMessage] = useState("");
-  const [snackSeverity, setSnackSeverity] = useState<"success" | "error">(
-    "success",
-  );
+  const [updateStatus, setupdateStatus] = useState(order.status);
   const updateOrder = async () => {
     try {
       console.log("Sending Status:", Status);
 
       const response = await postRequest("/products/orders/update-status", {
         id: order.id,
-        status: Status,
+        status: updateStatus,
       });
-      console.log("Sending payload:", response);
+      console.log("payload:", response);
 
-      console.log("API RESPONSE:", response);
+      console.log("API:", response);
 
       if (response.error) {
         throw new Error(response.message);
       }
-      setSnackMessage("Status updated successfully");
-      setSnackSeverity("success");
-      setSnackOpen(true);
+      setStatus(updateStatus);
+      snackBarFunction("Status updated successfully", "success");
     } catch (err: any) {
       console.log("ERROR:", err);
-      setSnackMessage(err.message || "Failed to update status");
-      setSnackSeverity("error");
-      setSnackOpen(true);
+      snackBarFunction(err.message || "Failed to update status", "error");
     }
   };
   return (
     <div className="flex flex-col w-full p-2 bg-[#135638]/5 rounded-lg border-1 gap-2">
-      <Snackbar
-        open={snackOpen}
-        autoHideDuration={3000}
-        onClose={() => setSnackOpen(false)}
-        anchorOrigin={{ vertical: "top", horizontal: "center" }}
-      >
-        <Alert
-          onClose={() => setSnackOpen(false)}
-          severity={snackSeverity}
-          sx={{ width: "100%" }}
-        >
-          {snackMessage}
-        </Alert>
-      </Snackbar>
       <div className="flex flex-row justify-between">
         <Typography fontWeight={"bold"} textTransform={"uppercase"}>
           {order.name}
@@ -103,11 +86,7 @@ const AdminOrderItem = ({
           }}
         >
           <Typography>
-            {
-              order_status_master[
-                order.status as keyof typeof order_status_master
-              ]
-            }
+            {order_status_master[Status as keyof typeof order_status_master]}
           </Typography>
 
           <Typography variant="body2">
@@ -145,15 +124,7 @@ const AdminOrderItem = ({
         </div>
         {order.address && (
           <>
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "flex-start",
-                width: "100%",
-                gap: "20px",
-              }}
-            >
+            <div className="flex flex-col lg:flex-row justify-between items-start gap-5 w-full">
               <div style={{ flex: 1 }}>
                 <Typography variant="body2">
                   {order.address?.customerName}
@@ -168,7 +139,7 @@ const AdminOrderItem = ({
                 </Typography>
               </div>
 
-              <div style={{ flex: 1, textAlign: "right" }}>
+              <div className="flex-1 lg:text-right">
                 <Typography variant="body2">Address:</Typography>
 
                 <Typography variant="body2">
@@ -188,15 +159,15 @@ const AdminOrderItem = ({
                 )}
 
                 <Typography variant="body2">
-                  City: {order.address?.city}
-                </Typography>
-
-                <Typography variant="body2">
-                  State:{" "}
+                  {order.address?.city},{" "}
                   {
-                    states.find((state) => state.key == order.address?.state)
+                    states.find((state) => state.key === order.address?.state)
                       ?.name
                   }
+                </Typography>
+                <Typography variant="body2">
+                  {order.address?.pincode},{""}
+                  {order.address?.country}
                 </Typography>
               </div>
             </div>
@@ -208,13 +179,27 @@ const AdminOrderItem = ({
                 gap: "20px",
               }}
             >
-              <FormControl size="small" sx={{ minWidth: 200 }}>
+              <FormControl
+                size="small"
+                variant="outlined"
+                sx={{ minWidth: 200 }}
+              >
+                <InputLabel
+                  id="status-label"
+                  sx={{
+                    color: "secondary.main",
+                  }}
+                >
+                  Status
+                </InputLabel>
                 <Select
-                  value={Status}
+                  labelId="status-label"
+                  id="status-select"
+                  value={updateStatus}
                   label="Status"
                   onChange={(e) => {
                     const newStatus = e.target.value;
-                    setStatus(newStatus);
+                    setupdateStatus(newStatus);
                   }}
                 >
                   {Object.keys(order_status_master).map((key) => (
@@ -228,7 +213,13 @@ const AdminOrderItem = ({
                   ))}
                 </Select>
               </FormControl>
-              <Button variant="contained" onClick={updateOrder}>
+
+              <Button
+                variant="contained"
+                onClick={updateOrder}
+                disabled={Status === updateStatus}
+                sx={{ bgcolor: "#135638", color: "#e2eced" }}
+              >
                 Update
               </Button>
             </div>
