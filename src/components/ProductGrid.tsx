@@ -109,7 +109,8 @@ export const ProductGrid: React.FC = () => {
                       );
                     }}
                     sx={{
-                      height: "100%",
+                      height: "auto",
+                      maxWidth: "210px",
                       display: "flex",
                       flexDirection: "column",
                       cursor: "pointer",
@@ -119,7 +120,9 @@ export const ProductGrid: React.FC = () => {
                       component="img"
                       image={product.images[0].url}
                       alt={product.name}
-                      sx={{ width: "210px", height: "auto" }}
+                      sx={{
+                        height: "auto",
+                      }}
                       className="rounded-t-xl"
                     />
                     <CardContent sx={{ ml: 0, pl: 0.5, pt: 0 }}>

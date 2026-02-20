@@ -48,9 +48,8 @@ export const ImageSlider: React.FC<ImageSliderProps> = ({
         sx={{
           position: "relative",
           width: "100%",
-          height: { xs: 600, sm: 500, lg: 400 },
+          height: { xs: 600, sm: 500, lg: 500 },
           overflow: "hidden",
-          borderRadius: 0,
           backgroundColor: "primary.main",
           display: "flex",
           justifyContent: "center",
@@ -68,9 +67,8 @@ export const ImageSlider: React.FC<ImageSliderProps> = ({
             sx={{
               maxWidth: "100%",
               maxHeight: "100%",
-              width: { xs: "100%", sm: "310px", lg: "310px" },
+              width: { xs: "100%", sm: "auto", lg: "auto" },
               height: "auto",
-              objectFit: "contain",
               position: "absolute",
               transition: "opacity 0.5s ease-in-out",
               opacity: index === currentIndex ? 1 : 0,
