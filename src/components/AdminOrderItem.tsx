@@ -181,6 +181,7 @@ const AdminOrderItem = ({
               <FormControl
                 size="small"
                 variant="outlined"
+                color="secondary"
                 sx={{ minWidth: 200 }}
               >
                 <InputLabel
