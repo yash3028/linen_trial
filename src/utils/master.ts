@@ -144,3 +144,8 @@ export const states = [
     name: "West Bengal",
   },
 ];
+
+export const product_status = {
+  A: { description: "Available", color: "green" },
+  C: { description: "Coming Soon", color: "orange" },
+};

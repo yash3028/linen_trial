@@ -1,16 +1,9 @@
 import React, { useEffect, useState } from "react";
-import {
-  Grid,
-  CardContent,
-  CardMedia,
-  Typography,
-  Paper,
-  Box,
-  Button,
-} from "@mui/material";
+import { Grid, CardMedia, Typography, Paper, Box, Button } from "@mui/material";
 import { getRequest } from "../utils/requests";
 import { useNavigate } from "react-router";
 import { BannerImageSlider } from "./BannerImageSlider";
+import { product_status } from "../utils/master";
 
 export const ProductGrid: React.FC = () => {
   const navigate = useNavigate();
@@ -75,9 +68,7 @@ export const ProductGrid: React.FC = () => {
         ]}
         onClickAction={scrollToSection}
       ></BannerImageSlider>
-      {/* <div className="flex flex-col items-center w-full p-1">
-        <div className="bg-slate-100 rounded-b-xl"></div>
-      </div> */}
+
       <div id="products">
         <Typography
           variant="h5"
@@ -104,9 +95,10 @@ export const ProductGrid: React.FC = () => {
                 <div className="rounded-xl border-1 bg-slate-100">
                   <Box
                     onClick={() => {
-                      navigate(
-                        `/the-earth-essentials/product/${product.productCode}`,
-                      );
+                      if (product.status == "A")
+                        navigate(
+                          `/the-earth-essentials/product/${product.productCode}`,
+                        );
                     }}
                     sx={{
                       height: "auto",
@@ -125,19 +117,47 @@ export const ProductGrid: React.FC = () => {
                       }}
                       className="rounded-t-xl"
                     />
-                    <CardContent sx={{ ml: 0, pl: 0.5, pt: 0 }}>
-                      <Typography
-                        sx={{ textTransform: "uppercase" }}
-                        color="text.primary"
-                        fontSize={"0.8rem"}
-                        fontWeight={"bold"}
-                      >
-                        {product.name}
-                      </Typography>
-                      <Typography color="text.primary" fontSize={"0.8rem"}>
-                        INR {product.price}
-                      </Typography>
-                    </CardContent>
+                    <Box
+                      sx={{ ml: 0, pl: 0.7, pt: 0 }}
+                      className="flex flex-col justify-between"
+                    >
+                      <div className="grow-0">
+                        <Typography
+                          sx={{ textTransform: "uppercase" }}
+                          color="text.primary"
+                          fontSize={"0.8rem"}
+                          fontWeight={"bold"}
+                        >
+                          {product.name}
+                        </Typography>
+                        <Typography
+                          color="text.primary"
+                          fontSize={"0.8rem"}
+                          letterSpacing={2}
+                        >
+                          INR {product.price}
+                        </Typography>
+                      </div>
+                      <div className="grow-1">
+                        <Typography
+                          color={
+                            product_status[
+                              product.status as keyof typeof product_status
+                            ].color
+                          }
+                          fontSize={"0.8rem"}
+                          textTransform={"uppercase"}
+                          fontWeight={"bold"}
+                          letterSpacing={4}
+                        >
+                          {
+                            product_status[
+                              product.status as keyof typeof product_status
+                            ].description
+                          }
+                        </Typography>
+                      </div>
+                    </Box>
                   </Box>
                 </div>
               </Grid>

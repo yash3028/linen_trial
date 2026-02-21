@@ -81,7 +81,7 @@ export const BannerImageSlider: React.FC<ImageSliderProps> = ({
         ))}
         <button
           onClick={onClickAction}
-          className="top-50 left-50 z-10 rounded-full border-2 p-3 sm:p-3 lg:p-8 cursor-pointer bg-secondary opacity-80"
+          className="hidden md:block top-50 left-50 z-10 rounded-full border-2 p-3 sm:p-3 lg:p-8 cursor-pointer bg-secondary opacity-80"
         >
           <Typography
             variant={"body1"}
