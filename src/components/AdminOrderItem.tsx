@@ -10,9 +10,8 @@ import {
 import { order_status_master } from "../utils/utils";
 // import CustomButton from "./CustomButton";
 import { states } from "../utils/master";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { postRequest } from "../utils/requests";
-import { Snackbar, Alert } from "@mui/material";
 
 const AdminOrderItem = ({
   order,
