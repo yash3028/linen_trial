@@ -1,18 +1,19 @@
 import React, { useEffect, useState } from "react";
 import { CardMedia, Typography, Paper, Box, Button, Grid } from "@mui/material";
 import { getRequest } from "../utils/requests";
-import { useNavigate } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import { BannerImageSlider } from "./BannerImageSlider";
 import { product_status } from "../utils/master";
 
 export const ProductGrid: React.FC = () => {
   const navigate = useNavigate();
+  const { category } = useParams();
   const [products, setProducts] = useState<any>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [page, setPage] = useState(1);
   const [limit] = useState(10);
   const [totalCount, setTotalCount] = useState(0);
-  const [category, setCategory] = useState<string | null>(null);
+  // const [category, setCategory] = useState<string | null>(null);
 
   function scrollToSection() {
     const element = document.getElementById("products");
@@ -105,7 +106,7 @@ export const ProductGrid: React.FC = () => {
                     flexDirection: "column",
                     cursor: "pointer",
                   }}
-                  onClick={() => setCategory("shirts")}
+                  onClick={() => navigate("/category/shirts")}
                 >
                   <CardMedia
                     component="img"
@@ -142,7 +143,7 @@ export const ProductGrid: React.FC = () => {
                     flexDirection: "column",
                     cursor: "pointer",
                   }}
-                  onClick={() => setCategory("trousers")}
+                  onClick={() => navigate("/category/trousers")}
                 >
                   <CardMedia
                     component="img"
@@ -168,18 +169,6 @@ export const ProductGrid: React.FC = () => {
 
         {category == "shirts" && (
           <>
-            <Box textAlign="center" mt={2}>
-              <Button variant="outlined" onClick={() => setCategory(null)}>
-                Back
-              </Button>
-            </Box>
-
-            {loading && (
-              <Typography textAlign="center" mt={2}>
-                Loading...
-              </Typography>
-            )}
-
             {!loading && (
               <>
                 <Grid
