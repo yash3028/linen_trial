@@ -106,7 +106,7 @@ export const ProductGrid: React.FC = () => {
                     flexDirection: "column",
                     cursor: "pointer",
                   }}
-                  onClick={() => navigate("/category/shirts")}
+                  onClick={() => navigate("/shirts")}
                 >
                   <CardMedia
                     component="img"
@@ -122,22 +122,16 @@ export const ProductGrid: React.FC = () => {
                       textAlign={"center"}
                     >
                       Pure linen Shirts
-                      <Typography
-                        fontSize={"0.8rem"}
-                        fontWeight={"bold"}
-                        textTransform="uppercase"
-                        textAlign={"center"}
-                      >
-                        MIN 50% OFF
-                        <Typography
-                          fontSize={"0.8rem"}
-                          fontWeight={"bold"}
-                          textTransform="uppercase"
-                          textAlign={"center"}
-                        >
-                          Explore Now
-                        </Typography>
-                      </Typography>
+                    </Typography>
+
+                    <Typography
+                      fontSize={"1rem"}
+                      fontWeight={"bold"}
+                      textTransform="uppercase"
+                      textAlign={"center"}
+                      letterSpacing={3}
+                    >
+                      MIN 5% OFF
                     </Typography>
                   </Box>
                 </Box>
@@ -159,7 +153,7 @@ export const ProductGrid: React.FC = () => {
                     flexDirection: "column",
                     cursor: "pointer",
                   }}
-                  onClick={() => navigate("/category/trousers")}
+                  onClick={() => navigate("/trousers")}
                 >
                   <CardMedia
                     component="img"

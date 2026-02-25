@@ -64,7 +64,7 @@ export const Home = () => {
         <Routes>
           <Route path="/">
             <Route path="" element={<ProductGrid></ProductGrid>}></Route>
-            <Route path="category/:category" element={<ProductGrid />} />
+            <Route path=":category" element={<ProductGrid />} />
 
             <Route
               path="the-earth-essentials/product/:id"
