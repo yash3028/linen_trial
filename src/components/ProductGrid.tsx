@@ -121,7 +121,23 @@ export const ProductGrid: React.FC = () => {
                       textTransform="uppercase"
                       textAlign={"center"}
                     >
-                      Shirts
+                      Pure linen Shirts
+                      <Typography
+                        fontSize={"0.8rem"}
+                        fontWeight={"bold"}
+                        textTransform="uppercase"
+                        textAlign={"center"}
+                      >
+                        MIN 50% OFF
+                        <Typography
+                          fontSize={"0.8rem"}
+                          fontWeight={"bold"}
+                          textTransform="uppercase"
+                          textAlign={"center"}
+                        >
+                          Explore Now
+                        </Typography>
+                      </Typography>
                     </Typography>
                   </Box>
                 </Box>
@@ -137,7 +153,7 @@ export const ProductGrid: React.FC = () => {
               <div className="rounded-xl border-1 bg-slate-100">
                 <Box
                   sx={{
-                    height: "auto",
+                    height: "100%",
                     maxWidth: "210px",
                     display: "flex",
                     flexDirection: "column",
@@ -151,14 +167,24 @@ export const ProductGrid: React.FC = () => {
                     sx={{ height: "auto" }}
                     className="rounded-t-xl"
                   />
-                  <Box sx={{ ml: 0, pl: 0.7, pt: 0 }}>
+                  <Typography
+                    fontSize={"0.8rem"}
+                    fontWeight={"bold"}
+                    textTransform="uppercase"
+                    textAlign={"center"}
+                  >
+                    pure linen Trousers
+                  </Typography>
+
+                  <Box sx={{ mt: "auto" }}>
                     <Typography
                       fontSize={"0.8rem"}
                       fontWeight={"bold"}
                       textTransform="uppercase"
                       textAlign={"center"}
+                      color="orange"
                     >
-                      Trousers
+                      coming soon
                     </Typography>
                   </Box>
                 </Box>
@@ -193,7 +219,7 @@ export const ProductGrid: React.FC = () => {
                               );
                           }}
                           sx={{
-                            height: "auto",
+                            height: "100%",
                             maxWidth: "210px",
                             display: "flex",
                             flexDirection: "column",
@@ -207,39 +233,46 @@ export const ProductGrid: React.FC = () => {
                             sx={{ height: "auto" }}
                             className="rounded-t-xl"
                           />
-                          <Box sx={{ ml: 0, pl: 0.7, pt: 0 }}>
+                          <Box
+                            sx={{
+                              pl: 1,
+                              pt: 1,
+                              display: "flex",
+                              flexDirection: "column",
+                              flexGrow: 1,
+                            }}
+                          >
                             <Typography
-                              sx={{ textTransform: "uppercase" }}
-                              color="text.primary"
-                              fontSize={"0.8rem"}
-                              fontWeight={"bold"}
+                              textTransform="uppercase"
+                              fontSize="0.8rem"
+                              fontWeight="bold"
                             >
                               {product.name}
                             </Typography>
-                            <Typography
-                              color="text.primary"
-                              fontSize={"0.8rem"}
-                              letterSpacing={2}
-                            >
-                              INR {product.price}
-                            </Typography>
-                            <Typography
-                              color={
-                                product_status[
-                                  product.status as keyof typeof product_status
-                                ].color
-                              }
-                              fontSize={"0.8rem"}
-                              textTransform={"uppercase"}
-                              fontWeight={"bold"}
-                              letterSpacing={4}
-                            >
-                              {
-                                product_status[
-                                  product.status as keyof typeof product_status
-                                ].description
-                              }
-                            </Typography>
+
+                            <Box sx={{ mt: "auto" }}>
+                              <Typography fontSize="0.8rem" letterSpacing={2}>
+                                INR {product.price}
+                              </Typography>
+
+                              <Typography
+                                fontSize="0.8rem"
+                                fontWeight="bold"
+                                textTransform="uppercase"
+                                letterSpacing={4}
+                                color={
+                                  product_status[
+                                    product.status as keyof typeof product_status
+                                  ].color
+                                }
+                              >
+                                {
+                                  product_status[
+                                    product.status as keyof typeof product_status
+                                  ].description
+                                }
+                              </Typography>
+                            </Box>
                           </Box>
                         </Box>
                       </div>
