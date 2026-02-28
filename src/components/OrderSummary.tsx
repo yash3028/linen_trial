@@ -28,16 +28,17 @@ const OrderSummary = ({
         <Box key={index}>
           <Divider />
           <div className="flex flex-row justify-between">
-            <div className="w-6/8 lg:w-1/2">
+            <div className="w-full text-center">
               <Typography
-                variant="body2"
+                variant="body1"
                 pt={1}
                 textTransform={"uppercase"}
                 fontWeight={"bold"}
+                letterSpacing={4}
               >
                 {order.name}
               </Typography>
-              <div className="flex flex-row justify-between">
+              <div className="flex flex-row gap-10 justify-center">
                 <Typography variant="body2">Size: {order.size}</Typography>
                 <Typography variant="body2">
                   Quantity: {order.quantity}
