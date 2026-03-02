@@ -24,7 +24,7 @@ export const theme = createTheme({
       letterSpacing: "0.1em",
     },
     body2: {
-      letterSpacing: "0.1em",
+      letterSpacing: "0.2em",
     },
   },
 });

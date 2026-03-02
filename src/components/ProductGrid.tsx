@@ -1,18 +1,19 @@
 import React, { useEffect, useState } from "react";
 import { CardMedia, Typography, Paper, Box, Button, Grid } from "@mui/material";
 import { getRequest } from "../utils/requests";
-import { useNavigate } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import { BannerImageSlider } from "./BannerImageSlider";
 import { product_status } from "../utils/master";
 
 export const ProductGrid: React.FC = () => {
   const navigate = useNavigate();
+  const { category } = useParams();
   const [products, setProducts] = useState<any>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [page, setPage] = useState(1);
   const [limit] = useState(10);
   const [totalCount, setTotalCount] = useState(0);
-  const [category, setCategory] = useState<string | null>(null);
+  // const [category, setCategory] = useState<string | null>(null);
 
   function scrollToSection() {
     const element = document.getElementById("products");
@@ -105,7 +106,7 @@ export const ProductGrid: React.FC = () => {
                     flexDirection: "column",
                     cursor: "pointer",
                   }}
-                  onClick={() => setCategory("shirts")}
+                  onClick={() => navigate("/shirts")}
                 >
                   <CardMedia
                     component="img"
@@ -120,7 +121,17 @@ export const ProductGrid: React.FC = () => {
                       textTransform="uppercase"
                       textAlign={"center"}
                     >
-                      Shirts
+                      Pure linen Shirts
+                    </Typography>
+
+                    <Typography
+                      fontSize={"1rem"}
+                      fontWeight={"bold"}
+                      textTransform="uppercase"
+                      textAlign={"center"}
+                      letterSpacing={3}
+                    >
+                      MIN 10% OFF
                     </Typography>
                   </Box>
                 </Box>
@@ -136,13 +147,13 @@ export const ProductGrid: React.FC = () => {
               <div className="rounded-xl border-1 bg-slate-100">
                 <Box
                   sx={{
-                    height: "auto",
+                    height: "100%",
                     maxWidth: "210px",
                     display: "flex",
                     flexDirection: "column",
                     cursor: "pointer",
                   }}
-                  onClick={() => setCategory("trousers")}
+                  onClick={() => navigate("/trousers")}
                 >
                   <CardMedia
                     component="img"
@@ -150,14 +161,24 @@ export const ProductGrid: React.FC = () => {
                     sx={{ height: "auto" }}
                     className="rounded-t-xl"
                   />
-                  <Box sx={{ ml: 0, pl: 0.7, pt: 0 }}>
+                  <Typography
+                    fontSize={"0.8rem"}
+                    fontWeight={"bold"}
+                    textTransform="uppercase"
+                    textAlign={"center"}
+                  >
+                    pure linen Trousers
+                  </Typography>
+
+                  <Box sx={{ mt: "auto" }}>
                     <Typography
                       fontSize={"0.8rem"}
                       fontWeight={"bold"}
                       textTransform="uppercase"
                       textAlign={"center"}
+                      color="orange"
                     >
-                      Trousers
+                      coming soon
                     </Typography>
                   </Box>
                 </Box>
@@ -168,18 +189,6 @@ export const ProductGrid: React.FC = () => {
 
         {category == "shirts" && (
           <>
-            <Box textAlign="center" mt={2}>
-              <Button variant="outlined" onClick={() => setCategory(null)}>
-                Back
-              </Button>
-            </Box>
-
-            {loading && (
-              <Typography textAlign="center" mt={2}>
-                Loading...
-              </Typography>
-            )}
-
             {!loading && (
               <>
                 <Grid
@@ -204,7 +213,7 @@ export const ProductGrid: React.FC = () => {
                               );
                           }}
                           sx={{
-                            height: "auto",
+                            height: "100%",
                             maxWidth: "210px",
                             display: "flex",
                             flexDirection: "column",
@@ -218,39 +227,46 @@ export const ProductGrid: React.FC = () => {
                             sx={{ height: "auto" }}
                             className="rounded-t-xl"
                           />
-                          <Box sx={{ ml: 0, pl: 0.7, pt: 0 }}>
+                          <Box
+                            sx={{
+                              pl: 1,
+                              pt: 1,
+                              display: "flex",
+                              flexDirection: "column",
+                              flexGrow: 1,
+                            }}
+                          >
                             <Typography
-                              sx={{ textTransform: "uppercase" }}
-                              color="text.primary"
-                              fontSize={"0.8rem"}
-                              fontWeight={"bold"}
+                              textTransform="uppercase"
+                              fontSize="0.8rem"
+                              fontWeight="bold"
                             >
                               {product.name}
                             </Typography>
-                            <Typography
-                              color="text.primary"
-                              fontSize={"0.8rem"}
-                              letterSpacing={2}
-                            >
-                              INR {product.price}
-                            </Typography>
-                            <Typography
-                              color={
-                                product_status[
-                                  product.status as keyof typeof product_status
-                                ].color
-                              }
-                              fontSize={"0.8rem"}
-                              textTransform={"uppercase"}
-                              fontWeight={"bold"}
-                              letterSpacing={4}
-                            >
-                              {
-                                product_status[
-                                  product.status as keyof typeof product_status
-                                ].description
-                              }
-                            </Typography>
+
+                            <Box sx={{ mt: "auto" }}>
+                              <Typography fontSize="0.8rem" letterSpacing={2}>
+                                INR {product.price}
+                              </Typography>
+
+                              <Typography
+                                fontSize="0.8rem"
+                                fontWeight="bold"
+                                textTransform="uppercase"
+                                letterSpacing={4}
+                                color={
+                                  product_status[
+                                    product.status as keyof typeof product_status
+                                  ].color
+                                }
+                              >
+                                {
+                                  product_status[
+                                    product.status as keyof typeof product_status
+                                  ].description
+                                }
+                              </Typography>
+                            </Box>
                           </Box>
                         </Box>
                       </div>

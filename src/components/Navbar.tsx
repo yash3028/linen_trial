@@ -229,18 +229,20 @@ const Navbar = ({
               }}
             />
 
-            <Typography sx={{ fontWeight: "bold" }}>THE TRUE TOUCH</Typography>
+            <Typography sx={{ fontWeight: "bold" }} color="secondary.main">
+              THE TRUE TOUCH
+            </Typography>
           </Box>
 
           <Box sx={{ py: 1, ml: "auto" }}>
             <IconButton color="inherit" onClick={handleClick}>
-              <PersonIcon fontSize="inherit" />
+              <PersonIcon fontSize="inherit" color="secondary" />
             </IconButton>
             <IconButton
               color="inherit"
               onClick={() => navigate("/checkout/view-cart")}
             >
-              <ShoppingCartIcon fontSize="inherit" />
+              <ShoppingCartIcon fontSize="inherit" color="secondary" />
             </IconButton>
             <Popover
               id={id}
