@@ -235,12 +235,17 @@ const Navbar = ({
           </Box>
 
           <Box sx={{ py: 1, ml: "auto" }}>
-            <IconButton color="inherit" onClick={handleClick}>
+            <IconButton
+              color="inherit"
+              onClick={handleClick}
+              aria-label="My Profile"
+            >
               <PersonIcon fontSize="inherit" color="secondary" />
             </IconButton>
             <IconButton
               color="inherit"
               onClick={() => navigate("/checkout/view-cart")}
+              aria-label="Cart"
             >
               <ShoppingCartIcon fontSize="inherit" color="secondary" />
             </IconButton>
