@@ -14,6 +14,8 @@ import { save_data, save_token } from "../utils/authentication";
 import { MuiOtpInput } from "mui-one-time-password-input";
 import { size_master } from "../utils/utils";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
+import { setNavigation } from "./breadcrumb/breadCrumbSlice";
+import { useDispatch } from "react-redux";
 export const Product = ({
   snackBarFunction,
 }: {
@@ -44,8 +46,14 @@ export const Product = ({
   const [isOtpSent, setIsOtpSent] = React.useState(false);
   const [otp, setOtp] = React.useState("");
   const [sizeChartOpen, setSizeChartOpen] = useState(false);
+  const dispatch = useDispatch();
+
   const handleSizeChartOpen = () => setSizeChartOpen(true);
   const handleSizeChartClose = () => setSizeChartOpen(false);
+
+  useEffect(() => {
+    dispatch(setNavigation(window.location.pathname));
+  }, []);
   const handleMobileNumberChange = (value: string) => {
     setPhone(value);
   };
@@ -174,6 +182,7 @@ export const Product = ({
   return (
     <>
       <Paper
+        elevation={0}
         sx={{
           flexGrow: 1,
           display: "flex",

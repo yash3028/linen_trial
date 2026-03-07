@@ -1,5 +1,5 @@
 import { configureStore } from "@reduxjs/toolkit";
-import breadCrumbReducer from "./components/breadCrumb/breadCrumbSlice";
+import breadCrumbReducer from "./components/breadcrumb/breadCrumbSlice";
 
 export const store = configureStore({
   reducer: {
