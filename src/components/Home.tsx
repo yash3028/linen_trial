@@ -3,7 +3,7 @@ import Carousel from "./Carousel";
 import { ThemeProvider } from "@mui/material/styles";
 import { theme } from "../Themes";
 import Navbar from "./Navbar";
-import { Route, Routes } from "react-router";
+import { Navigate, Route, Routes } from "react-router";
 import { Footer } from "./Footer";
 import { Alert, Snackbar } from "@mui/material";
 import React from "react";
@@ -18,7 +18,7 @@ import TermsOfService from "./TermsOfService";
 import PrivacyPolicy from "./PrivacyPolicy";
 import OrderDetail from "./OrderDetail";
 import AdminOrderList from "./AdminOrderList";
-
+import BreadCrumb from "./breadcrumb/BreadCrumb";
 export const Home = () => {
   const [snackBar, setSnackBar] = React.useState<{
     open: boolean;
@@ -61,15 +61,21 @@ export const Home = () => {
         </Snackbar>
         <Carousel />
         <Navbar snackBarFunction={openSnackBar} />
+        <BreadCrumb></BreadCrumb>
         <Routes>
           <Route path="/">
             <Route path="" element={<ProductGrid></ProductGrid>}></Route>
-            <Route path=":category" element={<ProductGrid />} />
-
-            <Route
-              path="the-earth-essentials/product/:id"
-              element={<Product snackBarFunction={openSnackBar} />}
-            ></Route>
+            <Route path=":category">
+              <Route path="" element={<ProductGrid />}></Route>
+              <Route
+                path="the-earth-essentials"
+                element={<Navigate to={"/shirts"} replace></Navigate>}
+              ></Route>
+              <Route
+                path="the-earth-essentials/:id"
+                element={<Product snackBarFunction={openSnackBar} />}
+              ></Route>
+            </Route>
           </Route>
           <Route path="/checkout">
             <Route

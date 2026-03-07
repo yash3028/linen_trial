@@ -4,6 +4,8 @@ import { getRequest } from "../utils/requests";
 import { useNavigate, useParams } from "react-router";
 import { BannerImageSlider } from "./BannerImageSlider";
 import { product_status } from "../utils/master";
+import { useDispatch } from "react-redux";
+import { setNavigation } from "./breadcrumb/breadCrumbSlice";
 
 export const ProductGrid: React.FC = () => {
   const navigate = useNavigate();
@@ -14,6 +16,7 @@ export const ProductGrid: React.FC = () => {
   const [limit] = useState(10);
   const [totalCount, setTotalCount] = useState(0);
   // const [category, setCategory] = useState<string | null>(null);
+  const dispatch = useDispatch();
 
   function scrollToSection() {
     const element = document.getElementById("products");
@@ -23,6 +26,9 @@ export const ProductGrid: React.FC = () => {
     });
   }
 
+  useEffect(() => {
+    dispatch(setNavigation(window.location.pathname));
+  }, []);
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -209,7 +215,8 @@ export const ProductGrid: React.FC = () => {
                           onClick={() => {
                             if (product.status === "A")
                               navigate(
-                                `/the-earth-essentials/product/${product.productCode}`,
+                                `./the-earth-essentials/${product.productCode}`,
+                                { relative: "path" },
                               );
                           }}
                           sx={{
