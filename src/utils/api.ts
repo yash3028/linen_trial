@@ -1,10 +1,7 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: "https://thetruetouch.in/api", // Replace with your backend API
-  headers: {
-    "Content-Type": "application/json",
-  },
+  baseURL: "/",
 });
 
 api.interceptors.request.use(
@@ -15,7 +12,7 @@ api.interceptors.request.use(
     }
     return config;
   },
-  (error) => Promise.reject(error)
+  (error) => Promise.reject(error),
 );
 
 export default api;

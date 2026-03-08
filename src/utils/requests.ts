@@ -9,7 +9,7 @@ export interface ApiResponse<T> {
 
 export const postRequest = async <T>(
   endpoint: string,
-  payload: Record<string, any>,
+  payload: any,
 ): Promise<ApiResponse<T>> => {
   try {
     const response = await api.post<T>(endpoint, payload, {
