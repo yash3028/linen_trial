@@ -66,7 +66,7 @@ const Navbar = ({
     if (matchIsValidTel(phone, { onlyCountries: ["IN"] })) {
       // API call to send OTP here
       const { data, error, message } = await postRequest<any>(
-        "/api/users/send-otp",
+        "/users/users/send-otp",
         {
           countryCode: "+91",
           mobileNumber: phone.replace(/\s/g, "").slice(-10),
@@ -86,7 +86,7 @@ const Navbar = ({
   const verifyOtp = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const { data, error, message } = await postRequest<any>(
-      "/api/users/verify-otp",
+      "/users/users/verify-otp",
       {
         verificationToken: localStorage.getItem("verificationToken"),
         otp: otp,
@@ -312,22 +312,25 @@ const Navbar = ({
                 </Box>
                 <Divider />
 
-                <Box
-                  color="secondary"
-                  onClick={() => {
-                    handleClose();
-
-                    get_role() == "admin"
-                      ? navigate("/admin-product")
-                      : navigate("/admin-product");
-                  }}
-                  p={1}
-                  sx={{ cursor: "pointer" }}
-                >
-                  <Typography textAlign={"start"} variant="body2">
-                    Products
-                  </Typography>
-                </Box>
+                {localStorage.getItem("token")?.length &&
+                  get_role() === "admin" && (
+                    <>
+                      <Divider />
+                      <Box
+                        color="secondary"
+                        onClick={() => {
+                          handleClose();
+                          navigate("/admin-product");
+                        }}
+                        p={1}
+                        sx={{ cursor: "pointer" }}
+                      >
+                        <Typography textAlign={"start"} variant="body2">
+                          Products
+                        </Typography>
+                      </Box>
+                    </>
+                  )}
               </Stack>
             </Popover>
             <Modal

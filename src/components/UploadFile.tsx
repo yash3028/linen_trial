@@ -25,7 +25,7 @@ const UploadFile = () => {
     formData.append("productId", "2");
 
     try {
-      const res = await postRequest("/api/products/upload-file", formData);
+      const res = await postRequest("/products/products/upload-file", formData);
       console.log(res.data);
       alert("File uploaded successfully");
       setFiles([]);

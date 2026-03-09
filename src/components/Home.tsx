@@ -20,7 +20,7 @@ import OrderDetail from "./OrderDetail";
 import AdminOrderList from "./AdminOrderList";
 import AddProduct from "./AddProduct";
 import UploadFile from "./UploadFile";
-import AdminProducts from "./AdminProducsts";
+import AdminProducts from "./AdminProducts";
 
 export const Home = () => {
   const [snackBar, setSnackBar] = React.useState<{

@@ -45,7 +45,7 @@ const AddProduct = ({
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const { data, error, message } = await postRequest(
-      "/api/products/save-product",
+      "/products/products/save-product",
       product,
     );
     if (error) {
@@ -85,6 +85,9 @@ const AddProduct = ({
                     "& .MuiInputLabel-root": {
                       color: "secondary.main",
                     },
+                    "& .MuiInputLabel-root.Mui-focused": {
+                      color: "secondary.main",
+                    },
                   }}
                 />
               </Grid>
@@ -98,6 +101,9 @@ const AddProduct = ({
                   onChange={handleChange}
                   sx={{
                     "& .MuiInputLabel-root": {
+                      color: "secondary.main",
+                    },
+                    "& .MuiInputLabel-root.Mui-focused": {
                       color: "secondary.main",
                     },
                   }}
@@ -115,6 +121,9 @@ const AddProduct = ({
                     "& .MuiInputLabel-root": {
                       color: "secondary.main",
                     },
+                    "& .MuiInputLabel-root.Mui-focused": {
+                      color: "secondary.main",
+                    },
                   }}
                 />
               </Grid>
@@ -128,6 +137,9 @@ const AddProduct = ({
                   onChange={handleChange}
                   sx={{
                     "& .MuiInputLabel-root": {
+                      color: "secondary.main",
+                    },
+                    "& .MuiInputLabel-root.Mui-focused": {
                       color: "secondary.main",
                     },
                   }}
@@ -146,6 +158,9 @@ const AddProduct = ({
                     "& .MuiInputLabel-root": {
                       color: "secondary.main",
                     },
+                    "& .MuiInputLabel-root.Mui-focused": {
+                      color: "secondary.main",
+                    },
                   }}
                 />
               </Grid>
@@ -160,6 +175,9 @@ const AddProduct = ({
                   onChange={handleChange}
                   sx={{
                     "& .MuiInputLabel-root": {
+                      color: "secondary.main",
+                    },
+                    "& .MuiInputLabel-root.Mui-focused": {
                       color: "secondary.main",
                     },
                   }}
