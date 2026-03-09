@@ -11,6 +11,7 @@ import {
   TableContainer,
   Paper,
   Button,
+  Typography,
 } from "@mui/material";
 import { useNavigate } from "react-router";
 import { getRequest } from "../utils/requests";
@@ -27,24 +28,31 @@ const AdminProducts = ({
   const [openRow, setOpenRow] = useState<number | null>(null);
   const navigate = useNavigate();
 
+  const [page, setPage] = useState(1);
+  const [limit] = useState(10);
+  const [totalCount, setTotalCount] = useState(0);
+
   useEffect(() => {
     const fetchProducts = async () => {
-      const res = await getRequest<any>("/products/products/get-all-products");
+      const res = await getRequest<any>(
+        `/products/products/get-all-products?page=${page}&limit=${limit}`,
+      );
 
       if (res.error) {
         snackBarFunction(res.message, "error");
         return;
       }
-      if (res.data) {
-        snackBarFunction("Products loaded", "success");
-        console.log(res);
 
+      if (res.data) {
         setProducts(res.data.products || []);
+        setTotalCount(res.data.count || 0);
       }
     };
 
     fetchProducts();
-  }, []);
+  }, [page]);
+
+  const totalPages = Math.ceil(totalCount / limit);
 
   const handleToggle = (index: number) => {
     setOpenRow(openRow === index ? null : index);
@@ -79,7 +87,7 @@ const AdminProducts = ({
               {products.map((product: any, index) => (
                 <React.Fragment key={product.id}>
                   <TableRow>
-                    <TableCell>{index + 1}</TableCell>
+                    <TableCell>{(page - 1) * limit + index + 1}</TableCell>
 
                     <TableCell>
                       <Box display="flex" alignItems="center" gap={1}>
@@ -106,7 +114,7 @@ const AdminProducts = ({
                   </TableRow>
 
                   <TableRow>
-                    <TableCell colSpan={4} sx={{ p: 0 }}>
+                    <TableCell colSpan={5} sx={{ p: 0 }}>
                       <Collapse in={openRow === index}>
                         <Box
                           sx={{
@@ -133,6 +141,32 @@ const AdminProducts = ({
             </TableBody>
           </Table>
         </TableContainer>
+
+        {totalPages > 1 && (
+          <Box display="flex" justifyContent="center" mt={3} gap={2}>
+            <Button
+              variant="outlined"
+              disabled={page <= 1}
+              onClick={() => setPage((p) => p - 1)}
+              sx={{ bgcolor: "secondary.main", color: "primary.main" }}
+            >
+              Previous
+            </Button>
+
+            <Typography>
+              Page {page} of {totalPages}
+            </Typography>
+
+            <Button
+              variant="outlined"
+              disabled={page >= totalPages}
+              onClick={() => setPage((p) => p + 1)}
+              sx={{ bgcolor: "secondary.main", color: "primary.main" }}
+            >
+              Next
+            </Button>
+          </Box>
+        )}
       </Box>
     </Box>
   );
