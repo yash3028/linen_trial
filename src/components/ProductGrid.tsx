@@ -137,7 +137,7 @@ export const ProductGrid: React.FC = () => {
                       textAlign={"center"}
                       letterSpacing={3}
                     >
-                      MIN 10% OFF
+                      26% OFF
                     </Typography>
                   </Box>
                 </Box>
