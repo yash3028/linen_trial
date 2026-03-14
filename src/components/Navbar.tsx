@@ -20,7 +20,7 @@ import PersonIcon from "@mui/icons-material/Person";
 import CloseIcon from "@mui/icons-material/Close";
 import LocalMallIcon from "@mui/icons-material/LocalMall";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import CustomButton from "./CustomButton";
 import { getRequest, postRequest } from "../utils/requests";
 import {
@@ -142,13 +142,31 @@ const Navbar = ({
   const handleClose = () => {
     setAnchorEl(null);
   };
+  const sideNavRef = useRef<HTMLDivElement>(null);
+  const menuButtonRef = useRef<HTMLButtonElement>(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      // If side nav is open AND the click target is NOT inside the side nav
+      // AND the click target is NOT the menu button (to avoid immediate closing)
+      if (
+        sideNavStatus === "flex" &&
+        sideNavRef.current &&
+        !sideNavRef.current.contains(event.target as Node) &&
+        !menuButtonRef.current?.contains(event.target as Node)
+      ) {
+        closeSideNav();
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [sideNavStatus]);
 
   const open = Boolean(anchorEl);
   const id = open ? "simple-popover" : undefined;
-
-  //-------------------------------------------------------
-
-  //-------------------------------------------------------
 
   return (
     <div className="sticky top-0 z-50">
@@ -256,7 +274,7 @@ const Navbar = ({
                 </Stack>
               </Popover>
             </Box>
-            <Box display={{ xs: "block", sm: "none" }}>
+            <Box display={{ xs: "block", sm: "none" }} ref={menuButtonRef}>
               <IconButton onClick={toggleSideNav}>
                 <MenuIcon fontSize="inherit" color="secondary"></MenuIcon>
               </IconButton>
@@ -274,6 +292,8 @@ const Navbar = ({
           flexDirection={"column"}
           p={2}
           gap={2}
+          id="side-nav"
+          ref={sideNavRef}
         >
           <button
             className="w-max self-end p-1 cursor-pointer"
