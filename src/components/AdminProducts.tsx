@@ -17,7 +17,7 @@ import { useNavigate } from "react-router";
 import { getRequest } from "../utils/requests";
 
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
-import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
+import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 
 const AdminProducts = ({
   snackBarFunction,
@@ -29,7 +29,7 @@ const AdminProducts = ({
   const navigate = useNavigate();
 
   const [page, setPage] = useState(1);
-  const [limit] = useState(10);
+  const [limit] = useState(5);
   const [totalCount, setTotalCount] = useState(0);
 
   useEffect(() => {
@@ -59,7 +59,16 @@ const AdminProducts = ({
   };
 
   return (
-    <Box sx={{ backgroundColor: "primary.main", minHeight: "100vh", py: 3 }}>
+    <Paper
+      sx={{
+        flexGrow: 1,
+        minHeight: "70vh",
+        width: "100%",
+        borderRadius: 0,
+        backgroundColor: "primary.main",
+        p: 2,
+      }}
+    >
       <Box display="flex" justifyContent="flex-end" px={4} mb={2}>
         <Button
           sx={{ backgroundColor: "secondary.main", color: "primary.main" }}
@@ -71,9 +80,15 @@ const AdminProducts = ({
       </Box>
 
       <Box sx={{ px: 3 }}>
-        <TableContainer component={Paper}>
+        <TableContainer>
           <Table>
-            <TableHead>
+            <TableHead
+              sx={{
+                "& .MuiTableCell-root": {
+                  borderBottom: "2px solid #444",
+                },
+              }}
+            >
               <TableRow>
                 <TableCell>S.No</TableCell>
                 <TableCell>Name</TableCell>
@@ -87,29 +102,27 @@ const AdminProducts = ({
               {products.map((product: any, index) => (
                 <React.Fragment key={product.id}>
                   <TableRow>
-                    <TableCell>{(page - 1) * limit + index + 1}</TableCell>
-
                     <TableCell>
-                      <Box display="flex" alignItems="center" gap={1}>
+                      <Box display="flex" alignItems="center">
                         <IconButton
                           size="small"
                           onClick={() => handleToggle(index)}
+                          sx={{ mr: 1 }}
                         >
                           {openRow === index ? (
-                            <KeyboardArrowUpIcon />
-                          ) : (
                             <KeyboardArrowDownIcon />
+                          ) : (
+                            <KeyboardArrowRightIcon />
                           )}
                         </IconButton>
 
-                        {product.name}
+                        {(page - 1) * limit + index + 1}
                       </Box>
                     </TableCell>
 
-                    <TableCell>{product.price}</TableCell>
-
+                    <TableCell>{product.name}</TableCell>
+                    <TableCell>₹{product.price}</TableCell>
                     <TableCell>{product.productFamily}</TableCell>
-
                     <TableCell>{product.color}</TableCell>
                   </TableRow>
 
@@ -148,7 +161,15 @@ const AdminProducts = ({
               variant="outlined"
               disabled={page <= 1}
               onClick={() => setPage((p) => p - 1)}
-              sx={{ bgcolor: "secondary.main", color: "primary.main" }}
+              sx={{
+                bgcolor: "secondary.main",
+                color: "primary.main",
+                "&.Mui-disabled": {
+                  bgcolor: "secondary.main",
+                  color: "primary.main",
+                  opacity: 1,
+                },
+              }}
             >
               Previous
             </Button>
@@ -161,14 +182,22 @@ const AdminProducts = ({
               variant="outlined"
               disabled={page >= totalPages}
               onClick={() => setPage((p) => p + 1)}
-              sx={{ bgcolor: "secondary.main", color: "primary.main" }}
+              sx={{
+                bgcolor: "secondary.main",
+                color: "primary.main",
+                "&.Mui-disabled": {
+                  bgcolor: "secondary.main",
+                  color: "primary.main",
+                  opacity: 1,
+                },
+              }}
             >
               Next
             </Button>
           </Box>
         )}
       </Box>
-    </Box>
+    </Paper>
   );
 };
 

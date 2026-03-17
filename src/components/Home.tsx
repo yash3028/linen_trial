@@ -124,7 +124,7 @@ export const Home = () => {
           ></Route>
           <Route
             path="/upload-file"
-            element={<UploadFile></UploadFile>}
+            element={<UploadFile snackBarFunction={openSnackBar}></UploadFile>}
           ></Route>
           <Route path="/policies">
             <Route path="privacy-policy" element={<PrivacyPolicy />}></Route>
