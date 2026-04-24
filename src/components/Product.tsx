@@ -65,7 +65,7 @@ export const Product = ({
     if (matchIsValidTel(phone, { onlyCountries: ["IN"] })) {
       // API call to send OTP here
       const { data, error, message } = await postRequest<any>(
-        "/users/users/send-otp",
+        "/api/users/send-otp",
         {
           countryCode: "+91",
           mobileNumber: phone.replace(/\s/g, "").slice(-10),
@@ -85,7 +85,7 @@ export const Product = ({
   const verifyOtp = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const { data, error, message } = await postRequest<any>(
-      "/users/users/verify-otp",
+      "/api/users/verify-otp",
       {
         verificationToken: localStorage.getItem("verificationToken"),
         otp: otp,

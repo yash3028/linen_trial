@@ -19,6 +19,10 @@ import PrivacyPolicy from "./PrivacyPolicy";
 import OrderDetail from "./OrderDetail";
 import AdminOrderList from "./AdminOrderList";
 import BreadCrumb from "./breadcrumb/BreadCrumb";
+import AddProduct from "./AddProduct";
+import UploadFile from "./UploadFile";
+import AdminProducts from "./AdminProducts";
+
 export const Home = () => {
   const [snackBar, setSnackBar] = React.useState<{
     open: boolean;
@@ -115,6 +119,20 @@ export const Home = () => {
               }
             ></Route>
           </Route>
+          <Route
+            path="/add-product"
+            element={<AddProduct snackBarFunction={openSnackBar}></AddProduct>}
+          ></Route>
+          <Route
+            path="/admin-product"
+            element={
+              <AdminProducts snackBarFunction={openSnackBar}></AdminProducts>
+            }
+          ></Route>
+          <Route
+            path="/upload-file"
+            element={<UploadFile snackBarFunction={openSnackBar}></UploadFile>}
+          ></Route>
           <Route path="/policies">
             <Route path="privacy-policy" element={<PrivacyPolicy />}></Route>
             <Route path="terms-of-service" element={<TermsOfService />}></Route>

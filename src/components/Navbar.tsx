@@ -107,13 +107,15 @@ const Navbar = ({
     } else {
       save_token(data.token);
       save_role(data.role);
+      console.log(data.role);
+
       setOtp("");
       snackBarFunction("Logged in successfully", "success");
       handleModalClose();
       handleClose();
       closeSideNav();
       if (data.role == "admin") {
-        navigate("/my-orders/all");
+        navigate("/add-product");
       }
     }
   };
@@ -209,7 +211,116 @@ const Navbar = ({
               <IconButton
                 color="inherit"
                 onClick={handleClick}
-                aria-label="My Profile"
+                aria-label="My Profile">
+            {/* <Button
+              variant="contained"
+              onClick={() => navigate("/add-product")}
+              sx={{
+                color: "primary.main",
+                bgcolor: "secondary.main",
+                textTransform: "none",
+                fontWeight: 600,
+              }}
+            >
+              Add Product
+            </Button> */}
+            <IconButton color="inherit" onClick={handleClick}>
+              <PersonIcon fontSize="inherit" color="secondary" />
+            </IconButton>
+
+            <IconButton
+              color="inherit"
+              onClick={() => navigate("/checkout/view-cart")}
+            >
+              <ShoppingCartIcon fontSize="inherit" color="secondary" />
+            </IconButton>
+            <Popover
+              id={id}
+              open={open}
+              anchorEl={anchorEl}
+              onClose={handleClose}
+              anchorOrigin={{
+                vertical: "bottom",
+                horizontal: "left",
+              }}
+              slotProps={{
+                paper: {
+                  sx: {
+                    backgroundColor: "primary.main",
+                  },
+                },
+              }}
+            >
+              <Stack direction={"column"} minWidth={200} textAlign={"start"}>
+                <Box
+                  color="secondary"
+                  onClick={
+                    localStorage.getItem("token")?.length
+                      ? logout
+                      : handleModalOpen
+                  }
+                  p={1}
+                  sx={{ cursor: "pointer" }}
+                >
+                  <Typography noWrap textAlign={"start"} variant="body2">
+                    {localStorage.getItem("token")?.length
+                      ? "Logout"
+                      : "Login / Sign up"}
+                  </Typography>
+                </Box>
+                <Divider />
+                <Box
+                  color="secondary"
+                  onClick={() => {
+                    handleClose();
+
+                    get_role() == "admin"
+                      ? navigate("/my-orders/all")
+                      : navigate("/my-orders");
+                  }}
+                  p={1}
+                  sx={{ cursor: "pointer" }}
+                >
+                  <Typography textAlign={"start"} variant="body2">
+                    Orders
+                  </Typography>
+                </Box>
+                <Divider />
+
+                {localStorage.getItem("token")?.length &&
+                  get_role() === "admin" && (
+                    <>
+                      <Divider />
+                      <Box
+                        color="secondary"
+                        onClick={() => {
+                          handleClose();
+                          navigate("/admin-product");
+                        }}
+                        p={1}
+                        sx={{ cursor: "pointer" }}
+                      >
+                        <Typography textAlign={"start"} variant="body2">
+                          Products
+                        </Typography>
+                      </Box>
+                    </>
+                  )}
+              </Stack>
+            </Popover>
+            <Modal
+              open={modalOpen}
+              onClose={handleModalClose}
+              aria-labelledby="modal-modal-title"
+              aria-describedby="modal-modal-description"
+            >
+              <Box
+                sx={style}
+                display={"flex"}
+                flexDirection={"column"}
+                gap={1}
+                component={"form"}
+                onSubmit={isOtpSent ? verifyOtp : sendOtp}
               >
                 <PersonIcon fontSize="inherit" color="secondary" />
               </IconButton>
