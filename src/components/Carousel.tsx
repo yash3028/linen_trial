@@ -5,7 +5,7 @@ import Typography from "@mui/material/Typography";
 const Carousel = () => {
   const items = [
     { url: "", text: "Contact for more details" },
-    { url: "", text: "Buy 1 - 10% OFF | Buy 2 - 15% OFF | Buy 3 - 20% OFF" },
+    { url: "", text: "Flat 26% OFF on all products" },
   ];
   const [index, setIndex] = useState(0);
 

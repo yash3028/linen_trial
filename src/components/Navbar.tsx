@@ -5,21 +5,22 @@ import {
   Typography,
   IconButton,
   Popover,
-  Button,
   Stack,
   Modal,
   Divider,
 } from "@mui/material";
 import { MuiTelInput, matchIsValidTel } from "mui-tel-input";
 import { MuiOtpInput } from "mui-one-time-password-input";
-
+import MenuIcon from "@mui/icons-material/Menu";
 import "../styles/index.css";
 
 import logo from "../assets/mark_svg.svg";
 import { Link, useNavigate } from "react-router";
 import PersonIcon from "@mui/icons-material/Person";
+import CloseIcon from "@mui/icons-material/Close";
+import LocalMallIcon from "@mui/icons-material/LocalMall";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import CustomButton from "./CustomButton";
 import { getRequest, postRequest } from "../utils/requests";
 import {
@@ -29,8 +30,6 @@ import {
   save_role,
   save_token,
 } from "../utils/authentication";
-
-import Drawer from "@mui/material/Drawer";
 
 const Navbar = ({
   snackBarFunction,
@@ -55,6 +54,17 @@ const Navbar = ({
   const [phone, setPhone] = React.useState("");
   const [isOtpSent, setIsOtpSent] = React.useState(false);
   const [otp, setOtp] = React.useState("");
+  const [sideNavStatus, setSideNavStatus] = React.useState("none");
+  const toggleSideNav = () => {
+    if (sideNavStatus == "none") {
+      setSideNavStatus("flex");
+    } else {
+      setSideNavStatus("none");
+    }
+  };
+  const closeSideNav = () => {
+    setSideNavStatus("none");
+  };
   const handleMobileNumberChange = (value: string) => {
     setPhone(value);
   };
@@ -103,6 +113,7 @@ const Navbar = ({
       snackBarFunction("Logged in successfully", "success");
       handleModalClose();
       handleClose();
+      closeSideNav();
       if (data.role == "admin") {
         navigate("/add-product");
       }
@@ -117,6 +128,7 @@ const Navbar = ({
       setIsOtpSent(false);
       setPhone("");
       handleClose();
+      closeSideNav();
       snackBarFunction("Logged out successfully", "success");
       navigate("/");
     }
@@ -132,72 +144,31 @@ const Navbar = ({
   const handleClose = () => {
     setAnchorEl(null);
   };
+  const sideNavRef = useRef<HTMLDivElement>(null);
+  const menuButtonRef = useRef<HTMLButtonElement>(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      // If side nav is open AND the click target is NOT inside the side nav
+      // AND the click target is NOT the menu button (to avoid immediate closing)
+      if (
+        sideNavStatus === "flex" &&
+        sideNavRef.current &&
+        !sideNavRef.current.contains(event.target as Node) &&
+        !menuButtonRef.current?.contains(event.target as Node)
+      ) {
+        closeSideNav();
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [sideNavStatus]);
 
   const open = Boolean(anchorEl);
   const id = open ? "simple-popover" : undefined;
-
-  //-------------------------------------------------------
-  type Anchor = "top" | "left" | "bottom" | "right";
-
-  const [state, setState] = React.useState({
-    top: false,
-    left: false,
-    bottom: false,
-    right: false,
-  });
-
-  const toggleDrawer =
-    (open: boolean, anchor: Anchor = "right") =>
-    (event: React.KeyboardEvent | React.MouseEvent) => {
-      if (
-        event.type === "keydown" &&
-        ((event as React.KeyboardEvent).key === "Tab" ||
-          (event as React.KeyboardEvent).key === "Shift")
-      ) {
-        return;
-      }
-
-      setState({ ...state, [anchor]: open });
-    };
-
-  const list = () => (
-    <Box
-      sx={{ width: 100, backgroundColor: "primary.main" }}
-      role="presentation"
-      onClick={toggleDrawer(false)}
-      onKeyDown={toggleDrawer(false)}
-      mt={10}
-    >
-      <Stack direction={"column"}>
-        <Button
-          variant="text"
-          color="secondary"
-          onClick={
-            localStorage.getItem("token")?.length ? logout : handleModalOpen
-          }
-        >
-          <Typography variant="button" noWrap>
-            {localStorage.getItem("token")?.length
-              ? "Logout"
-              : "Login / Sign up"}
-          </Typography>
-        </Button>
-        <Button
-          variant="text"
-          color="secondary"
-          onClick={() =>
-            get_role() == "admin"
-              ? navigate("/my-orders/all")
-              : navigate("/my-orders")
-          }
-        >
-          <Typography variant="button">Orders</Typography>
-        </Button>
-      </Stack>
-    </Box>
-  );
-
-  //-------------------------------------------------------
 
   return (
     <div className="sticky top-0 z-50">
@@ -235,8 +206,12 @@ const Navbar = ({
               THE TRUE TOUCH
             </Typography>
           </Box>
-
           <Box sx={{ py: 1, ml: "auto" }}>
+            <Box display={{ xs: "none", lg: "block" }}>
+              <IconButton
+                color="inherit"
+                onClick={handleClick}
+                aria-label="My Profile">
             {/* <Button
               variant="contained"
               onClick={() => navigate("/add-product")}
@@ -347,113 +322,254 @@ const Navbar = ({
                 component={"form"}
                 onSubmit={isOtpSent ? verifyOtp : sendOtp}
               >
-                <Typography
-                  id="modal-modal-title"
-                  color="secondary"
-                  variant="h6"
-                  component="h2"
-                >
-                  Login / Sign up
-                </Typography>
-
-                {!isOtpSent && (
-                  <MuiTelInput
-                    value={phone}
-                    onChange={handleMobileNumberChange}
-                    onlyCountries={["IN"]}
-                    forceCallingCode
-                    autoFocus
-                    defaultCountry="IN"
-                    sx={{
+                <PersonIcon fontSize="inherit" color="secondary" />
+              </IconButton>
+              <IconButton
+                color="inherit"
+                onClick={() => navigate("/checkout/view-cart")}
+                aria-label="Cart"
+              >
+                <ShoppingCartIcon fontSize="inherit" color="secondary" />
+              </IconButton>
+              <Popover
+                id={id}
+                open={open}
+                anchorEl={anchorEl}
+                onClose={handleClose}
+                anchorOrigin={{
+                  vertical: "bottom",
+                  horizontal: "left",
+                }}
+                slotProps={{
+                  paper: {
+                    sx: {
                       backgroundColor: "primary.main",
-                      borderRadius: "4px",
-
-                      // Default border
-                      "& .MuiOutlinedInput-notchedOutline": {
-                        borderColor: "secondary.main",
-                      },
-
-                      // Hover
-                      "&:hover .MuiOutlinedInput-notchedOutline": {
-                        borderColor: "secondary.main",
-                      },
-
-                      // Focus (IMPORTANT FIX)
-                      "& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline":
-                        {
-                          borderColor: "secondary.main",
-                          borderWidth: 2,
-                        },
-                    }}
-                  />
-                )}
-                {isOtpSent && (
-                  <>
-                    <Typography
-                      id="modal-modal-title"
-                      color="secondary"
-                      variant="subtitle1"
-                      component="h2"
-                    >
-                      Please enter OTP
+                    },
+                  },
+                }}
+              >
+                <Stack direction={"column"} minWidth={200} textAlign={"start"}>
+                  <Box
+                    color="secondary"
+                    onClick={
+                      localStorage.getItem("token")?.length
+                        ? logout
+                        : handleModalOpen
+                    }
+                    p={1}
+                    sx={{ cursor: "pointer" }}
+                  >
+                    <Typography noWrap textAlign={"start"} variant="body2">
+                      {localStorage.getItem("token")?.length
+                        ? "Logout"
+                        : "Login / Sign up"}
                     </Typography>
-                    <MuiOtpInput
-                      value={otp}
-                      length={6}
-                      autoFocus
-                      onChange={handleOtpChange}
-                      TextFieldsProps={{ inputProps: { inputMode: "numeric" } }}
-                      sx={{
-                        backgroundColor: "primary.main",
-                        borderRadius: "4px",
+                  </Box>
+                  <Divider />
+                  <Box
+                    color="secondary"
+                    onClick={() => {
+                      handleClose();
 
-                        // Default border
-                        "& .MuiOutlinedInput-notchedOutline": {
-                          borderColor: "secondary.main",
-                        },
-
-                        // Hover
-                        "&:hover .MuiOutlinedInput-notchedOutline": {
-                          borderColor: "secondary.main",
-                        },
-
-                        // Focus (IMPORTANT FIX)
-                        "& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline":
-                          {
-                            borderColor: "secondary.main",
-                            borderWidth: 2,
-                          },
-                      }}
-                    />
-                  </>
-                )}
-                {!isOtpSent && (
-                  <CustomButton
-                    label="Send OTP"
-                    type="submit"
-                    onClick={() => {}}
-                  ></CustomButton>
-                )}
-                {isOtpSent && (
-                  <CustomButton
-                    label="Verify OTP"
-                    onClick={() => {}}
-                    type="submit"
-                  ></CustomButton>
-                )}
-              </Box>
-            </Modal>
+                      get_role() == "admin"
+                        ? navigate("/my-orders/all")
+                        : navigate("/my-orders");
+                    }}
+                    p={1}
+                    sx={{ cursor: "pointer" }}
+                  >
+                    <Typography textAlign={"start"} variant="body2">
+                      Orders
+                    </Typography>
+                  </Box>
+                </Stack>
+              </Popover>
+            </Box>
+            <Box display={{ xs: "block", sm: "none" }} ref={menuButtonRef}>
+              <IconButton onClick={toggleSideNav}>
+                <MenuIcon fontSize="inherit" color="secondary"></MenuIcon>
+              </IconButton>
+            </Box>
           </Box>
         </Toolbar>
+        <Box
+          position={"absolute"}
+          zIndex={50}
+          right={0}
+          height={"100dvh"}
+          minWidth={"270px"}
+          sx={{ backgroundColor: "primary.main" }}
+          display={sideNavStatus}
+          flexDirection={"column"}
+          p={2}
+          gap={2}
+          id="side-nav"
+          ref={sideNavRef}
+        >
+          <button
+            className="w-max self-end p-1 cursor-pointer"
+            onClick={toggleSideNav}
+          >
+            <CloseIcon color="secondary"></CloseIcon>
+          </button>
+          <button
+            className="cursor-pointer"
+            onClick={
+              localStorage.getItem("token")?.length ? logout : handleModalOpen
+            }
+          >
+            {" "}
+            <div className="flex flex-row items-center gap-3">
+              <PersonIcon fontSize="inherit" color="secondary" />
+              <Typography variant="body2" color="text.primary">
+                {localStorage.getItem("token")?.length
+                  ? "Logout"
+                  : "Login / Sign up"}{" "}
+              </Typography>
+            </div>
+          </button>
+          <button
+            className="cursor-pointer"
+            onClick={() => {
+              toggleSideNav();
+              get_role() == "admin"
+                ? navigate("/my-orders/all")
+                : navigate("/my-orders");
+            }}
+          >
+            <div className="flex flex-row items-center gap-3">
+              <LocalMallIcon fontSize="inherit" color="secondary" />
+              <Typography variant="body2" color="text.primary">
+                Orders
+              </Typography>
+            </div>
+          </button>
+          <button
+            className="cursor-pointer"
+            onClick={() => {
+              toggleSideNav();
+              navigate("/checkout/view-cart");
+            }}
+          >
+            <div className="flex flex-row items-center gap-3">
+              <ShoppingCartIcon fontSize="inherit" color="secondary" />
+              <Typography variant="body2" color="text.primary">
+                Cart
+              </Typography>
+            </div>
+          </button>
+        </Box>
       </AppBar>
-      <Drawer
-        anchor={"right"}
-        open={state["right"]}
-        onClose={toggleDrawer(false)}
-        slotProps={{ paper: { sx: { backgroundColor: "primary.main" } } }}
+      <Modal
+        open={modalOpen}
+        onClose={handleModalClose}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
       >
-        {list()}
-      </Drawer>
+        <Box
+          sx={style}
+          display={"flex"}
+          flexDirection={"column"}
+          gap={1}
+          component={"form"}
+          onSubmit={isOtpSent ? verifyOtp : sendOtp}
+        >
+          <Typography
+            id="modal-modal-title"
+            color="secondary"
+            variant="h6"
+            component="h2"
+          >
+            Login / Sign up
+          </Typography>
+
+          {!isOtpSent && (
+            <MuiTelInput
+              value={phone}
+              onChange={handleMobileNumberChange}
+              onlyCountries={["IN"]}
+              forceCallingCode
+              autoFocus
+              defaultCountry="IN"
+              sx={{
+                backgroundColor: "primary.main",
+                borderRadius: "4px",
+
+                // Default border
+                "& .MuiOutlinedInput-notchedOutline": {
+                  borderColor: "secondary.main",
+                },
+
+                // Hover
+                "&:hover .MuiOutlinedInput-notchedOutline": {
+                  borderColor: "secondary.main",
+                },
+
+                // Focus (IMPORTANT FIX)
+                "& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline":
+                  {
+                    borderColor: "secondary.main",
+                    borderWidth: 2,
+                  },
+              }}
+            />
+          )}
+          {isOtpSent && (
+            <>
+              <Typography
+                id="modal-modal-title"
+                color="secondary"
+                variant="subtitle1"
+                component="h2"
+              >
+                Please enter OTP
+              </Typography>
+              <MuiOtpInput
+                value={otp}
+                length={6}
+                autoFocus
+                onChange={handleOtpChange}
+                TextFieldsProps={{ inputProps: { inputMode: "numeric" } }}
+                sx={{
+                  backgroundColor: "primary.main",
+                  borderRadius: "4px",
+
+                  // Default border
+                  "& .MuiOutlinedInput-notchedOutline": {
+                    borderColor: "secondary.main",
+                  },
+
+                  // Hover
+                  "&:hover .MuiOutlinedInput-notchedOutline": {
+                    borderColor: "secondary.main",
+                  },
+
+                  // Focus (IMPORTANT FIX)
+                  "& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline":
+                    {
+                      borderColor: "secondary.main",
+                      borderWidth: 2,
+                    },
+                }}
+              />
+            </>
+          )}
+          {!isOtpSent && (
+            <CustomButton
+              label="Send OTP"
+              type="submit"
+              onClick={() => {}}
+            ></CustomButton>
+          )}
+          {isOtpSent && (
+            <CustomButton
+              label="Verify OTP"
+              onClick={() => {}}
+              type="submit"
+            ></CustomButton>
+          )}
+        </Box>
+      </Modal>
     </div>
   );
 };
