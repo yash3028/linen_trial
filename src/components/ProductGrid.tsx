@@ -89,11 +89,12 @@ export const ProductGrid: React.FC = () => {
           <Grid
             container
             spacing={{ xs: 0, sm: 1, md: 2 }}
-            justifyContent={{ xs: "start", md: "center" }}
+            justifyContent={{ xs: "start", md: "center", sm: "center" }}
           >
             <Grid
               size={{ xs: 6, sm: 3, md: 4, lg: 2 }}
-              display={"flex"}
+              display="flex"
+              justifyContent="center"
               gap={1}
               p={0.7}
             >

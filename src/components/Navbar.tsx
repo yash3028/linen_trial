@@ -97,12 +97,14 @@ const Navbar = ({
     } else {
       save_token(data.token);
       save_role(data.role);
+      console.log(data.role);
+
       setOtp("");
       snackBarFunction("Logged in successfully", "success");
       handleModalClose();
       handleClose();
       if (data.role == "admin") {
-        navigate("/my-orders/all");
+        navigate("/add-product");
       }
     }
   };
@@ -235,9 +237,22 @@ const Navbar = ({
           </Box>
 
           <Box sx={{ py: 1, ml: "auto" }}>
+            {/* <Button
+              variant="contained"
+              onClick={() => navigate("/add-product")}
+              sx={{
+                color: "primary.main",
+                bgcolor: "secondary.main",
+                textTransform: "none",
+                fontWeight: 600,
+              }}
+            >
+              Add Product
+            </Button> */}
             <IconButton color="inherit" onClick={handleClick}>
               <PersonIcon fontSize="inherit" color="secondary" />
             </IconButton>
+
             <IconButton
               color="inherit"
               onClick={() => navigate("/checkout/view-cart")}
@@ -295,6 +310,27 @@ const Navbar = ({
                     Orders
                   </Typography>
                 </Box>
+                <Divider />
+
+                {localStorage.getItem("token")?.length &&
+                  get_role() === "admin" && (
+                    <>
+                      <Divider />
+                      <Box
+                        color="secondary"
+                        onClick={() => {
+                          handleClose();
+                          navigate("/admin-product");
+                        }}
+                        p={1}
+                        sx={{ cursor: "pointer" }}
+                      >
+                        <Typography textAlign={"start"} variant="body2">
+                          Products
+                        </Typography>
+                      </Box>
+                    </>
+                  )}
               </Stack>
             </Popover>
             <Modal
